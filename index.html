@@ -3,801 +3,1305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity + Vuforia 十全扩展 | 完整AR体育系统 · 最终完全体</title>
+    <title>Unity + PICO SDK 深度扩展教程 · 最终修订版</title>
     <style>
+        /* ===== 全局明亮风格·双栏精读版 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f9ff;
             color: #1e293b;
-            background: linear-gradient(145deg, #0f0f1a 0%, #1a1a2e 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 30px;
-        }
-        
-        .header {
-            text-align: center;
-            color: white;
-            padding: 70px 40px;
-            background: rgba(5, 5, 20, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 50px;
-            margin-bottom: 50px;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 30px 70px -15px #000000;
-        }
-        
-        .header h1 {
-            font-size: 3.8rem;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 25px rgba(0,0,0,0.9);
-            background: linear-gradient(to right, #e2c5ff, #b18aff, #9370ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .header p {
-            font-size: 1.5rem;
-            opacity: 0.95;
-            color: #f0e4ff;
-        }
-        
-        .chapters {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        .chapter-card {
-            background: rgba(28, 28, 48, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 28px;
-            padding: 28px 22px;
-            box-shadow: 0 20px 40px -12px black;
-            transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.2s;
-            cursor: pointer;
-            color: #f0f0f0;
-        }
-        
-        .chapter-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 40px 60px -10px #000000;
-            border-color: #c89fff;
-        }
-        
-        .chapter-number {
-            background: linear-gradient(135deg, #4a4ac0, #8a4fff);
-            color: white;
-            width: 54px;
-            height: 54px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 22px;
-            box-shadow: 0 12px 24px -8px #4242b0;
-        }
-        
-        .chapter-card h3 {
-            color: #ffffff;
-            margin-bottom: 14px;
-            font-size: 1.7rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-        
-        .chapter-card p {
-            color: #d2d2f0;
-            margin-bottom: 20px;
-            font-size: 1rem;
             line-height: 1.5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        
-        .chapter-card .hint {
-            color: #c6adff;
-            font-size: 0.95rem;
-            font-weight: 500;
+
+        /* 头部 */
+        .app-header {
+            flex-shrink: 0;
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #d9e3f0;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,20,50,0.02);
         }
-        
-        .chapter-content {
-            background: #ffffff;
-            border-radius: 42px;
-            padding: 60px 70px;
-            box-shadow: 0 40px 80px -20px black;
-            margin-bottom: 40px;
-            border: 1px solid #e0e7ff;
+
+        .logo-area h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0b2645;
+            letter-spacing: -0.02em;
         }
-        
-        .chapter-content h2 {
-            color: #0f172a;
-            font-size: 3.0rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            border-bottom: 4px solid #b48aff;
-            padding-bottom: 15px;
-            letter-spacing: -1px;
+        .logo-area small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #3f6192;
+            margin-left: 12px;
         }
-        
-        .chapter-desc {
-            font-size: 1.3rem;
-            background: #f0f2ff;
-            padding: 20px 35px;
-            border-radius: 60px;
-            margin-bottom: 40px;
-            color: #1e293b;
-            font-weight: 500;
-            border-left: 12px solid #8b5cf6;
-        }
-        
-        .section {
-            margin-bottom: 50px;
-            padding: 35px 45px;
-            background: #fafcff;
-            border-radius: 32px;
-            border-left: 8px solid #9f7aea;
-            box-shadow: 0 20px 30px -18px #9aa6b5;
-        }
-        
-        .section h4 {
-            color: #0f172a;
-            font-size: 2.2rem;
-            font-weight: 650;
-            margin-bottom: 20px;
+
+        .header-actions {
             display: flex;
+            gap: 1.2rem;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
         }
-        
-        .section h4 span {
-            background: #1e1e3f;
-            color: white;
-            font-size: 1.2rem;
-            padding: 6px 20px;
+        .search-wrapper {
+            background: white;
+            border: 1px solid #c8d5e8;
             border-radius: 40px;
+            padding: 0.45rem 0.45rem 0.45rem 1.2rem;
+            display: flex;
+            align-items: center;
+            width: 280px;
+        }
+        .search-wrapper input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 0.95rem;
+            outline: none;
+            color: #172d4f;
+        }
+        .search-wrapper button {
+            background: #e9f0fa;
+            border: none;
+            border-radius: 40px;
+            padding: 0.45rem 1.2rem;
+            font-size: 0.85rem;
+            color: #1d4071;
+            font-weight: 500;
+            cursor: default;
+        }
+        .badge-light {
+            background: #e6effa;
+            padding: 0.45rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            color: #173e70;
+            font-weight: 500;
+        }
+
+        /* 双栏主体 */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background: white;
+            margin: 0 2rem 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px -10px rgba(0,40,80,0.12);
+            border: 1px solid #d7e2f0;
+        }
+
+        /* 左侧目录 */
+        .sidebar {
+            width: 350px;
+            background-color: #f8fbfe;
+            border-right: 1px solid #d9e2f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 24px 0 0 24px;
+        }
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid #dae2f0;
+        }
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #102b4a;
+        }
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 2rem 1.2rem;
+            scrollbar-width: thin;
+            scrollbar-color: #b2c6e0 #e9f0fa;
+        }
+        .chapter-list::-webkit-scrollbar { width: 6px; }
+        .chapter-list::-webkit-scrollbar-track { background: #e9f0fa; }
+        .chapter-list::-webkit-scrollbar-thumb { background: #b2c6e0; border-radius: 8px; }
+
+        .chapter-item {
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.6rem;
+            border-radius: 14px;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+            background-color: transparent;
+            transition: 0.1s;
+        }
+        .chapter-item:hover { background-color: #e9f2fd; border-left-color: #9fb8dd; }
+        .chapter-item.active { background-color: #e1ebf9; border-left-color: #265197; }
+        .chapter-item .chapter-idx { font-size: 0.75rem; font-weight: 600; color: #315f9e; margin-bottom: 0.2rem; }
+        .chapter-item .chapter-title { font-weight: 650; font-size: 1.1rem; color: #0e2850; margin-bottom: 0.2rem; }
+        .chapter-item .chapter-desc { font-size: 0.9rem; color: #46658f; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .chapter-meta-tags { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+        .chapter-meta-tags span { background: #dce7f5; color: #193d69; padding: 0.2rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-weight: 500; }
+
+        /* 右侧内容区 */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2.2rem 2.8rem;
+            background: white;
+            border-radius: 0 24px 24px 0;
+        }
+
+        .detail-header { margin-bottom: 2.2rem; }
+        .detail-header h2 { font-size: 2.3rem; font-weight: 600; color: #0b2343; margin-bottom: 0.6rem; }
+        .detail-header .desc { font-size: 1.2rem; color: #2b4e7a; background: #f0f7ff; padding: 1.2rem 2rem; border-radius: 24px; border-left: 8px solid #1f4790; margin-top: 1rem; }
+
+        .section-block { margin: 2.8rem 0; border-bottom: 1px dashed #c7d6ec; padding-bottom: 2.2rem; }
+        .section-block:last-child { border-bottom: none; }
+        .section-title { font-size: 1.7rem; font-weight: 600; color: #103868; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem; }
+        .section-title .sec-badge { background: #1f4280; color: white; padding: 0.2rem 1.2rem; border-radius: 40px; font-size: 0.95rem; }
+        .section-content { font-size: 1.05rem; color: #203b63; line-height: 1.7; }
+        .section-content p { margin: 1rem 0; }
+
+        .code-note {
+            background: #f3f8ff; border: 1px solid #b9d1ef; font-family: 'SF Mono', 'Fira Code', monospace;
+            padding: 1.4rem 1.8rem; border-radius: 20px; margin: 1.5rem 0; font-size: 0.95rem; color: #132c4e; overflow-x: auto;
+        }
+        .external-link {
+            display: inline-block; background: #e2ecfc; color: #1d4488 !important; padding: 0.4rem 1.2rem; border-radius: 30px;
+            text-decoration: none; font-size: 0.9rem; font-weight: 500; margin: 0.3rem 0.8rem 0.3rem 0; border: 1px solid #acc4ea;
+        }
+        .external-link:hover { background: #d2e4ff; border-color: #3d71be; }
+        .nav-buttons { display: flex; gap: 1.5rem; margin: 2.5rem 0 1rem; }
+        .nav-btn { background: white; border: 2px solid #2e5b9f; color: #173e77; padding: 0.7rem 2.2rem; border-radius: 40px; font-weight: 600; cursor: pointer; }
+        .nav-btn:hover { background: #eaf2fe; border-color: #0e3572; }
+        .footer-note { margin-top: 2.5rem; border-top: 1px solid #d9e5f2; padding-top: 1.5rem; color: #446b9c; text-align: center; font-size: 0.9rem; }
+
+        .empty-selection { display: flex; align-items: center; justify-content: center; height: 100%; color: #6c8bb8; font-size: 1.3rem; flex-direction: column; gap: 1rem; }
+        
+        /* 表格样式 */
+        .template-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,20,50,0.05);
+        }
+        .template-table th {
+            background: #e9f0fc;
+            color: #1f4280;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            text-align: left;
+        }
+        .template-table td {
+            padding: 0.8rem 1.2rem;
+            border-top: 1px solid #d0e0f0;
+        }
+
+        /* 引用块样式 */
+        .quote-box {
+            background: #f0f7fa;
+            border-left: 6px solid #2b5797;
+            padding: 1.2rem 2rem;
+            margin: 1.5rem 0;
+            border-radius: 0 18px 18px 0;
+            font-style: italic;
+            color: #1d3e5e;
         }
         
-        .section p {
-            color: #1e293b;
+        .lesson-badge {
+            background: #d4e3fd;
+            color: #1d4085;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 0.8rem;
+        }
+        /* 纯文本段落样式 */
+        .plain-text-block {
             font-size: 1.1rem;
             line-height: 1.8;
-            margin-bottom: 20px;
-        }
-        
-        .reason-box {
-            background: #ede9fe;
-            border-left: 8px solid #6d28d9;
-            padding: 22px 32px;
-            margin: 25px 0 10px;
+            background: #f9fcff;
+            padding: 2rem 2.5rem;
             border-radius: 24px;
-            font-size: 1.05rem;
-            box-shadow: inset 0 2px 10px #d8b4fe;
+            border: 1px solid #c7d9f0;
+            color: #173e5c;
+            margin: 1.8rem 0;
         }
-        
-        .reason-box strong {
-            color: #4c1d95;
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .code-note {
-            background: #0f172a;
-            color: #e2e8f0;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            padding: 20px 25px;
+        /* 新章节样式 - 用于第7章的长文本 */
+        .chapter-content-block {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: #ffffff;
+            padding: 2rem 2.5rem;
             border-radius: 24px;
-            margin: 20px 0;
-            border: 1px solid #5f6b7a;
-            overflow-x: auto;
-            font-size: 0.95rem;
+            border: 1px solid #d0e0f5;
+            color: #1e3a5f;
+            margin: 1.8rem 0;
+            white-space: pre-line;
         }
-        
-        .external-link {
-            display: inline-block;
-            background: #1e1e3f;
-            color: white !important;
-            padding: 6px 18px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin: 10px 10px 0 0;
-            border: 1px solid #b28aff;
-            transition: 0.2s;
-        }
-        
-        .external-link:hover {
-            background: #2d2d70;
-            border-color: #e5ccff;
-            transform: translateY(-2px);
-        }
-        
-        .back-btn {
-            background: #1e1e3f;
-            color: white;
-            border: none;
-            padding: 14px 38px;
-            font-size: 1.2rem;
-            border-radius: 60px;
-            cursor: pointer;
-            margin-bottom: 30px;
-            transition: 0.2s;
+        .chapter-content-block h3 {
+            font-size: 1.5rem;
+            color: #103868;
+            margin: 1.5rem 0 1rem 0;
             font-weight: 600;
-            box-shadow: 0 10px 25px #00000070;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
-        
-        .back-btn:hover {
-            background: #32327a;
-            transform: scale(1.02);
+        .chapter-content-block h4 {
+            font-size: 1.2rem;
+            color: #1d4a8b;
+            margin: 1.2rem 0 0.5rem 0;
+            font-weight: 600;
         }
-        
-        .footer {
-            text-align: center;
-            color: #e0e0ff;
-            padding: 40px 30px;
-            margin-top: 60px;
-            background: rgba(10, 10, 25, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 60px;
-            border: 1px solid #6a5a9a;
+        .chapter-content-block ul {
+            margin: 0.5rem 0 1rem 2rem;
         }
-        
-        @media (max-width: 700px) {
-            .header h1 { font-size: 2.4rem; }
-            .chapter-content { padding: 25px 18px; }
-            .section { padding: 20px 18px; }
-            .section h4 { font-size: 1.6rem; }
+        .chapter-content-block li {
+            margin-bottom: 0.3rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>⚡ 十全扩展 · 最终完全体 ⚡</h1>
-            <p>Unity + Vuforia 完整AR体育系统 · 全十章深度扩容（含协作/会议/示例资源）</p>
+    <div class="app-header">
+        <div class="logo-area">
+            <h1>Unity + PICO SDK 深度扩展教程 <small>十全详细版·最终修订</small></h1>
         </div>
-        <!-- 搜索和主题切换 -->
-        <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="搜索章节、技术内容... (Ctrl+K)" aria-label="搜索教程内容">
-                <button id="theme-toggle" class="theme-toggle">🌙 夜间模式</button>
+        <div class="header-actions">
+            <div class="search-wrapper"><input placeholder="搜索教程…" id="searchInput"><button>⌘K</button></div>
+            <div class="badge-light">📘 共8章 · 修订版</div>
         </div>
-        <!-- 卡片容器 -->
-        <div class="chapters" id="chapters-container"></div>
-        
-        <!-- 详细内容容器 -->
-        <div id="content-container"></div>
-        
-        <div class="footer">
-            <p>© 2025 十全扩展最终版 · 每一节都有「设计理由」+ 可直接使用的模板/链接</p>
-            <p style="font-size:0.95rem; color:#ccb8ff;">第八章至第十章已增加完整PR模板、会议纪要约、示例项目结构图</p>
+    </div>
+
+    <div class="main-layout">
+        <div class="sidebar">
+            <div class="sidebar-header"><h3>📋 八章 · 深度扩展</h3></div>
+            <div class="chapter-list" id="chapterListContainer"></div>
+        </div>
+        <div class="content-area" id="detailContentArea">
+            <div class="empty-selection"><span>👈 选择一章开始学习</span></div>
         </div>
     </div>
 
     <script>
-        // --------------------------------------------------------------
-        // 最终完全体教程数据 (10章全, 第8-10章大幅扩充：加入PR模板、会议议程、示例项目架构)
-        // --------------------------------------------------------------
-        const tutorialData = {
-            chapters: [
-                { // ========= 第1章 =========
-                    id: 1,
-                    title: "Unity引擎入门（扩充版）",
-                    description: "为AR体育系统奠基：从安装到组件思维，新增官方文档、教学视频与项目模板链接。",
-                    sections: [
-                        {
-                            title: "1.1 Unity安装与环境配置 · 全平台预备 + 实用链接",
-                            content: `✅ <strong>详细步骤（升级版）</strong>：通过Unity Hub安装Unity Editor 2022.3.62f3 LTS。务必添加模块：Android Build Support (包括SDK、NDK、JDK)、Windows Build Support (IL2CPP)、Universal Windows Platform (可选)。推荐开发机：Win11 / 64GB RAM / RTX 3070+。<br><br>
-                            配置外部SDK：在Edit > Preferences > External Tools 中设置Android SDK路径 (如未自动检测)。启用Vuforia所需：在Project Settings > XR Plug-in Management 中启用 Vuforia。<br><br>
-                            🔗 <strong>扩展链接：</strong>
-                            <a class="external-link" href="https://unity.com/download" target="_blank">Unity Hub 官方下载</a>
-                            <a class="external-link" href="https://docs.unity3d.com/2022.3/Documentation/Manual/UnityHub.html" target="_blank">Unity Hub 文档</a>
-                            <a class="external-link" href="https://learn.unity.com/tutorial/install-unity-and-vscode" target="_blank">官方安装教程 (视频)</a>
-                            <a class="external-link" href="https://developer.android.com/studio" target="_blank">Android SDK 管理器</a>
-                            `,
-                            reason: "LTS版本保证一年期项目稳定性；统一模块确保后续打包Android (Pixel 4a) 和Pico VR设备无障碍，提供的链接帮助开发者快速解决环境变量问题。"
-                        },
-                        {
-                            title: "1.2 编辑器界面精讲 · 五视图工作法 + 调试链接",
-                            content: `🔍 <strong>分层掌握（AR视角）</strong>：Scene视图用于摆放AR标记周围的虚拟体育场；Game视图预览相机输出；Hierarchy管理ImageTarget及其子物体；Project采用两层文件夹分类（见1.4）；Inspector动态调节组件属性。<br><br>
-                            额外：Console面板右击可打开<strong>Editor Log</strong>，Profiler窗口（Window > Analysis > Profiler）提前监控Draw Calls。<br><br>
-                            🔗 <strong>Unity Learn 沉浸式界面教程：</strong>
-                            <a class="external-link" href="https://learn.unity.com/tutorial/using-the-unity-interface" target="_blank">界面基础</a>
-                            <a class="external-link" href="https://docs.unity3d.com/Manual/ProfilerWindow.html" target="_blank">Profiler 文档</a>
-                            `,
-                            reason: "AR开发需要频繁切换视图定位虚拟物体与标记，熟练五视图可提高三倍迭代效率，这些链接能巩固官方术语。"
-                        },
-                        {
-                            title: "1.3 游戏对象与组件 · 组件式思维实战 + 代码示例",
-                            content: `🧩 <strong>组件思维 AR特训</strong>：任何GameObject都是容器。实战：创建“Player_ARCube”空物体，添加Transform、MeshFilter（立方体）、MeshRenderer、以及下面这个C#脚本“EnergyHealth.cs”：<br>
-                            <div class="code-note">
-                            using UnityEngine;<br>
-                            public class EnergyHealth : MonoBehaviour {<br>
-                            &nbsp;   public int maxHealth = 100;<br>
-                            &nbsp;   private int currentHealth;<br>
-                            &nbsp;   void Start() { currentHealth = maxHealth; }<br>
-                            &nbsp;   public void TakeDamage(int dmg) { <br>
-                            &nbsp;       currentHealth -= dmg;<br>
-                            &nbsp;       Debug.Log($"剩余血量: {currentHealth}");<br>
-                            &nbsp;   }<br>
-                            }
-                            </div>
-                            理解Tag与Layer：在AR碰撞检测中，给玩家层和能量球层添加碰撞矩阵。<br><br>
-                            🔗 <strong>组件系统深入：</strong>
-                            <a class="external-link" href="https://docs.unity3d.com/Manual/Components.html" target="_blank">官方组件手册</a>
-                            <a class="external-link" href="https://www.youtube.com/watch?v=5b1pGKonqRo" target="_blank">YouTube组件实战</a>
-                            `,
-                            reason: "AR体育系统中的玩家、能量球、血条全部遵循组件模式，代码示例让初学者立刻上手并理解生命值管理。"
-                        },
-                        {
-                            title: "1.4 项目资源管理 · 工业级文件夹规范 + Github模板",
-                            content: `📁 <strong>团队顶级结构（带链接模板）：</strong>
-                            <div class="code-note">
-                            AR-Sports-Template/<br>
-                            &nbsp; Assets/<br>
-                            &nbsp; &nbsp; Art/ (Models, Textures, Materials, Animations)<br>
-                            &nbsp; &nbsp; Scripts/ (Core, UI, Network, Utils)<br>
-                            &nbsp; &nbsp; Prefabs/ (Player, Ball, UI, AR-Anchors)<br>
-                            &nbsp; &nbsp; Scenes/ (Main_AR, Test_VR)<br>
-                            &nbsp; &nbsp; Vuforia/ (Databases, ImageTarget configs)<br>
-                            &nbsp; &nbsp; Plugins/ (Pico SDK, third-party dlls)<br>
-                            &nbsp; &nbsp; Resources/ (动态加载备用)
-                            </div>
-                            可直接使用的 <a class="external-link" href="https://github.com/Unity-Technologies/AR-Foundation-Samples" target="_blank">AR Foundation样例参考</a> 但我们将文件夹适配Vuforia。<br>
-                            推荐 <a class="external-link" href="https://github.com/github/gitignore/blob/main/Unity.gitignore" target="_blank">Unity .gitignore官方模板</a>。`,
-                            reason: "AR/VR项目资源量巨大，规范的结构能让协作者30秒内定位任何文件，提供的链接可以直接克隆参考。"
-                        }
-                    ]
-                },
-                { // ========= 第2章 =========
-                    id: 2,
-                    title: "Vuforia AR框架入门（扩充版）",
-                    description: "AR识别核心+云数据库+高级稳定技巧，内附视频教程与官方开发者指南。",
-                    sections: [
-                        {
-                            title: "2.1 Vuforia核心功能全景 + 链接",
-                            content: `📌 <strong>图像目标(Image Targets)</strong>：预存特征图片。<strong>模型目标(Model Targets)</strong>：识别物体如玩具。<strong>多目标(Multi-Targets)</strong>：立方体等多面识别。<strong>虚拟按钮(Virtual Buttons)</strong>：通过遮挡触发。<strong>云识别(Cloud Recognition)</strong>：云端图库，适合海量标记。<br><br>
-                            本项目选用Image Targets + Extended Tracking。<br>
-                            🔗 <a class="external-link" href="https://library.vuforia.com/" target="_blank">Vuforia Library 官方文档</a>
-                            <a class="external-link" href="https://www.youtube.com/@Vuforia" target="_blank">Vuforia YouTube频道</a>
-                            `,
-                            reason: "体育观众需要稳定锚定在场地周边标记，链接可查阅不同目标类型的性能对比。"
-                        },
-                        {
-                            title: "2.2 Vuforia引擎配置 · 四步集成 + 许可证链接",
-                            content: `🔧 <strong>集成步骤</strong>：1. Window > Package Manager 添加 Vuforia Engine。2. Project Settings > XR Plug-in Management 勾选 Vuforia。3. 获取免费开发许可证：<a class="external-link" href="https://developer.vuforia.com/license-manager" target="_blank">Vuforia 许可证管理页</a>，将License Key粘贴到Vuforia Configuration。4. 删除主相机，替换为ARCamera预制件。<br><br>
-                            常见坑点：许可证类型错误会导致黑屏，建议先选择“Development”类型。`,
-                            reason: "License配置错误是新手最常见问题，直接链接到申请页面并提醒开发模式可节省大量排查时间。"
-                        },
-                        {
-                            title: "2.3 第一个AR应用：标记追踪实战 + 数据库指南",
-                            content: `🖼️ <strong>实操加强版</strong>：登录 <a class="external-link" href="https://developer.vuforia.com/target-manager" target="_blank">Vuforia Target Manager</a>，创建Database（类型Device），上传高对比图片（特征至少4星）。下载.unitypackage导入。在Hierarchy新建ImageTarget，选择数据集与图片名称。为其添加子物体——一个运动员模型（可从 <a class="external-link" href="https://assetstore.unity.com/packages/3d/characters/humanoids/free-low-poly-sports-player-163150" target="_blank">Asset Store免费模型</a>获取）。真机测试：Build to Android，对准图片模型即刻出现。`,
-                            reason: "从零到可运行的经验快速建立信心，附带资源链接避免模型匮乏。"
-                        },
-                        {
-                            title: "2.4 高阶优化 · 稳定追踪技巧 + 高级调参",
-                            content: `🌟 图像目标设计原则：避免重复图案，使用10以上特征评级。启用Extended Tracking和Device Tracking协同。在Vuforia Configuration内调整“Max Simultaneous Targets”为2，降低性能消耗。<br><br>
-                            相机模式选择MODE_OPTIMIZE_SPEED。另外推荐阅读 <a class="external-link" href="https://library.vuforia.com/articles/Training/Optimizing-Target-Detection-and-Tracking" target="_blank">官方优化指南</a>。`,
-                            reason: "观众在移动手机时极易丢失标记，扩展追踪让虚拟体育场不至于瞬间漂移，链接提供官方优化建议。"
-                        }
-                    ]
-                },
-                { // ========= 第3章 =========
-                    id: 3,
-                    title: "项目技术选型与实施规划（扩充版）",
-                    description: "为什么Unity+Vuforia是最优组合？Roadmap细化到周，附竞品分析报告链接。",
-                    sections: [
-                        {
-                            title: "3.1 核心技术栈深度论证 + 对比报告",
-                            content: `💡 <strong>重申选型：</strong>C# (类型安全，生态强)；Unity LTS (XR支持全面)；Vuforia (标记追踪领先，无需ARCore/ARKit复杂配置)；Windows11开发 (Pico SDK调试最佳)；GitHub强制代码审查。<br><br>
-                            深度对比：<a class="external-link" href="https://www.ptc.com/en/products/vuforia/vuforia-engine" target="_blank">Vuforia官方页</a> vs <a class="external-link" href="https://developers.google.com/ar" target="_blank">ARCore</a>。内部测试显示Vuforia重定位快0.3s，角度大17°。<br>
-                            查看我们的<a class="external-link" href="#" target="_blank">(模拟链接)详细对比表格</a>。`,
-                            reason: "项目为期一年，LTS减少引擎API改动风险；Vuforia在观众端多设备兼容性测试中完胜AR Foundation。"
-                        },
-                        {
-                            title: "3.2 Unity与Vuforia协同分工 + 架构图",
-                            content: `🤝 <strong>分工明确</strong>：Vuforia提供世界坐标系——通过ImageTarget输出每一帧的Pose。Unity负责渲染与逻辑：在Pose根部搭建虚拟竞技场，驱动玩家动画、能量球物理、UI面向相机。两者通过Transform层级链接。<br><br>
-                            <a class="external-link" href="#" target="_blank">(模拟链接) 查看架构Visio图</a>  <a class="external-link" href="https://docs.unity3d.com/Manual/Transforms.html" target="_blank">Unity Transform文档</a>`,
-                            reason: "理解这个分工就不会错误地将游戏逻辑写进Vuforia回调，保持架构清晰、性能高效。"
-                        },
-                        {
-                            title: "3.3 分阶段实施路线图（细化到每周任务）",
-                            content: `📅 <strong>阶段1</strong>（W1-3）：Unity基础 + Vuforia单个标记追踪 → 产出“静态模型叠加”。<br>
-                            <strong>阶段2</strong>（W4-8）：双人对战逻辑（能量球碰撞、血条、特效）→ 可玩AR对战。<br>
-                            <strong>阶段3</strong>（W9-14）：Pico SDK集成，实现VR手柄控制玩家 → <a class="external-link" href="https://developer.picoxr.com/document/" target="_blank">Pico开发者文档</a><br>
-                            <strong>阶段4</strong>（W15-20）：跨端同步（Netcode实验） → 参考 <a class="external-link" href="https://docs-multiplayer.unity3d.com/" target="_blank">Unity Netcode</a><br>
-                            <strong>阶段5</strong>（W21-24）：测试、优化、文档。<br>
-                            同时使用 <a class="external-link" href="https://trello.com/" target="_blank">Trello看板</a> 跟踪进度。`,
-                            reason: "清晰路线让团队聚焦里程碑，早期快速产出可演示原型以便 stakeholder 反馈。链接方便直接进入开发环境。"
-                        },
-                        {
-                            title: "3.4 附加：风险预案与备用方案",
-                            content: "📉 技术风险：Vuforia在部分安卓机型纹理失真 → 备用方案为AR Foundation + 图像目标手动实现。同步延迟过大 → 降级为本地局域网+预测算法。已准备<a class='external-link' href='#'>风险登记册</a>。",
-                            reason: "提前规划风险使团队冷静面对意外，不恐慌。"
-                        }
-                    ]
-                },
-                { // ========= 第4章 =========
-                    id: 4,
-                    title: "核心技术选型与论证（深度加料版）",
-                    description: "深入技术权衡的细节，新增性能测试数据、官方文档与社区讨论链接。",
-                    sections: [
-                        {
-                            title: "4.1 编程语言与引擎 · C# & Unity LTS + 最新特性",
-                            content: `🚀 <strong>C# 11 / .NET Framework 深度结合</strong>：使用记录类型、模式匹配简化状态机。Unity 2022 LTS 的DOTS虽未用，但为后续性能优化预留。我们封装了 <code>HealthSystem</code> 泛型类便于复用。<br>
-                            示例：<div class="code-note">public record struct DamageInfo(int Amount, Vector3 Source);<br>
-                            public interface IDamageable { void TakeDamage(DamageInfo info); }</div>
-                            🔗 <a class="external-link" href="https://learn.microsoft.com/zh-cn/dotnet/csharp/whats-new/csharp-11" target="_blank">C# 11 新特性</a>
-                            <a class="external-link" href="https://unity.com/dots" target="_blank">Unity DOTS 介绍</a>`,
-                            reason: "C# 的跨平台兼容性和庞大社区，确保遇到难题时 Stack Overflow 等资源唾手可得；DOTS 预留为后期万人同屏测试做准备。"
-                        },
-                        {
-                            title: "4.2 Vuforia vs AR Foundation 实锤对比 + 外部测评",
-                            content: `📊 <strong>对比测试详细数据：</strong> 同样光照变化下，Vuforia 图像目标重定位速度平均快0.3秒，丢失后恢复角度65° vs 48°。同时参考 <a class="external-link" href="https://www.youtube.com/watch?v=xyz123" target="_blank">第三方对比视频</a> 和 <a class="external-link" href="#" target="_blank">社区讨论帖</a>。<br><br>
-                            另外，Vuforia 的 <strong>Model Target</strong> 在体育器材识别（如篮球）上表现优异，我们未来可扩展。`,
-                            reason: "对「标记追踪稳定性」的极致追求让我们放弃了一点跨平台通用性，换来观众视角更少的画面抖动。外部链接供 skeptics 验证。"
-                        },
-                        {
-                            title: "4.3 版本控制 · GitHub + Unity 元文件 + 自动化",
-                            content: `🔁 强化策略：使用 <strong>Unity 的 Yaml 合并工具</strong>（UnityYAMLMerge）。配置 <code>.gitattributes</code> 将场景、预制体设置为merge=unityyamlmerge。CI/CD 方面，接入 <a class="external-link" href="https://unity.com/products/unity-devops" target="_blank">Unity DevOps</a> 自动打包。<br>
-                            强制Code Review：每个PR必须通过两名核心成员批准。<br>
-                            🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/SmartMerge.html" target="_blank">Unity Smart Merge</a> <a class="external-link" href="https://github.com/actions/checkout" target="_blank">GitHub Actions 模板</a>`,
-                            reason: "Unity场景合并冲突极易损坏，精细化分支+每日同步+自动化能将冲突概率降低80%，加快迭代。"
-                        },
-                        {
-                            title: "4.4 扩展：第三方SDK与插件生态",
-                            content: "📦 考虑引入 <strong>DOTween</strong> (动画插值)、<strong>Odin Inspector</strong> (编辑器增强) 提高开发效率。网络同步可选 <strong>Photon Fusion</strong> 作为Netcode备选。<br>🔗 <a class='external-link' href='http://dotween.demigiant.com/'>DOTween官网</a> <a class='external-link' href='https://www.photonengine.com/fusion'>Photon Fusion</a>",
-                            reason: "在长周期项目中，成熟的插件可以节省数千行代码，让我们专注核心AR玩法。"
-                        }
-                    ]
-                },
-                { // ========= 第5章 =========
-                    id: 5,
-                    title: "AR识别与空间锚定实现（深度加料版）",
-                    description: "从标记设计到场景锚固，新增高级校准与多标记融合方案。",
-                    sections: [
-                        {
-                            title: "5.1 标记设计黄金法则 + 图例链接",
-                            content: `🖼️ <strong>高级设计原则：</strong> 使用高对比几何图案 + 丰富的纹理细节，避免反光材料。我们设计了一组 <strong>动态标记</strong> 结合AprilTag部分特征。特征评级必须 ≥ 4星。<br>
-                            🔗 <a class="external-link" href="https://library.vuforia.com/articles/Training/Image-Targets-Best-Practices" target="_blank">Vuforia官方设计指南</a>
-                            <a class="external-link" href="#" target="_blank">(模拟链接) 我们的标记PSD模板下载</a>`,
-                            reason: "特征点数量直接影响识别距离和稳定性，按照官方最佳实践可避免90%的识别问题。"
-                        },
-                        {
-                            title: "5.2 数据库配置与导入 + 尺寸校准",
-                            content: `📏 宽度设置技巧：在Target Manager中填入标记实际宽度（单位英寸），必须与打印尺寸一致。导入Unity后，通过 <strong>ImageTargetBehaviour</strong> 的 <code>Aspect Ratio</code> 和 <code>Preserve Child Size</code> 选项确保虚拟物体缩放正确。<br>
-                            复杂情况：多标记同时追踪，配置 <code>Max Simultaneous Targets = 3</code>。`,
-                            reason: "宽度设置影响虚拟物体缩放比例，与实际尺寸偏差过大会导致能量球看起来像乒乓球或篮球，破坏沉浸感。"
-                        },
-                        {
-                            title: "5.3 空间锚定：虚拟世界扎根 + 坐标系解算",
-                            content: `🌍 所有游戏内容作为ImageTarget的子物体，此外我们实现了 <strong>世界锚点</strong> 脚本：当标记丢失时，利用陀螺仪和加速度计做短时预测（通过 <code>Unity.XR.ARSubsystems</code> 的尝试）。<br>
-                            代码片段：<div class="code-note">void OnTrackingLost() { StartCoroutine(ExtendedPredict()); }<br>
-                            IEnumerator ExtendedPredict() { /* 利用最后已知位置和传感器预测 */ }</div>
-                            🔗 <a class="external-link" href="https://docs.unity3d.com/ScriptReference/XR.InputTracking.html" target="_blank">XR InputTracking</a>`,
-                            reason: "父子关系确保标记移动时整个虚拟场景跟随，扩展预测进一步提升标记短暂遮挡时的稳定性。"
-                        },
-                        {
-                            title: "5.4 高级多标记融合方案",
-                            content: "🏟️ 体育场四角放置不同标记，通过 <strong>Vuforia Fusion Provider</strong> 融合多个标记的位姿，生成一个大地图坐标系。参考 <a class='external-link' href='https://library.vuforia.com/features/fusion' target='_blank'>Vuforia Fusion</a> 文档。",
-                            reason: "当观众移动时，多标记融合能提供更大范围的追踪，让虚拟体育场覆盖整个真实场地。"
-                        }
-                    ]
-                },
-                { // ========= 第6章 =========
-                    id: 6,
-                    title: "核心游戏逻辑开发（深度加料版）",
-                    description: "玩家战斗、物理弹道、伤害反馈——全套源码+高级物理调试。",
-                    sections: [
-                        {
-                            title: "6.1 玩家行为与输入捕获 + 新输入系统",
-                            content: `🎮 <strong>Unity 新输入系统 (Input System Package)</strong>：设置 <code>PlayerInput</code> 组件，映射摇杆、扳机、触摸板。同时为AR观众测试提供键盘映射（WASD/Space）。<br>
-                            示例：<div class="code-note">public void OnMove(InputValue value) { moveVec = value.Get<Vector2>(); }</div>
-                            🔗 <a class="external-link" href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.5/manual/" target="_blank">新输入系统文档</a>`,
-                            reason: "抽象输入层使得后期接入真实VR控制器只需替换绑定，不用重写业务逻辑。新输入系统支持多平台灵活重映射。"
-                        },
-                        {
-                            title: "6.2 弹道物理系统 · 高级物理参数",
-                            content: `💥 能量球预制体：Sphere Collider + Rigidbody (mass=0.5, drag=0) + <strong>Projectile.cs</strong>。初始化速度 = 方向 * 20 m/s + 随机扰动 ±5%。使用 <code>Physics.IgnoreCollision</code> 避免与发射者碰撞。<br>
-                            优化：<strong>对象池</strong> 管理能量球，避免运行时Instantiate/Destroy开销。<br>
-                            🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/PhysicsOverview.html" target="_blank">Unity 物理概述</a>`,
-                            reason: "物理引擎负责真实的碰撞与反弹，但禁掉重力让弹道更符合竞技游戏直觉；对象池保证大量弹幕时帧率稳定。"
-                        },
-                        {
-                            title: "6.3 碰撞伤害与特效 · 接口实战",
-                            content: `⚡ <strong>IDamageable 接口完整实现：</strong>
-                            <div class="code-note">
-                            public interface IDamageable { void TakeDamage(int amount, GameObject source); }<br>
-                            public class PlayerHealth : MonoBehaviour, IDamageable {<br>
-                            &nbsp;   public void TakeDamage(int amount, GameObject source) { /* 扣血、播放受击特效、震动 */ }<br>
-                            }
-                            </div>
-                            特效使用 <strong>VFX Graph</strong> 或简单粒子系统。销毁能量球前调用 <code>ObjectPool.Release</code>。`,
-                            reason: "接口设计方便扩展新角色或障碍物，后期增加“能量盾”只需实现IDamageable；特效增加打击感。"
-                        },
-                        {
-                            title: "6.4 动态血条UI + 进阶面向相机",
-                            content: `❤️ 世界空间Canvas下，使用 <code>LookAtCamera</code> 脚本 (LateUpdate中 transform.LookAt( Camera.main.transform ) )。血条渐变：<code>image.color = Color.Lerp(Color.red, Color.green, healthPercent);</code><br>
-                            可添加 <strong>伤害数字飘字</strong> (使用预制体 + 动画)。`,
-                            reason: "世界空间UI让观众从任何角度看到玩家状态，强化竞技临场感；伤害数字提供即时反馈。"
-                        }
-                    ]
-                },
-                { // ========= 第7章 =========
-                    id: 7,
-                    title: "跨设备交互与数据同步（深度加料版）",
-                    description: "VR玩家 ↔ AR观众 实时互动，全网架构+开源示例+延迟优化。",
-                    sections: [
-                        {
-                            title: "7.1 跨设备网络架构 · NGO 深度实践",
-                            content: `🌐 采用 <strong>Unity Netcode for GameObjects</strong>，VR端作为Host，AR观众作为Client。关键同步：玩家位置、旋转、攻击事件。使用 <code>NetworkTransform</code> 和 <code>NetworkVariable</code> 同步基础状态。<br>
-                            难点：AR标记坐标系与VR世界坐标系统一。解法：在VR端放置一个<strong>虚拟标记锚点</strong>，将所有VR玩家坐标转换为相对于该锚点的偏移，再同步到AR端。<br>
-                            🔗 <a class="external-link" href="https://docs-multiplayer.unity3d.com/" target="_blank">Unity Netcode 官方手册</a>
-                            <a class="external-link" href="https://github.com/Unity-Technologies/com.unity.multiplayer.samples.coop" target="_blank">联机示例项目</a>`,
-                            reason: "NGO相对轻量，适合小范围局域网；相对坐标转换是跨端混合现实同步的核心创新。"
-                        },
-                        {
-                            title: "7.2 数据同步痛点与解法 · 开源核心算法",
-                            content: `🧩 核心代码思路：<div class="code-note">// VR端<br>Vector3 relativePos = vrPlayer.position - markerAnchor.position;<br>syncVar.RelativePos = relativePos;<br><br>// AR端<br>arPlayer.position = imageTarget.position + syncVar.RelativePos;</div>
-                            同时同步旋转四元数的相对差值。<br>
-                            项目已开源：<a class="external-link" href="https://github.com/yourorg/AR-VR-Sync" target="_blank">AR-VR同步示例库</a> (模拟链接)。`,
-                            reason: "这是本项目最核心的创新点，也是学术界和工业界混合现实同步的典型难题。我们开源了相对坐标同步示例，社区可复用。"
-                        },
-                        {
-                            title: "7.3 同步性能优化 · 带宽与延迟",
-                            content: `📉 优化策略：<br>
-                            - 使用 <code>NetworkVariable</code> 的 <code>Permissions</code> 和 <code>SendRate</code> 降低频率 (每秒15次)。<br>
-                            - 攻击事件用 <code>NetworkManager.Singleton.Spawn</code> 实例化能量球，确保所有端看到相同弹道。<br>
-                            - 客户端预测 + 服务器回滚（高级，暂未实现，但预留接口）。<br>
-                            🔗 <a class="external-link" href="https://docs-multiplayer.unity3d.com/netcode/current/learn/bossroom/" target="_blank">Boss Room 优化案例</a>`,
-                            reason: "减少带宽占用，同时保证攻击指令不丢失，保障游戏公平。预测机制为未来网络恶劣环境准备。"
-                        },
-                        {
-                            title: "7.4 备选方案：Photon / 自定义UDP",
-                            content: "📡 如果NGO不能满足需求，备选 <strong>Photon Fusion</strong> 提供状态同步和输入同步；或者自制简单的 <strong>UDP 通信</strong> 传输Transform数据。但会增加开发量。",
-                            reason: "网络库各有优劣，保留备选方案以防NGO在复杂场景下出现瓶颈。"
-                        }
-                    ]
-                },
-                { // ========= 第8章 · 超级扩充 =========
-                    id: 8,
-                    title: "团队协作与版本控制（深度加料版）",
-                    description: "多人、多端、多资源——完整Git操作流+PR模板+自动化。",
-                    sections: [
-                        {
-                            title: "8.1 Unity专属.gitignore + .gitattributes 完全配置",
-                            content: `📄 <strong>完整配置示例：</strong>
-                            <div class="code-note">
-                            # .gitignore 核心<br>
-                            /Library/<br>
-                            /Temp/<br>
-                            /obj/<br>
-                            *.csproj<br>
-                            *.pidb<br>
-                            .vs/<br>
-                            # 但强制跟踪.meta<br>
-                            !*.meta<br><br>
-                            # .gitattributes 设置<br>
-                            *.unity merge=unityyamlmerge<br>
-                            *.prefab merge=unityyamlmerge<br>
-                            *.png filter=lfs diff=lfs merge=lfs -text<br>
-                            *.fbx filter=lfs diff=lfs merge=lfs -text
-                            </div>
-                            🔗 <a class="external-link" href="https://github.com/github/gitignore/blob/main/Unity.gitignore" target="_blank">官方Unity.gitignore</a>
-                            <a class="external-link" href="https://git-lfs.com/" target="_blank">Git LFS 官网</a>`,
-                            reason: "忽略临时文件和编译输出，但保留.meta保证资源GUID一致，LFS防止大文件使仓库臃肿。精确配置避免日后纠葛。"
-                        },
-                        {
-                            title: "8.2 分支策略：Git Flow + 专属PR模板",
-                            content: `🌿 <strong>分支命名规范：</strong><br>
-                            - main: 稳定可发布版<br>
-                            - dev: 开发集成<br>
-                            - feature/ar-xxx, feature/vr-xxx<br>
-                            - release/v1.0.0 预发布<br>
-                            - hotfix/critical-bug<br><br>
-                            📋 <strong>Pull Request 模板 (.github/PULL_REQUEST_TEMPLATE.md)</strong>
-                            <div class="code-note">
-                            ### 功能描述<br>
-                            ### 关联需求/议题<br>
-                            ### 测试说明<br>
-                            ### 截图/视频 (AR演示必须)<br>
-                            ### 检查清单<br>
-                            - [ ] 代码自审通过<br>
-                            - [ ] 与main无冲突<br>
-                            - [ ] 已更新文档
-                            </div>
-                            🔗 <a class="external-link" href="https://docs.github.com/zh/communities/using-templates-to-encourage-useful-issues-and-pull-requests/creating-a-pull-request-template-for-your-repository" target="_blank">GitHub PR模板文档</a>`,
-                            reason: "多个特性并行时，feature分支避免相互干扰，合并前必须多人Code Review。PR模板保证每次提交信息完整，减少沟通成本。"
-                        },
-                        {
-                            title: "8.3 场景合并冲突实战 + 自动化工具",
-                            content: `⚔️ <strong>Unity Smart Merge 配置：</strong><br>
-                            确保 <code>UnityYAMLMerge</code> 在路径中，并在 <code>.git/config</code> 添加：<br>
-                            <div class="code-note">
-                            [merge "unityyamlmerge"]<br>
-                            &nbsp;   driver = 'C:/Program Files/Unity/Editor/Data/Tools/UnityYAMLMerge.exe' merge %O %A %B
-                            </div>
-                            自动化：使用 <strong>Unity DevOps</strong> 或 <strong>GameCI</strong> 进行每日自动化打包测试。<br>
-                            🔗 <a class="external-link" href="https://game.ci/" target="_blank">GameCI 开源CI/CD</a> <a class="external-link" href="https://unity.com/products/unity-devops" target="_blank">Unity DevOps</a>`,
-                            reason: "场景冲突是团队杀手，规范化操作+自动化让合并时间从2小时压缩到10分钟，并提前发现构建错误。"
-                        },
-                        {
-                            title: "8.4 文档驱动协作 ·  README 与 Wiki 规范",
-                            content: "📚 强制要求每个文件夹包含 README.md，说明用途和责任人。主Wiki记录架构决策（ADR）。推荐 <strong>MkDocs</strong> 生成静态文档站。<br>🔗 <a class='external-link' href='https://www.mkdocs.org/'>MkDocs官网</a>",
-                            reason: "随着项目膨胀，文档成为团队共同记忆，减少人员流动带来的知识损失。"
-                        }
-                    ]
-                },
-                { // ========= 第9章 · 超级扩充 =========
-                    id: 9,
-                    title: "会议准备与利益相关者管理（深度加料版）",
-                    description: "学术项目不仅靠代码，全套会议模板+ stakeholder 沟通策略+演示清单。",
-                    sections: [
-                        {
-                            title: "9.1 会前准备清单 · 细化到分钟",
-                            content: `📋 <strong>终极清单示例：</strong>
-                            <div class="code-note">
-                            ## 硬件检查
-                            - [ ] 手机/Pico 电量 > 80%
-                            - [ ] 标记图片打印至少2份 (A4哑光)
-                            - [ ] 备用数据线/转接头
-                            ## 软件检查
-                            - [ ] 项目编译最新APK并安装
-                            - [ ] 关闭弹窗/勿扰模式
-                            - [ ] 录屏软件准备 (OBS)
-                            ## 内容准备
-                            - [ ] 2页PPT (问题/进展/下一步)
-                            - [ ] 30秒电梯演讲演练
-                            </div>
-                            🔗 <a class="external-link" href="https://www.notion.so/help/guides/meeting-notes" target="_blank">Notion 会议纪要模板</a>`,
-                            reason: "利益相关者（教师/合作方）时间宝贵，有结构地演示能迅速获得关键建议而非跑题，清单避免现场慌乱。"
-                        },
-                        {
-                            title: "9.2 议程与纪要模板 · 标准格式",
-                            content: `📅 <strong>标准会议议程：</strong>
-                            <div class="code-note">
-                            1. 项目背景与目标重申 (2分钟)
-                            2. 现场演示 (8分钟) — 强调AR追踪稳定性/跨端互动
-                            3. 待解决问题 & 求助 (5分钟)
-                            4. 下一步计划与分工 (5分钟)
-                            5. 自由讨论
-                            </div>
-                            纪要模板：<strong>[Notion 模板链接]</strong> (模拟链接) 包含行动项、负责人、DDL。`,
-                            reason: "书面记录避免分歧，明确下一步行动，让 stakeholder 感到被尊重，同时作为项目历史存档。"
-                        },
-                        {
-                            title: "9.3 管理期望的沟通策略 + 话术示例",
-                            content: `🗣️ <strong>话术示例：</strong><br>
-                            “目前跨设备同步延迟大约200ms，我们正在尝试客户端预测，计划下个月将延迟控制在100ms以内。作为备选，我们准备了一个局域网版本，可以展示流畅对战。”<br>
-                            风险沟通工具：<strong>风险登记册</strong> (公开共享)。`,
-                            reason: "提前管理期望防止最终交付时失望，且展示团队的思考深度和备选方案，增强 stakeholder 信心。"
-                        },
-                        {
-                            title: "9.4 远程/混合会议工具链",
-                            content: "💻 推荐使用 <strong>Miro</strong> 进行实时架构图协作，<strong>Google Slides</strong> 共享PPT，<strong>Slack</strong> 会后即时沟通。",
-                            reason: "团队可能分散在不同地点，统一的工具链提高协作效率。"
-                        }
-                    ]
-                },
-                { // ========= 第10章 · 超级扩充 =========
-                    id: 10,
-                    title: "示例项目与资源（深度加料版）",
-                    description: "可直接运行的AR体育演示包 + 完全注释源码 + 资产树 + 快速上手指南。",
-                    sections: [
-                        {
-                            title: "10.1 示例项目下载与导入 · 完整架构图",
-                            content: `📦 <strong>GitHub Release 包含：</strong><br>
-                            - AR-Sports-Demo.unitypackage (含场景/预制体/数据库)<br>
-                            - 示例标记图片 (可打印PDF)<br>
-                            - 项目结构图 (如下)<br>
-                            <div class="code-note">
-                            📂 Assets/<br>
-                            ┣ 📂 Art/Characters/Player.fbx<br>
-                            ┣ 📂 Prefabs/EnergyBall.prefab<br>
-                            ┣ 📂 Scenes/MainAR.unity<br>
-                            ┣ 📂 Scripts/Networking/VrPlayerSync.cs<br>
-                            ┗ 📂 Vuforia/ARSportsDatabase
-                            </div>
-                            🔗 <a class="external-link" href="#" target="_blank">(模拟链接) GitHub 仓库</a>`,
-                            reason: "示例项目让新手直接运行看到效果，通过修改参数理解每个脚本的作用，学习曲线从90°降为15°。"
-                        },
-                        {
-                            title: "10.2 关键脚本全注释 · 片段展示",
-                            content: `📝 <strong>VrPlayerSync.cs 核心注释：</strong>
-                            <div class="code-note">
-                            /// <summary><br>
-                            /// 同步VR玩家相对于标记锚点的位置到AR客户端<br>
-                            /// 原理：将世界坐标转换为相对锚点的偏移，网络传输后在AR端叠加到ImageTarget上<br>
-                            /// </summary><br>
-                            [SerializeField] private Transform markerAnchor; // 场景中代表真实标记的空物体
-                            </div>
-                            其他脚本：BallShooter.cs (对象池实现), Health.cs (接口范例) 全部XML注释。`,
-                            reason: "注释详细到“为什么用Quaternion.LookRotation而非直接赋值”，体现工程决策，便于学习者修改。"
-                        },
-                        {
-                            title: "10.3 资源清单与扩展阅读 · 知识图谱",
-                            content: `🔗 <strong>完整资源清单：</strong><br>
-                            - 模型: <a class="external-link" href="https://assetstore.unity.com/packages/3d/characters/humanoids/free-low-poly-sports-player-163150" target="_blank">Free Low-Poly Sports Player</a><br>
-                            - 音频: Freesound 能量球音效<br>
-                            - 文档: <a class="external-link" href="https://library.vuforia.com/" target="_blank">Vuforia Library</a><br>
-                            - 视频: <a class="external-link" href="https://www.youtube.com/playlist?list=PLX2vGYjWbI0S4UJqWWJp0P5qRvKJ5rF8d" target="_blank">官方AR教程播放列表</a><br>
-                            - 博客: 本项目开发全过程 (模拟链接)`,
-                            reason: "给予学习者进一步自学的钥匙，并遵守开源许可，同时展示项目透明度和学术诚信。"
-                        },
-                        {
-                            title: "10.4 快速上手指南 · 5分钟运行",
-                            content: "⚡ 步骤：1. 导入package 2. 打开MainAR场景 3. 在Vuforia Configuration粘贴你的测试许可证 4. 将打印的标记对准摄像头 5. 点击Play — 即可看到运动员和UI。",
-                            reason: "极速上手增强初学者信心，避免配置陷阱。"
-                        }
-                    ]
-                }
-            ]
-        };
+        (function(){
+            // ==================== 深度扩展后的章节内容（所有reason已移除） ====================
+            const tutorialData = { chapters: [] };
 
-        function renderChapterCards() {
-            const container = document.getElementById('chapters-container');
-            container.innerHTML = '';
-            tutorialData.chapters.forEach(ch => {
-                const card = document.createElement('div');
-                card.className = 'chapter-card';
-                card.onclick = () => showChapter(ch.id);
-                card.innerHTML = `
-                    <div class="chapter-number">${ch.id}</div>
-                    <h3>${ch.title}</h3>
-                    <p>${ch.description}</p>
-                    <div class="hint">🔍 点击展开 ${ch.sections.length} 节详细内容 →</div>
+            // ========= 第1章 Unity引擎简介 =========
+            tutorialData.chapters.push({
+                id: 1, title: "Unity引擎简介（超深度扩展）", difficulty: "初级", duration: "4小时", icon: "🎮",
+                description: "从零开始安装Unity Hub和编辑器（2022.3.62f3 LTS），完整模块配置（Android, Windows），编辑器五视图精讲，游戏对象和组件架构深度剖析。",
+                sections: [
+                    { title: "1.1 Unity Hub安装与编辑器版本选择（含故障排除）", 
+                      content: `✅ <strong>超详细步骤：</strong>
+                      <br><br>1. **访问官网下载**：打开 <a class="external-link" href="https://unity.com/download" target="_blank">Unity官网</a>，下载Unity Hub 3.7+ 版本（支持Windows/macOS/Linux）。
+                      <br>2. **安装Unity Hub**：双击安装程序，选择安装路径（建议非系统盘），完成安装。
+                      <br>3. **登录与激活许可证**：
+                      <br>   - 打开Unity Hub，使用Unity账号登录（如无账号，先免费注册）。
+                      <br>   - 进入“许可证”菜单，点击“添加”，选择“获得免费的个人许可证”并激活。
+                      <br>4. **安装指定编辑器版本**：
+                      <br>   - 在“安装”选项卡点击“添加”按钮。
+                      <br>   - 选择版本 <strong>2022.3.62f3 LTS</strong>（LTS表示长期支持版，适合商业项目）。
+                      <br>5. **必须勾选的模块（非常重要！）**：
+                      <br>   - **Android Build Support**：展开后必须勾选：
+                      <br>     - SDK（Android软件开发工具包）
+                      <br>     - NDK（原生开发工具包）
+                      <br>     - JDK（Java开发工具包）
+                      <br>     - OpenJDK（开源Java环境）
+                      <br>     - Gradle（Android构建工具）
+                      <br>   - **Windows Build Support (IL2CPP)**：用于PC端测试和性能分析。
+                      <br>   - **简体中文本地化包**（可选，便于中文界面）。
+                      <br>6. **模块补装**：如果安装时漏装模块，后续可在Hub中“添加模块”随时补充。
+                      <br><br>⚠️ **常见错误与解决**：
+                      <br>- 错误：安装卡在“正在下载”长时间不动 → 尝试切换网络或使用科学上网。
+                      <br>- 错误：许可证激活失败 → 检查账号是否已验证邮箱，或重新登录。
+                      <br>- 错误：模块下载失败 → 手动下载模块包，参考官方文档离线安装。
+                      <br><br>🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/GettingStartedInstallingHub.html" target="_blank">官方安装文档</a> | <a class="external-link" href="https://docs.unity3d.com/Manual/OfflineInstallation.html" target="_blank">离线安装指南</a>` },
+                    
+                    { title: "1.2 创建项目与Android环境深度验证", 
+                      content: `📁 <strong>新建项目完整流程：</strong>
+                      <br>1. 打开Unity Hub，点击“新建项目”，选择“3D核心”模板。
+                      <br>2. 项目名称：例如“PICO_AR_Sports”，保存位置：**绝对不要包含中文或特殊字符**（建议英文路径）。
+                      <br>3. 点击“创建项目”，等待Unity初始化完成。
+                      <br><br>🔧 **Android环境深度验证**：
+                      <br>1. 打开菜单 **Edit > Preferences > External Tools**（Windows）或 **Unity > Preferences**（macOS）。
+                      <br>2. 检查 **Android SDK Tools** 路径是否自动识别：
+                      <br>   - 默认路径：Windows为 <code>C:\\Users\\[用户名]\\AppData\\Local\\Android\\Sdk</code>
+                      <br>   - 如果未识别，点击“Browse”手动指向SDK安装目录。
+                      <br>3. 检查NDK、JDK、Gradle是否都已正确识别，如缺失可点击“Download”自动下载补全。
+                      <br>4. **配置环境变量（高级）**：将Android SDK的platform-tools路径添加到系统PATH，方便使用adb命令。
+                      <br><br>📱 **真机调试环境验证**：
+                      <br>1. **开启PICO开发者模式**：
+                      <br>   - 在PICO设备中进入“设置” > “通用” > “关于本机”，连续点击“版本号”7次开启开发者选项。
+                      <br>   - 返回“设置” > “系统” > “开发者选项”，开启“USB调试”。
+                      <br>2. **连接设备**：用USB线连接电脑，在PICO设备上弹出的“允许USB调试？”对话框中点击“允许”。
+                      <br>3. **验证连接**：打开终端/命令提示符，输入 <code>adb devices</code>，如果显示设备序列号且状态为“device”，则表示连接成功。
+                      <br>4. **Unity中配置Build**：
+                      <br>   - 打开 **File > Build Settings**，点击“Android”然后点击“Switch Platform”。
+                      <br>   - 点击“Player Settings”：
+                      <br>     - **Package Name**：设置唯一包名，例如 <code>com.yourcompany.picoarsports</code>
+                      <br>     - **Minimum API Level**：选择 **Android API Level 29**（Android 10）
+                      <br>     - **Target API Level**：选择 **32 或 33**
+                      <br>   - 点击“Build And Run”，如果能在PICO设备上安装一个空App（黑屏或显示默认场景），则环境验证成功。
+                      <br><br>🔗 <a class="external-link" href="https://developer.android.com/studio/command-line/adb" target="_blank">ADB使用指南</a> | <a class="external-link" href="https://developer.picoxr.com/zh/document/unity/development-environment/" target="_blank">PICO开发环境文档</a>` },
+                    
+                    { title: "1.3 编辑器界面五视图精讲（AR开发视角）", 
+                      content: `🖥️ **Unity五大核心视图详解（AR开发视角）**：
+                      <br><br>1. **Scene视图**：
+                      <br>   - **用途**：在AR开发中用于摆放虚拟物体、调整位置、设置光照。
+                      <br>   - **快捷键**：Q（手形工具）、W（移动）、E（旋转）、R（缩放）。
+                      <br>   - **技巧**：使用“2D”模式查看UI布局，使用“ISO”模式查看3D场景。
+                      <br>   - **AR专用**：通过Scene视图可以精确地将虚拟物体放置在真实世界的对应位置（模拟）。
+                      <br><br>2. **Game视图**：
+                      <br>   - **用途**：预览最终输出效果，模拟不同分辨率和设备。
+                      <br>   - **技巧**：点击“Free Aspect”可切换预设分辨率（如1080x1920模拟手机）。
+                      <br>   - **AR专用**：在PICO头显中运行时，Game视图显示的是头显左眼画面。
+                      <br><br>3. **Hierarchy视图**：
+                      <br>   - **用途**：显示当前场景中所有游戏对象的层级结构，支持父子级关系。
+                      <br>   - **技巧**：右键可快速创建基本对象（Cube、Camera、UI等）。
+                      <br>   - **AR专用**：管理ImageTarget、PXR_CameraRig及其子物体（手柄、头显）。
+                      <br><br>4. **Project视图**：
+                      <br>   - **用途**：管理项目所有资源（脚本、模型、材质、场景等），支持搜索和筛选。
+                      <br>   - **技巧**：使用“Packages”显示所有导入的包，使用“Favorites”快速访问常用资源。
+                      <br>   - **AR专用**：按照规范组织资源，便于团队协作。
+                      <br><br>5. **Inspector视图**：
+                      <br>   - **用途**：查看和编辑选中物体的所有组件属性。
+                      <br>   - **技巧**：点击右上角“锁”图标可以锁定当前物体，方便对比不同物体属性。
+                      <br>   - **AR专用**：调整PXR_Manager的参数（如License、追踪设置）、修改手柄射线属性。
+                      <br><br>🔧 **实用技巧**：
+                      <br>- **布局保存**：调整好视图布局后，点击右上角“Layout”下拉菜单，选择“Save Layout...”保存自定义布局。
+                      <br>- **搜索功能**：Hierarchy和Project视图都支持搜索，输入“t:script”可筛选所有脚本。
+                      <br>- **快捷键**：按住Ctrl/Cmd + Shift + F可将摄像机对齐到Scene视图当前视角。` },
+                    
+                    { title: "1.4 游戏对象与组件架构实战（含完整示例）", 
+                      content: `🧩 **组件式思维深度解析**：
+                      <br>Unity的核心设计思想：**任何GameObject都是一个容器，通过添加组件赋予其功能**。组件包括Transform、MeshRenderer、Collider、脚本等。
+                      <br><br>**实战演练：创建可交互的旋转立方体**：
+                      <br>1. **创建空物体**：在Hierarchy右键 > “Create Empty”，命名为“Player”。
+                      <br>2. **添加可视化组件**：
+                      <br>   - 选中Player，点击Inspector下方的“Add Component”。
+                      <br>   - 搜索并添加 **MeshFilter**，在Mesh属性中选择 **Cube**。
+                      <br>   - 添加 **MeshRenderer**，在Materials中点击小圆圈选择默认材质（或新建材质）。
+                      <br>3. **添加C#脚本**：
+                      <br>   - 在Project视图的Scripts文件夹中右键 > “Create” > “C# Script”，命名为“Rotate”。
+                      <br>   - 双击打开脚本，输入以下代码：
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      public class Rotate : MonoBehaviour {<br>
+                      &nbsp;   [Tooltip("旋转速度（度/秒）")]<br>
+                      &nbsp;   public float speed = 30f;<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // 绕Y轴匀速旋转，Time.deltaTime保证帧率独立<br>
+                      &nbsp;       transform.Rotate(0, speed * Time.deltaTime, 0);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>4. **挂载脚本**：将Rotate脚本拖拽到Player物体上，或点击“Add Component”搜索Rotate添加。
+                      <br>5. **运行测试**：点击顶部播放按钮，应该看到立方体匀速旋转。
+                      <br><br>**理解Tag和Layer**：
+                      <br>- **Tag**：用于标识物体类型，例如“Player”、“Ball”。可在脚本中用 <code>CompareTag("Player")</code> 快速判断。
+                      <br>- **Layer**：用于物理碰撞筛选、相机渲染分层。例如设置“Player”层只与“Ball”层碰撞。
+                      <br><br>**组件生命周期**：
+                      <br>- **Awake()**：物体创建时调用，用于初始化。
+                      <br>- **Start()**：第一帧更新前调用。
+                      <br>- **Update()**：每帧调用，用于处理逻辑。
+                      <br>- **FixedUpdate()**：固定时间步长调用，用于物理计算。
+                      <br>- **OnCollisionEnter()**：碰撞发生时调用。` }
+                ]
+            });
+
+            // ========= 第2章 开始使用PICO Unity Integration SDK =========
+            tutorialData.chapters.push({
+                id: 2, title: "开始使用PICO Unity Integration SDK（超深度扩展）", difficulty: "初级", duration: "6小时", icon: "🥽",
+                description: "PICO Unity Integration SDK功能全景，专注于设备跟踪和空间感知，通过PICO开发者Portal集成SDK，为PICO设备配置项目设置，创建一个基本的AR跟踪应用并解决常见问题。",
+                sections: [
+                    { title: "2.1 SDK功能全景：设备跟踪与空间感知详解", 
+                      content: `📡 **PICO SDK核心能力深度解析**：
+                      <br><br>1. **6DoF头显追踪**：
+                      <br>   - 获取头显的精确位置（Position）和旋转（Rotation）。
+                      <br>   - 频率高达72/90Hz，延迟极低。
+                      <br>   - 支持区域学习，可在不同环境快速重定位。
+                      <br><br>2. **手柄追踪**：
+                      <br>   - 获取左右手柄的位置、旋转、速度、角速度。
+                      <br>   - 读取所有按键状态：扳机、握持键、摇杆、菜单键、A/B/X/Y键。
+                      <br>   - 支持震动反馈（强度0-1，持续时间可调）。
+                      <br><br>3. **空间锚点**：
+                      <br>   - 创建锚点：将虚拟物体固定在真实世界的特定位置。
+                      <br>   - 保存锚点：持久化到设备存储，重启应用后自动加载。
+                      <br>   - 导出/导入锚点：实现多设备共享同一空间位置。
+                      <br><br>4. **空间网格**：
+                      <br>   - 获取真实环境的三角形网格数据，用于物理碰撞、遮挡。
+                      <br>   - 支持网格更新（当环境变化时）。
+                      <br><br>5. **彩色透视**：
+                      <br>   - 开启后头显显示真实世界画面（PICO 4/Neo3 Pro支持）。
+                      <br>   - 支持调节亮度和对比度。
+                      <br><br>6. **手势识别**：
+                      <br>   - 检测21个手部关键点。
+                      <br>   - 内置手势：捏合、点击、握拳等。
+                      <br><br>本教程聚焦于**设备跟踪**和**空间感知**基础，为后续章节铺垫。` },
+                    
+                    { title: "2.2 通过PICO开发者Portal集成SDK（含账号注册）", 
+                      content: `📦 **超详细集成步骤**：
+                      <br><br>1. **注册PICO开发者账号**：
+                      <br>   - 访问 <a class="external-link" href="https://developer.picoxr.com" target="_blank">PICO开发者官网</a>，点击“注册”。
+                      <br>   - 使用邮箱注册，完成邮箱验证。
+                      <br>   - 登录后，点击右上角“控制台”。
+                      <br><br>2. **创建应用获取License**：
+                      <br>   - 在控制台点击“创建应用”，填写应用名称（如“AR_Sports_Demo”），选择平台为“PICO 4”。
+                      <br>   - 创建成功后，在应用详情页找到 **App ID** 和 **App License**（重要！）。
+                      <br>   - 复制License字符串，稍后需要粘贴到Unity中。
+                      <br><br>3. **导入SDK到Unity**：
+                      <br>   - 方法A（推荐）：在Unity中打开 **Window > Asset Store**，搜索“PICO Unity Integration SDK”，点击“下载”然后“导入”。
+                      <br>   - 方法B：从Portal下载最新.unitypackage，然后双击导入。
+                      <br>   - 导入后，Unity菜单栏会出现“PICO”选项，表示导入成功。
+                      <br><br>4. **配置XR Plug-in Management**：
+                      <br>   - 打开 **Edit > Project Settings > XR Plug-in Management**。
+                      <br>   - 点击“Android”选项卡，勾选 **PICO XR**。
+                      <br><br>5. **填入License**：
+                      <br>   - 在Hierarchy中右键 > “PICO” > “PXR_Manager”，创建一个PICO管理器。
+                      <br>   - 选中PXR_Manager，在Inspector中找到 **App License** 字段，粘贴从Portal复制的License。
+                      <br><br>🔧 **验证SDK安装**：
+                      <br>- 检查Project视图中是否有“PICO”文件夹。
+                      <br>- 检查菜单栏是否有“PICO”选项。` },
+                    
+                    { title: "2.3 为PICO设备配置项目（Player Settings终极指南）", 
+                      content: `⚙️ **必须的Android设置（逐项解释）**：
+                      <br><br>1. **打开Player Settings**：**File > Build Settings > Player Settings**。
+                      <br><br>2. **Resolution and Presentation**：
+                      <br>   - **Render Outside Safe Area**：取消勾选（避免渲染异常）。
+                      <br>   - **Orientation**：锁定为 **Landscape Left** 或 **Landscape Right**（PICO默认横屏）。
+                      <br><br>3. **Other Settings**（关键！）：
+                      <br>   - **Color Space**：设为 **Linear**（线性色彩空间，保证渲染正确）。
+                      <br>   - **Minimum API Level**：设为 **29**（Android 10，PICO 4最低要求）。
+                      <br>   - **Target API Level**：设为 **32** 或 **33**（建议与设备系统一致）。
+                      <br>   - **Multithreaded Rendering**：**必须禁用！**（否则可能导致黑屏或崩溃）。
+                      <br>   - **Graphics APIs**：删除 **Vulkan**，只保留 **OpenGLES3**（部分PICO设备对Vulkan支持不完善）。
+                      <br>   - **Package Name**：设置唯一包名，如 <code>com.yourcompany.picoarsports</code>。
+                      <br>   - **Version**：初始设为 **0.1**。
+                      <br><br>4. **其他优化设置**：
+                      <br>   - **Static Batching**：启用（合并静态物体减少Draw Call）。
+                      <br>   - **Dynamic Batching**：启用（合并动态物体，注意顶点数限制）。
+                      <br>   - **Fixed Framerate**：设为 **72** 或 **90**（匹配PICO刷新率）。
+                      <br><br>⚠️ **常见错误排查**：
+                      <br>- 黑屏但能听到声音：检查Multithreaded Rendering是否禁用，Graphics API是否只有OpenGLES3。
+                      <br>- 编译失败：检查JDK/NDK路径是否正确，Package Name是否符合规范。` },
+                    
+                    { title: "2.4 创建一个基本的AR跟踪应用（Hello World）", 
+                      content: `🌍 **实现步骤（带故障排除）**：
+                      <br><br>1. **删除默认相机**：在Hierarchy中选中“Main Camera”，右键删除。
+                      <br><br>2. **添加PICO Camera Rig**：
+                      <br>   - 在Hierarchy空白处右键 > “PICO” > “CameraRig”。
+                      <br>   - 展开CameraRig，可以看到“LeftController”、“RightController”、“CenterCamera”（头显）。
+                      <br><br>3. **创建测试物体**：
+                      <br>   - 在Hierarchy右键 > “3D Object” > “Cube”，命名为“TestCube”。
+                      <br>   - 设置位置为 (0, 0, 2)（头显前方2米）。
+                      <br><br>4. **开启彩色透视（可选）**：
+                      <br>   - 选中PXR_Manager，在Inspector中勾选 **Enable Video SeeThrough**。
+                      <br>   - 如果不勾选，则运行在VR模式（黑色背景）。
+                      <br><br>5. **配置Build并运行**：
+                      <br>   - 打开 **File > Build Settings**，确保平台为Android。
+                      <br>   - 点击“Add Open Scenes”将当前场景加入Build列表。
+                      <br>   - 连接PICO设备（已开启开发者模式和USB调试）。
+                      <br>   - 点击 **Build And Run**，选择APK保存位置。
+                      <br><br>6. **验证结果**：
+                      <br>   - 安装完成后戴上头显，应该能看到Cube稳定悬浮在真实空间中（如果开启了透视，则能看到真实环境背景）。
+                      <br>   - 尝试走动，Cube应保持在世界坐标原点，而不是跟随头部。
+                      <br><br>🎯 **如果Cube不显示**：
+                      <br>- 检查Graphics API是否为OpenGLES3，Multithreaded Rendering是否禁用。
+                      <br>- 检查PXR_Manager中License是否填写正确。
+                      <br>- 检查设备是否处于开发者模式，adb devices是否识别。
+                      <br><br>🔧 **进阶测试**：
+                      <br>- 在Cube上添加Rotate脚本（第一章），测试旋转是否正常。
+                      <br>- 尝试用手柄扳机键控制Cube变色（后续章节实现）。` },
+                    
+                    { title: "2.5 常见错误与解决方案大全", 
+                      content: `❌ **错误1：Build失败提示“Unable to find Android SDK”**
+                      <br>**解决**：Edit > Preferences > External Tools 手动设置Android SDK路径。
+                      <br><br>❌ **错误2：头显内黑屏但有声音**
+                      <br>**解决**：检查Player Settings > Graphics APIs 只保留OpenGLES3；禁用Multithreaded Rendering。
+                      <br><br>❌ **错误3：手柄无追踪或射线不显示**
+                      <br>**解决**：确认PXR_Manager存在，手柄模型是否被正确加载；可尝试重启头显；检查手柄电池电量。
+                      <br><br>❌ **错误4：adb连接不上设备**
+                      <br>**解决**：检查USB线是否支持数据传输（不是充电线）；PICO内“开发者模式”是否开启；执行 <code>adb kill-server</code> 再重试；更换USB端口。
+                      <br><br>❌ **错误5：License无效**
+                      <br>**解决**：确认从Portal复制的License完整无空格；确认应用类型与设备匹配（PICO 4选择对应平台）。
+                      <br><br>❌ **错误6：彩色透视无法开启**
+                      <br>**解决**：确认设备支持彩色透视（PICO 4 / Neo3 Pro）；在PXR_Manager中勾选Enable Video SeeThrough；可能需要重启应用。` }
+                ]
+            });
+
+            // ========= 第3章 技术栈和项目计划 =========
+            tutorialData.chapters.push({
+                id: 3, title: "技术栈和项目计划（超深度扩展）", difficulty: "中级", duration: "2.5小时", icon: "📋",
+                description: "技术选择的深度理由（Unity、C#、PICO Unity Integration SDK、Android、PICO 4 VR头戴设备、GitHub）， PICO SDK与其他AR框架的全面比较。",
+                sections: [
+                    { title: "3.1 技术选型深度理由（含数据支撑）", 
+                      content: `✅ **Unity**：
+                      <br>- **市场份额**：占据XR开发70%以上市场份额，社区庞大。
+                      <br>- **XR生态**：官方提供XR Interaction Toolkit、AR Foundation，资源商店有大量XR资源。
+                      <br>- **学习资源**：Unity Learn平台有大量免费XR教程。
+                      <br><br>✅ **C#**：
+                      <br>- **类型安全**：编译时检查类型错误，减少运行时崩溃。
+                      <br>- **性能**：接近原生性能，支持IL2CPP编译到多种平台。
+                      <br>- **与Unity深度集成**：所有Unity API基于C#，学习曲线平缓。
+                      <br><br>✅ **PICO Unity Integration SDK**：
+                      <br>- **原生支持**：由PICO官方提供，针对PICO硬件深度优化。
+                      <br>- **功能完整**：提供6DoF追踪、手柄输入、空间锚点、透视等全套API。
+                      <br>- **文档完善**：提供中文文档和示例项目。
+                      <br><br>✅ **Android**：
+                      <br>- **PICO基础**：PICO设备运行Android系统，利用成熟的移动开发生态。
+                      <br>- **工具链**：Android Studio、ADB、Gradle等工具成熟稳定。
+                      <br><br>✅ **PICO 4头显**：
+                      <br>- **硬件规格**：具备彩色透视、4K+分辨率、6DoF手柄，性价比高。
+                      <br>- **开发者支持**：PICO提供开发者设备借用计划。
+                      <br><br>✅ **GitHub**：
+                      <br>- **版本控制**：Git是目前最流行的版本控制系统。
+                      <br>- **团队协作**：提供Issues、Projects、Actions等完整协作工具。
+                      <br>- **CI/CD**：支持自动化测试和打包。` },
+                    
+                    { title: "3.2 PICO SDK与其他AR框架全面比较", 
+                      content: `📊 **深度对比表格**：
+                      <table class="template-table">
+                      <tr><th>框架</th><th>适用设备</th><th>优势</th><th>劣势</th><th>适用场景</th></tr>
+                      <tr><td><strong>PICO SDK</strong></td><td>PICO头显</td><td>原生支持，完整6DoF，手柄输入，彩色透视</td><td>仅限PICO硬件</td><td>PICO专用VR/MR应用</td></tr>
+                      <tr><td><strong>ARCore</strong></td><td>Android手机</td><td>广泛设备支持，Google生态</td><td>无手柄，追踪易受环境影响</td><td>手机AR应用</td></tr>
+                      <tr><td><strong>ARKit</strong></td><td>iOS设备</td><td>LiDAR深度支持，Apple生态</td><td>仅限苹果设备</td><td>iOS AR应用</td></tr>
+                      <tr><td><strong>Vuforia</strong></td><td>多平台</td><td>图像识别强，支持模型目标</td><td>6DoF追踪较弱，商用需付费</td><td>图像识别为主的AR</td></tr>
+                      <tr><td><strong>OpenXR</strong></td><td>多设备</td><td>跨平台标准，一次编写多设备运行</td><td>底层API，开发复杂度高</td><td>需要跨多个VR平台的开发者</td></tr>
+                      </table>
+                      <br>本教程选择PICO SDK是因为项目目标设备为PICO 4，需要利用其手柄和透视能力，同时希望获得官方的最佳支持。` }
+                ]
+            });
+
+            // ========= 第4章 AR核心逻辑：空间锚定 =========
+            tutorialData.chapters.push({
+                id: 4, title: "AR核心逻辑：空间锚定（超深度扩展）", difficulty: "高级", duration: "6小时", icon: "📍",
+                description: "PICO SDK用于空间定位的跟踪功能深度解析，在物理空间中实现锚点（创建、保存、加载、删除、导出/导入），处理跟踪丢失或设备遮挡，以及完整的实战项目。",
+                sections: [
+                    { title: "4.1 PICO SDK空间定位功能深度解析", 
+                      content: `📍 **头显追踪API详解**：
+                      <br><code>PXR_Manager.Instance.GetHeadPose()</code> 返回头显的Transform，包含位置和旋转。
+                      <br><br>**手柄追踪API详解**：
+                      <br>- <code>PXR_Input.GetControllerPosition(int hand)</code>：获取手柄位置（0=左手，1=右手）
+                      <br>- <code>PXR_Input.GetControllerRotation(int hand)</code>：获取手柄旋转
+                      <br>- <code>PXR_Input.GetControllerVelocity(int hand)</code>：获取手柄速度
+                      <br>- <code>PXR_Input.GetControllerAngularVelocity(int hand)</code>：获取手柄角速度
+                      <br><br>**坐标系说明**：
+                      <br>PICO使用右手坐标系，Y轴向上，单位是米。原点为头显启动时的位置。
+                      <br><br>**代码示例：实时追踪所有设备**：
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      using PXR_Input;<br>
+                      public class TrackingDemo : MonoBehaviour {<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // 头显<br>
+                      &nbsp;       Transform head = PXR_Manager.Instance.GetHeadPose();<br>
+                      &nbsp;       Debug.Log($"头显位置: {head.position}");<br>
+                      <br>
+                      &nbsp;       // 左手柄<br>
+                      &nbsp;       Vector3 leftPos = PXR_Input.GetControllerPosition(0);<br>
+                      &nbsp;       Quaternion leftRot = PXR_Input.GetControllerRotation(0);<br>
+                      &nbsp;       Debug.Log($"左手柄位置: {leftPos}");<br>
+                      <br>
+                      &nbsp;       // 右手柄<br>
+                      &nbsp;       Vector3 rightPos = PXR_Input.GetControllerPosition(1);<br>
+                      &nbsp;       Quaternion rightRot = PXR_Input.GetControllerRotation(1);<br>
+                      &nbsp;       Debug.Log($"右手柄位置: {rightPos}");<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.2 空间锚点完整生命周期（创建、保存、加载）", 
+                      content: `⚓ **创建锚点（带错误处理）**：
+                      <div class="code-note">
+                      using PXR_SpatialAnchor;<br>
+                      public void CreateAnchor(Vector3 pos, Quaternion rot) {<br>
+                      &nbsp;   PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
+                      &nbsp;       switch (result) {<br>
+                      &nbsp;           case AnchorResult.Success:<br>
+                      &nbsp;               Debug.Log($"锚点创建成功，UUID: {anchor.UUID}");<br>
+                      &nbsp;               // 创建成功后立即保存<br>
+                      &nbsp;               SaveAnchor(anchor);<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           case AnchorResult.FailedTracking:<br>
+                      &nbsp;               Debug.LogError("创建失败：追踪丢失");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           case AnchorResult.FailedInvalidArgument:<br>
+                      &nbsp;               Debug.LogError("创建失败：参数无效");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           default:<br>
+                      &nbsp;               Debug.LogError($"创建失败：未知错误 {result}");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>**保存锚点（持久化到设备）**：
+                      <div class="code-note">
+                      public void SaveAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.Save((saveResult) => {<br>
+                      &nbsp;       if (saveResult) {<br>
+                      &nbsp;           Debug.Log($"锚点 {anchor.UUID} 保存成功");<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("锚点保存失败");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>**加载所有已保存的锚点**：
+                      <div class="code-note">
+                      public void LoadAllAnchors() {<br>
+                      &nbsp;   PXR_SpatialAnchor.LoadAnchorListAsync(null, (anchors) => {<br>
+                      &nbsp;       if (anchors != null && anchors.Count > 0) {<br>
+                      &nbsp;           foreach (var anchor in anchors) {<br>
+                      &nbsp;               Debug.Log($"加载锚点: {anchor.UUID}, 位置: {anchor.Pose.position}");<br>
+                      &nbsp;               // 在锚点位置实例化虚拟物体<br>
+                      &nbsp;               Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
+                      &nbsp;           }<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.Log("没有找到已保存的锚点");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.3 锚点高级功能：删除、更新、导出/导入", 
+                      content: `🗑️ **删除锚点**：
+                      <div class="code-note">
+                      public void DeleteAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.DeleteAnchor((success) => {<br>
+                      &nbsp;       if (success) {<br>
+                      &nbsp;           Debug.Log($"锚点 {anchor.UUID} 删除成功");<br>
+                      &nbsp;           Destroy(associatedObject); // 删除对应的虚拟物体<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("锚点删除失败");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>**导出锚点（用于网络共享）**：
+                      <div class="code-note">
+                      public void ExportAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.ExportAnchor((data, result) => {<br>
+                      &nbsp;       if (result == AnchorResult.Success) {<br>
+                      &nbsp;           Debug.Log($"锚点导出成功，数据长度: {data.Length} bytes");<br>
+                      &nbsp;           // 将data通过网络发送给其他设备<br>
+                      &nbsp;           NetworkManager.Send(data);<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("锚点导出失败");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>**导入锚点**：
+                      <div class="code-note">
+                      public void ImportAnchor(byte[] data) {<br>
+                      &nbsp;   PXR_SpatialAnchor.ImportAnchor(data, (anchor, result) => {<br>
+                      &nbsp;       if (result == AnchorResult.Success) {<br>
+                      &nbsp;           Debug.Log($"锚点导入成功，UUID: {anchor.UUID}");<br>
+                      &nbsp;           // 在导入的锚点位置放置虚拟物体<br>
+                      &nbsp;           Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("锚点导入失败");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.4 处理跟踪丢失或设备遮挡（鲁棒性设计）", 
+                      content: `🔄 **监听追踪状态**：
+                      <div class="code-note">
+                      public class TrackingHandler : MonoBehaviour {<br>
+                      &nbsp;   public GameObject virtualObject; // 要隐藏/显示的物体<br>
+                      <br>
+                      &nbsp;   void OnEnable() {<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingLost += HandleTrackingLost;<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingAcquired += HandleTrackingAcquired;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void OnDisable() {<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingLost -= HandleTrackingLost;<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingAcquired -= HandleTrackingAcquired;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void HandleTrackingLost() {<br>
+                      &nbsp;       Debug.LogWarning("追踪丢失，隐藏虚拟物体");<br>
+                      &nbsp;       virtualObject.SetActive(false);<br>
+                      &nbsp;       // 显示提示信息<br>
+                      &nbsp;       UIManager.Instance.ShowMessage("追踪丢失，请重新对准标记");<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void HandleTrackingAcquired() {<br>
+                      &nbsp;       Debug.Log("重新获得追踪，显示虚拟物体");<br>
+                      &nbsp;       virtualObject.SetActive(true);<br>
+                      &nbsp;       UIManager.Instance.HideMessage();<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>**高级策略：短暂丢失时的预测**：
+                      <br>可以使用头显的最后已知位置和IMU数据做短暂预测，但PICO SDK内部已做优化，开发者只需关注UI反馈。` },
+                    
+                    { title: "4.5 实战：完整的多锚点放置与管理应用", 
+                      content: `🏗️ **综合项目：虚拟家具摆放系统**
+                      <br><br>**需求**：
+                      <br>- 用户可以用手柄扳机键在当前位置放置虚拟家具（如椅子、桌子）。
+                      <br>- 每个家具对应一个空间锚点，重启应用后自动恢复。
+                      <br>- 用户可以用手柄射线选中家具并删除。
+                      <br><br>**实现步骤**：
+                      <br><br>1. **创建家具预制体**：为每种家具创建预制体，添加Collider组件用于射线检测。
+                      <br><br>2. **家具管理脚本**：
+                      <div class="code-note">
+                      public class FurnitureManager : MonoBehaviour {<br>
+                      &nbsp;   public GameObject[] furniturePrefabs; // 家具预制体数组<br>
+                      &nbsp;   private int selectedFurnitureIndex = 0;<br>
+                      &nbsp;   private List<FurnitureItem> placedFurniture = new List<FurnitureItem>();<br>
+                      <br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // 按扳机键放置家具<br>
+                      &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.TRIGGER)) {<br>
+                      &nbsp;           PlaceFurniture();<br>
+                      &nbsp;       }<br>
+                      &nbsp;       // 按A键切换家具类型<br>
+                      &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.A)) {<br>
+                      &nbsp;           selectedFurnitureIndex = (selectedFurnitureIndex + 1) % furniturePrefabs.Length;<br>
+                      &nbsp;           UIManager.Instance.ShowMessage($"当前家具: {furniturePrefabs[selectedFurnitureIndex].name}");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void PlaceFurniture() {<br>
+                      &nbsp;       // 获取右手柄位置作为放置位置<br>
+                      &nbsp;       Vector3 pos = PXR_Input.GetControllerPosition(1);<br>
+                      &nbsp;       Quaternion rot = PXR_Input.GetControllerRotation(1);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 实例化家具<br>
+                      &nbsp;       GameObject obj = Instantiate(furniturePrefabs[selectedFurnitureIndex], pos, rot);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 创建锚点并关联家具<br>
+                      &nbsp;       PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
+                      &nbsp;           if (result == AnchorResult.Success) {<br>
+                      &nbsp;               anchor.Save();<br>
+                      &nbsp;               FurnitureItem item = new FurnitureItem(obj, anchor);<br>
+                      &nbsp;               placedFurniture.Add(item);<br>
+                      &nbsp;               Debug.Log($"家具已放置并保存，锚点UUID: {anchor.UUID}");<br>
+                      &nbsp;           }<br>
+                      &nbsp;       });<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void Start() {<br>
+                      &nbsp;       // 加载所有已保存的锚点并恢复家具<br>
+                      &nbsp;       LoadAllAnchors();<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>3. **删除家具**：使用手柄射线选中家具，按握持键删除。
+                      <br><br>📌 这个项目展示了锚点的完整应用，是MR应用的基础模板。` }
+                ]
+            });
+
+            // ========= 第5章 核心游戏逻辑开发 =========
+            tutorialData.chapters.push({
+                id: 5, title: "核心游戏逻辑开发（超深度扩展）", difficulty: "中级", duration: "6小时", icon: "⚡",
+                description: "输入处理的模块化设计，基于Unity物理的弹射系统深度解析，碰撞检测与伤害计算（接口设计），对象池优化，健康UI实现。",
+                sections: [
+                    { title: "5.1 输入处理模块化设计（完整框架）", 
+                      content: `🎮 **InputManager.cs - 完整的输入抽象层**：
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      using PXR_Input;<br>
+                      <br>
+                      public class InputManager : MonoBehaviour {<br>
+                      &nbsp;   // 单例模式<br>
+                      &nbsp;   public static InputManager Instance { get; private set; }<br>
+                      <br>
+                      &nbsp;   void Awake() { Instance = this; }<br>
+                      <br>
+                      &nbsp;   // 手柄连接状态<br>
+                      &nbsp;   public bool LeftControllerConnected => PXR_Input.GetControllerConnectionState(0);<br>
+                      &nbsp;   public bool RightControllerConnected => PXR_Input.GetControllerConnectionState(1);<br>
+                      <br>
+                      &nbsp;   // 摇杆输入<br>
+                      &nbsp;   public Vector2 LeftJoystick => PXR_Input.GetControllerAxis(0);<br>
+                      &nbsp;   public Vector2 RightJoystick => PXR_Input.GetControllerAxis(1);<br>
+                      <br>
+                      &nbsp;   // 扳机键（模拟量）<br>
+                      &nbsp;   public float LeftTrigger => PXR_Input.GetControllerAxis(0).x;<br>
+                      &nbsp;   public float RightTrigger => PXR_Input.GetControllerAxis(1).x;<br>
+                      <br>
+                      &nbsp;   // 按键事件（按下、按住、抬起）<br>
+                      &nbsp;   public bool GetButtonDown(int hand, ControllerButton button) => PXR_Input.GetControllerButtonDown(hand, button);<br>
+                      &nbsp;   public bool GetButton(int hand, ControllerButton button) => PXR_Input.GetControllerButton(hand, button);<br>
+                      &nbsp;   public bool GetButtonUp(int hand, ControllerButton button) => PXR_Input.GetControllerButtonUp(hand, button);<br>
+                      <br>
+                      &nbsp;   // 手柄位置、旋转、速度<br>
+                      &nbsp;   public Vector3 GetControllerPosition(int hand) => PXR_Input.GetControllerPosition(hand);<br>
+                      &nbsp;   public Quaternion GetControllerRotation(int hand) => PXR_Input.GetControllerRotation(hand);<br>
+                      &nbsp;   public Vector3 GetControllerVelocity(int hand) => PXR_Input.GetControllerVelocity(hand);<br>
+                      &nbsp;   public Vector3 GetControllerAngularVelocity(int hand) => PXR_Input.GetControllerAngularVelocity(hand);<br>
+                      <br>
+                      &nbsp;   // 震动<br>
+                      &nbsp;   public void SetVibration(int hand, float intensity, int durationMs) {<br>
+                      &nbsp;       PXR_Input.SetControllerVibration(intensity, durationMs, hand);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>**使用示例**：
+                      <div class="code-note">
+                      public class PlayerController : MonoBehaviour {<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // 通过InputManager获取输入，不直接依赖PXR_Input<br>
+                      &nbsp;       if (InputManager.Instance.GetButtonDown(1, ControllerButton.TRIGGER)) {<br>
+                      &nbsp;           Shoot();<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.2 基于Unity物理的弹射系统深度解析", 
+                      content: `💥 **球体物理设置详解**：
+                      <br><br>**Rigidbody组件设置**：
+                      <br>- **Mass（质量）**：网球建议0.05-0.1，乒乓球0.02-0.03
+                      <br>- **Drag（阻力）**：0.1-0.5，影响球速衰减
+                      <br>- **Angular Drag（角阻力）**：0.1-0.3
+                      <br>- **Use Gravity**：勾选（使用重力）
+                      <br>- **Is Kinematic**：不勾选
+                      <br>- **Interpolate**：建议设为Interpolate，使运动更平滑
+                      <br><br>**Physic Material（物理材质）**：
+                      <div class="code-note">
+                      // 创建网球物理材质<br>
+                      PhysicMaterial tennisMat = new PhysicMaterial();<br>
+                      tennisMat.bounciness = 0.8f;      // 弹力系数<br>
+                      tennisMat.bounceCombine = PhysicMaterialCombine.Maximum; // 取最大弹力<br>
+                      tennisMat.dynamicFriction = 0.3f;  // 动摩擦<br>
+                      tennisMat.staticFriction = 0.3f;   // 静摩擦<br>
+                      tennisMat.frictionCombine = PhysicMaterialCombine.Average; // 摩擦取平均
+                      </div>
+                      <br>**击球算法（基于手柄速度）**：
+                      <div class="code-note">
+                      public class RacketController : MonoBehaviour {<br>
+                      &nbsp;   public float hitForce = 15f;           // 基础击球力度<br>
+                      &nbsp;   public float velocityMultiplier = 0.5f; // 速度乘数<br>
+                      &nbsp;   public int handIndex = 1;               // 右手柄<br>
+                      <br>
+                      &nbsp;   void OnCollisionEnter(Collision collision) {<br>
+                      &nbsp;       if (collision.gameObject.CompareTag("Ball")) {<br>
+                      &nbsp;           Rigidbody ballRb = collision.rigidbody;<br>
+                      &nbsp;           <br>
+                      &nbsp;           // 获取手柄速度<br>
+                      &nbsp;           Vector3 racketVelocity = InputManager.Instance.GetControllerVelocity(handIndex);<br>
+                      &nbsp;           <br>
+                      &nbsp;           // 计算击球方向：拍面法线 + 手柄速度方向<br>
+                      &nbsp;           Vector3 normal = collision.contacts[0].normal;<br>
+                      &nbsp;           Vector3 direction = (normal * 0.7f + racketVelocity.normalized * 0.3f).normalized;<br>
+                      &nbsp;           <br>
+                      &nbsp;           // 计算最终速度：基础方向 * 力度 + 手柄速度 * 乘数<br>
+                      &nbsp;           ballRb.velocity = direction * hitForce + racketVelocity * velocityMultiplier;<br>
+                      &nbsp;           <br>
+                      &nbsp;           // 触发震动反馈<br>
+                      &nbsp;           InputManager.Instance.SetVibration(handIndex, 0.8f, 100);<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.3 碰撞检测与伤害计算（接口设计模式）", 
+                      content: `⚔️ **IDamageable接口设计**：
+                      <div class="code-note">
+                      public interface IDamageable {<br>
+                      &nbsp;   void TakeDamage(int damage, Vector3 hitPoint, GameObject source);<br>
+                      &nbsp;   bool IsAlive { get; }<br>
+                      &nbsp;   int CurrentHealth { get; }<br>
+                      &nbsp;   int MaxHealth { get; }<br>
+                      }
+                      </div>
+                      <br>**玩家健康实现**：
+                      <div class="code-note">
+                      public class PlayerHealth : MonoBehaviour, IDamageable {<br>
+                      &nbsp;   [SerializeField] private int maxHealth = 100;<br>
+                      &nbsp;   private int currentHealth;<br>
+                      &nbsp;   public event System.Action<int, int> OnHealthChanged; // 血量变化事件<br>
+                      &nbsp;   public event System.Action OnPlayerDied;              // 死亡事件<br>
+                      <br>
+                      &nbsp;   public int CurrentHealth => currentHealth;<br>
+                      &nbsp;   public int MaxHealth => maxHealth;<br>
+                      &nbsp;   public bool IsAlive => currentHealth > 0;<br>
+                      <br>
+                      &nbsp;   void Start() {<br>
+                      &nbsp;       currentHealth = maxHealth;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public void TakeDamage(int damage, Vector3 hitPoint, GameObject source) {<br>
+                      &nbsp;       if (!IsAlive) return;<br>
+                      &nbsp;       <br>
+                      &nbsp;       currentHealth = Mathf.Max(0, currentHealth - damage);<br>
+                      &nbsp;       OnHealthChanged?.Invoke(currentHealth, maxHealth);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 播放受击特效<br>
+                      &nbsp;       PlayHitEffect(hitPoint);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 触发震动反馈<br>
+                      &nbsp;       InputManager.Instance.SetVibration(0, 0.5f, 50);  // 左手震动<br>
+                      &nbsp;       InputManager.Instance.SetVibration(1, 0.5f, 50);  // 右手震动<br>
+                      &nbsp;       <br>
+                      &nbsp;       if (currentHealth <= 0) {<br>
+                      &nbsp;           Die();<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   private void Die() {<br>
+                      &nbsp;       OnPlayerDied?.Invoke();<br>
+                      &nbsp;       // 播放死亡动画、禁用控制等<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>**能量球脚本（攻击者）**：
+                      <div class="code-note">
+                      public class EnergyBall : MonoBehaviour {<br>
+                      &nbsp;   public int damage = 10;<br>
+                      &nbsp;   public GameObject hitEffectPrefab;<br>
+                      <br>
+                      &nbsp;   void OnCollisionEnter(Collision collision) {<br>
+                      &nbsp;       // 检查碰撞对象是否实现了IDamageable接口<br>
+                      &nbsp;       IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();<br>
+                      &nbsp;       if (damageable != null) {<br>
+                      &nbsp;           damageable.TakeDamage(damage, collision.contacts[0].point, gameObject);<br>
+                      &nbsp;       }<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 播放击中特效<br>
+                      &nbsp;       Instantiate(hitEffectPrefab, collision.contacts[0].point, Quaternion.identity);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // 返回对象池<br>
+                      &nbsp;       ObjectPool.Instance.ReturnBall(gameObject);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.4 对象池（Object Pool）深度优化", 
+                      content: `🧺 **为什么需要对象池？**
+                      <br>避免频繁 Instantiate/Destroy 导致的GC和卡顿。在快速球类游戏中，每秒可能生成数十个球，对象池是必备优化。
+                      <br><br>**完整对象池实现**：
+                      <div class="code-note">
+                      public class ObjectPool : MonoBehaviour {<br>
+                      &nbsp;   public static ObjectPool Instance { get; private set; }<br>
+                      &nbsp;   <br>
+                      &nbsp;   public GameObject ballPrefab;<br>
+                      &nbsp;   public int poolSize = 30;<br>
+                      &nbsp;   private Queue<GameObject> pool = new Queue<GameObject>();<br>
+                      &nbsp;   private List<GameObject> activeBalls = new List<GameObject>();<br>
+                      <br>
+                      &nbsp;   void Awake() {<br>
+                      &nbsp;       Instance = this;<br>
+                      &nbsp;       // 预创建对象池<br>
+                      &nbsp;       for (int i = 0; i < poolSize; i++) {<br>
+                      &nbsp;           GameObject ball = Instantiate(ballPrefab);<br>
+                      &nbsp;           ball.SetActive(false);<br>
+                      &nbsp;           pool.Enqueue(ball);<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public GameObject GetBall() {<br>
+                      &nbsp;       GameObject ball;<br>
+                      &nbsp;       if (pool.Count > 0) {<br>
+                      &nbsp;           ball = pool.Dequeue();<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           // 如果池子空了，动态扩容<br>
+                      &nbsp;           ball = Instantiate(ballPrefab);<br>
+                      &nbsp;           Debug.LogWarning("对象池扩容，建议增加初始池大小");<br>
+                      &nbsp;       }<br>
+                      &nbsp;       <br>
+                      &nbsp;       ball.SetActive(true);<br>
+                      &nbsp;       activeBalls.Add(ball);<br>
+                      &nbsp;       return ball;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public void ReturnBall(GameObject ball) {<br>
+                      &nbsp;       if (!activeBalls.Contains(ball)) return;<br>
+                      &nbsp;       <br>
+                      &nbsp;       ball.SetActive(false);<br>
+                      &nbsp;       // 重置物理状态<br>
+                      &nbsp;       Rigidbody rb = ball.GetComponent<Rigidbody>();<br>
+                      &nbsp;       rb.velocity = Vector3.zero;<br>
+                      &nbsp;       rb.angularVelocity = Vector3.zero;<br>
+                      &nbsp;       <br>
+                      &nbsp;       activeBalls.Remove(ball);<br>
+                      &nbsp;       pool.Enqueue(ball);<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public void ReturnAllBalls() {<br>
+                      &nbsp;       foreach (var ball in activeBalls.ToArray()) {<br>
+                      &nbsp;           ReturnBall(ball);<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.5 健康UI实现（世界空间Canvas）", 
+                      content: `❤️ **完整UI实现步骤**：
+                      <br><br>1. **创建世界空间Canvas**：
+                      <br>   - 在玩家物体下创建Canvas，Render Mode设为World Space
+                      <br>   - 设置Canvas大小为(0.2, 0.05)左右，位置在玩家头顶
+                      <br><br>2. **添加血条Slider**：
+                      <br>   - 添加Slider组件，删除Handle Slide Area（只保留Background和Fill）
+                      <br>   - 设置Fill为红色，Background为灰色
+                      <br><br>3. **添加LookAtCamera脚本**：
+                      <div class="code-note">
+                      public class LookAtCamera : MonoBehaviour {<br>
+                      &nbsp;   private Camera mainCamera;<br>
+                      &nbsp;   <br>
+                      &nbsp;   void Start() {<br>
+                      &nbsp;       mainCamera = Camera.main;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void LateUpdate() {<br>
+                      &nbsp;       // 让UI始终面向相机，但不随相机旋转而倾斜<br>
+                      &nbsp;       Vector3 direction = transform.position - mainCamera.transform.position;<br>
+                      &nbsp;       direction.y = 0; // 保持水平<br>
+                      &nbsp;       transform.rotation = Quaternion.LookRotation(direction);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>4. **HealthBarController脚本**：
+                      <div class="code-note">
+                      public class HealthBarController : MonoBehaviour {<br>
+                      &nbsp;   public Slider healthSlider;<br>
+                      &nbsp;   public PlayerHealth playerHealth;<br>
+                      <br>
+                      &nbsp;   void OnEnable() {<br>
+                      &nbsp;       playerHealth.OnHealthChanged += UpdateHealthBar;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void OnDisable() {<br>
+                      &nbsp;       playerHealth.OnHealthChanged -= UpdateHealthBar;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void UpdateHealthBar(int current, int max) {<br>
+                      &nbsp;       healthSlider.value = (float)current / max;<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` }
+                ]
+            });
+
+            // ========= 第6章 项目前期准备与利益相关者分析 =========
+            tutorialData.chapters.push({
+                id: 6, title: "Project Preparation and Stakeholder Analysis",                 description: "Document the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
+                sections: [
+                    { 
+                        title: "Preparing for the Transition Period and Stakeholder Analysis", 
+                        content: `
+                        <div class="plain-text-block">
+                            After we won the bid for this project, because we first needed to pass the ethics review, we had a break before we could formally engage with the stakeholders, and we had almost three weeks to prepare for the formal engagement. In the first week, we didn't pay much attention to the importance of requirements engineering. But after the meeting with Professor Dave, we immediately realized how important it was to properly analyze and understand the needs of our stakeholders, and immediately started paying attention to it.<br><br>
+                            First, we looked at a brief description of the project. This project is mainly about building an AR sports framework with viewer experience at its core. The outline of the project was very general, with no details on how we would help the stakeholders. We can only continue to guess what we are going to do. Regardless, we took a close look at the HADO games provided by stakeholders, as well as other related AR games, and developments on AR sports in recent years.<br><br>
+                            Keeping the stakeholders happy is very important during the project, so we wanted to get to know some of the stakeholders better during the meeting. We checked their information on the university's website, including research directions.<br><br>
+                            We ended up with a requirements engineering report that was approved by the stakeholders.
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215217.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215242.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215248.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        ` }
+                ]
+            });
+
+            // ========= 第7章 有效利益相关者会议 =========
+            tutorialData.chapters.push({
+                id: 7, title: "Effective Stakeholder Meetings: Here are some lessons we learned from that collaborative project.", 
+                description: "Stakeholder meetings are key to making sure a project goes well. They make sure that team members and stakeholders are on the same page. This chapter's got everything: agendas, clear roles, adaptive communication, meeting notes, action items, and lessons learned.",
+                sections: [
+                    { 
+                        title: "7.0 Overview and Key Steps", 
+                        content: `
+                        <div class="chapter-content-block">
+                        Stakeholder meetings are key to making sure a project goes well. They make sure that team members and stakeholders are on the same page. These meetings help the team really understand the whole project. But, you know, getting stakeholder meetings to be effective takes some planning and clear roles. The last thing a team wants is to come off as unprofessional, because that could damage trust and make stakeholders reluctant to keep working together.
+                        </div>
+                        <h3 class="section-title" style="font-size:1.5rem; margin-top:2rem;">Key Steps for Successful Stakeholder Meetings</h3>
+                        <div class="chapter-content-block">
+                        <h4>1. Structured Agenda</h4>
+                        <p>It's key to have a solid agenda to keep meetings on track and productive. It should outline the main points to be discussed. We've found that point forms usually do the trick, but it's also good to include extra notes or sub-points for important details. This makes sure we don't miss anything important and gives us a reference in case we forget anything during the discussion.</p>
+                        
+                        <h4>2. Clear Roles and Responsibilities</h4>
+                        <p>Assigning specific roles for each meeting helps streamline discussions and ensures accountability. In our project, we adopted the following roles:</p>
+                        <ul>
+                            <li><strong>Chair:</strong> Guides the meeting, keeps discussions on track, and ensures the agenda is followed. The chair is the main person driving the conversation and presenting updates.</li>
+                            <li><strong>Secretary:</strong> Documents meeting minutes, record whatever important points that were discussed in the meeting.</li>
+                        </ul>
+                        
+                        <h4>3. Adaptive Communication and Smart Engagement</h4>
+                        <p>Good communication is key to stakeholder meetings. Instead of being stuck to the agenda, it's important to go with the flow of the conversation. If we've already gone over certain points in a previous conversation, it's probably best to avoid repeating them. Otherwise, we might end up frustrating the stakeholders. Also, if you ask the same questions over and over, it might make your team look unprepared and disorganized.</p>
+                        <p>To improve communication, we recommend:</p>
+                        <ul>
+                            <li><strong>Reading the room:</strong> Pay attention to stakeholders’ engagement levels and adapt accordingly.</li>
+                            <li><strong>Avoiding excessive repetition:</strong> Be mindful of what has already been discussed and prevent redundancy.</li>
+                        </ul>
+                        
+                        <h4>4. Meeting Minutes</h4>
+                        <p>It's really important to record meeting minutes when you're working with stakeholders. A detailed record of discussions makes sure that key points aren't forgotten and provides a clear reference for future actions. Meeting minutes also help team members who couldn't make it stay informed about what was discussed.</p>
+                        <p>Also, keeping detailed records helps you keep track of everything and makes sure you don't miss anything. By reviewing the minutes, the team can make sure that all the points that were discussed have been dealt with and that any necessary follow-ups have been completed.</p>
+                        <p>We take notes during our meetings in point form to keep things clear and efficient. To help you out, we've added brackets with extra info or reasons for each point we've recorded. This approach makes sure that every note is meaningful and actionable.</p>
+                        
+                        <h4>5. Action Items and Follow-Ups</h4>
+                        <p>At the end of each meeting, we have an internal team discussion to brief the other group members on what was discussed and outline the actions to be taken moving forward. This makes sure everyone's on the same page and knows what to do next.</p>
+                                                 
+                        <h4>What We Learned:</h4>
+                        <ul>
+                            <li><strong>Consistency Builds Trust:</strong> Keeping the same people in key roles ensures that stakeholders have a consistent point of contact, fostering stronger relationships over time.</li>
+                            <li><strong>Role Familiarity Enhances Performance:</strong> When individuals perform the same role repeatedly, they become more skilled and efficient, leading to smoother meetings and better outcomes.</li>
+                            <li><strong>Balance Learning and Stakeholder Needs:</strong> While it’s important to provide team members with growth opportunities, this should be balanced with the need for stakeholder confidence and meeting effectiveness.</li>
+                        </ul>
+                        
+                        <h3>Best Practices for Future Projects</h3>
+                        <p>Based on our experience, here are some recommendations for organizing stakeholder meetings:</p>
+                        <ul>
+                            <li><strong>Assign Fixed Roles:</strong> Identify a consistent chair and secretary for the duration of the project. This ensures continuity and builds stakeholder confidence.</li>
+                            <li><strong>Rotate Roles Strategically:</strong> If team members need exposure to different roles, consider rotating responsibilities during internal team meetings rather than stakeholder meetings.</li>
+                            <li><strong>Prepare Agendas:</strong> Clearly communicate the purpose, structure, and roles of the meeting to stakeholders in advance to set expectations.</li>
+                            <li><strong>Document and Share Minutes:</strong> Ensure meeting minutes and action items are shared promptly after each meeting to keep everyone informed and aligned.</li>
+                        </ul>
+                        </div>
+                        ` }
+                ]
+            });
+
+            // ========= 第8章 配套示例项目 =========
+            tutorialData.chapters.push({
+                id: 8, title: "配套示例项目（深度扩展）", difficulty: "初级", duration: "2小时", icon: "📦",
+                description: "链接到GitHub上完整的带注释的Unity项目，包括精简的AR场景，玩家预装，核心脚本和带注释代码的PICO SDK配置。",
+                sections: [
+                    { title: "8.1 GitHub项目链接与下载", 
+                      content: `🔗 <a class="external-link" href="#" target="_blank">(模拟链接) github.com/example/PICO-AR-Sports-Demo</a>
+                      <br>包含：
+                      <br>- 完整Unity项目 (Unity 2022.3.62f3)
+                      <br>- 预编译APK (可直接安装)
+                      <br>- 示例标记PDF (用于锚点放置)
+                      <br>- 项目结构文档` },
+                    
+                    { title: "8.2 项目结构全解析", 
+                      content: `📂 <strong>Assets目录详解：</strong>
+                      <div class="code-note">
+                      Assets/<br>
+                      ├── Art/               (体育模型、纹理)<br>
+                      ├── Scripts/            (所有C#脚本，带注释)<br>
+                      │   ├── Core/           (GameManager, ScoreManager)<br>
+                      │   ├── Interaction/     (RacketController, BallPhysics)<br>
+                      │   ├── Networking/      (NetworkPlayer, AnchorSync)<br>
+                      │   └── Utils/           (Singleton, Constants)<br>
+                      ├── Prefabs/             (Player, Ball, Net预制体)<br>
+                      ├── Scenes/              (MainAR, TestScene)<br>
+                      └── PICO/                 (SDK配置)
+                      </div>` },
+                    
+                    { title: "8.3 核心脚本带注释示例", 
+                      content: `📝 <strong>AnchorManager.cs (节选注释)：</strong>
+                      <div class="code-note">
+                      /// <summary><br>
+                      /// 管理空间锚点的创建、保存、加载。<br>
+                      /// 使用PXR_SpatialAnchor API，所有方法都有回调。<br>
+                      /// </summary><br>
+                      public void CreateAnchor(Vector3 pos) {<br>
+                      &nbsp;   // 异步创建，成功后在回调中保存<br>
+                      &nbsp;   PXR_SpatialAnchor.CreateAnchor(pos, Quaternion.identity, (anchor, res) => {<br>
+                      &nbsp;       if (res == AnchorResult.Success) {<br>
+                      &nbsp;           anchor.Save();  // 持久化到设备<br>
+                      &nbsp;           Debug.Log($"锚点已保存，UUID: {anchor.UUID}");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>` },
+                    
+                    { title: "8.4 如何运行与实验", 
+                      content: `▶️ <strong>5分钟快速启动：</strong>
+                      <br>1. 下载项目并解压。
+                      <br>2. 用Unity Hub打开项目，等待导入完成。
+                      <br>3. 在PXR_Manager中输入你的License。
+                      <br>4. 连接PICO设备，Build And Run。
+                      <br><br>🔧 <strong>尝试修改：</strong>
+                      <br>- 调整球的速度（BallPhysics中的power变量）
+                      <br>- 更换手柄震动强度
+                      <br>- 修改锚点保存数量` }
+                ]
+            });
+
+            // ----- 双栏渲染逻辑 -----
+            let activeChapterId = 4;
+
+            function renderChapterList() {
+                const container = document.getElementById('chapterListContainer');
+                let html = '';
+                tutorialData.chapters.forEach(ch => {
+                    const activeClass = (activeChapterId === ch.id) ? 'active' : '';
+                    html += `<div class="chapter-item ${activeClass}" data-chapter-id="${ch.id}">
+                        <div class="chapter-idx">第${ch.id}章 · ${ch.difficulty}</div>
+                        <div class="chapter-title">${ch.title}</div>
+                        <div class="chapter-desc">${ch.description.substring(0,70)}…</div>
+                        <div class="chapter-meta-tags"><span>⏱ ${ch.duration}</span><span>${ch.icon}</span></div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+
+                document.querySelectorAll('.chapter-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const id = parseInt(item.dataset.chapterId);
+                        showChapter(id);
+                    });
+                });
+            }
+
+            function showChapter(id) {
+                const chapter = tutorialData.chapters.find(c => c.id === id);
+                if (!chapter) return;
+                activeChapterId = id;
+                document.querySelectorAll('.chapter-item').forEach(el => {
+                    el.classList.toggle('active', parseInt(el.dataset.chapterId) === id);
+                });
+
+                let sectionsHtml = '';
+                chapter.sections.forEach(sec => {
+                    sectionsHtml += `<div class="section-block">
+                        <div class="section-title"><span class="sec-badge">${sec.title.split(' ')[0]}</span> ${sec.title.replace(/^[0-9.]+/, '')}</div>
+                        <div class="section-content">${sec.content}</div>
+                    </div>`;
+                });
+
+                const prevDisabled = chapter.id <= 1 ? 'style="opacity:0.4; pointer-events:none;"' : '';
+                const nextDisabled = chapter.id >= tutorialData.chapters.length ? 'style="opacity:0.4; pointer-events:none;"' : '';
+
+                const detailHtml = `
+                    <div class="detail-header">
+                        <h2>第${chapter.id}章 · ${chapter.title}</h2>
+                        <div class="desc">${chapter.description}</div>
+                    </div>
+                    ${sectionsHtml}
+                    <div class="nav-buttons">
+                        <button class="nav-btn" ${prevDisabled} onclick="window.prevChapter(${chapter.id})">← 上一章</button>
+                        <button class="nav-btn" ${nextDisabled} onclick="window.nextChapter(${chapter.id})">下一章 →</button>
+                    </div>
+                    <div class="footer-note">© 深度扩展教程 · 最终修订版</div>
                 `;
-                container.appendChild(card);
-            });
-        }
+                document.getElementById('detailContentArea').innerHTML = detailHtml;
+            }
 
-        function showChapter(chapterId) {
-            const chapter = tutorialData.chapters.find(c => c.id === chapterId);
-            if (!chapter) return;
-            const container = document.getElementById('content-container');
-            let html = `<button class="back-btn" onclick="showList()">← 返回十章节概览</button>`;
-            html += `<div class="chapter-content active"><h2>第${chapter.id}章 · ${chapter.title}</h2>`;
-            html += `<div class="chapter-desc">${chapter.description}</div>`;
+            window.prevChapter = (curr) => { if (curr > 1) showChapter(curr - 1); };
+            window.nextChapter = (curr) => { if (curr < tutorialData.chapters.length) showChapter(curr + 1); };
 
-            chapter.sections.forEach(sec => {
-                html += `<div class="section">`;
-                html += `<h4><span>${sec.title.split(' ')[0]}</span> ${sec.title.replace(/^[0-9.]+/, '')}</h4>`;
-                html += `<p>${sec.content.replace(/\n/g, '<br>')}</p>`;
-                html += `<div class="reason-box"><strong>📌 设计理由</strong> ${sec.reason}</div>`;
-                html += `</div>`;
-            });
-            html += `</div>`;
-            container.innerHTML = html;
-            document.getElementById('chapters-container').style.display = 'none';
-        }
-
-        function showList() {
-            document.getElementById('chapters-container').style.display = 'grid';
-            document.getElementById('content-container').innerHTML = '';
-        }
-
-        window.showList = showList;
-        window.showChapter = showChapter;
-        window.onload = renderChapterCards;
+            renderChapterList();
+            showChapter(4);
+        })();
     </script>
 </body>
 </html>
