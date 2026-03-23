@@ -145,8 +145,6 @@
         .chapter-item .chapter-idx { font-size: 0.75rem; font-weight: 600; color: #315f9e; margin-bottom: 0.2rem; }
         .chapter-item .chapter-title { font-weight: 650; font-size: 1.1rem; color: #0e2850; margin-bottom: 0.2rem; }
         .chapter-item .chapter-desc { font-size: 0.9rem; color: #46658f; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .chapter-meta-tags { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
-        .chapter-meta-tags span { background: #dce7f5; color: #193d69; padding: 0.2rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-weight: 500; }
 
         /* 右侧内容区 */
         .content-area {
@@ -268,16 +266,22 @@
         .chapter-content-block li {
             margin-bottom: 0.3rem;
         }
+        .image-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <div class="app-header">
         <div class="logo-area">
-            <h1>Unity + PICO SDK 深度扩展教程 <small>十全详细版·最终修订</small></h1>
-        </div>
-        <div class="header-actions">
-            <div class="search-wrapper"><input placeholder="搜索教程…" id="searchInput"><button>⌘K</button></div>
-            <div class="badge-light">📘 共8章 · 修订版</div>
+            <h1>Unity + PICO SDK 深度扩展教程</h1>
         </div>
     </div>
 
@@ -293,12 +297,12 @@
 
     <script>
         (function(){
-            // ==================== 深度扩展后的章节内容（所有reason已移除） ====================
+            // ==================== 深度扩展后的章节内容（所有reason已移除，删除了difficulty/duration/icon） ====================
             const tutorialData = { chapters: [] };
 
             // ========= 第1章 Unity引擎简介 =========
             tutorialData.chapters.push({
-                id: 1, title: "Unity引擎简介（超深度扩展）", difficulty: "初级", duration: "4小时", icon: "🎮",
+                id: 1, title: "Unity引擎简介（超深度扩展）",
                 description: "从零开始安装Unity Hub和编辑器（2022.3.62f3 LTS），完整模块配置（Android, Windows），编辑器五视图精讲，游戏对象和组件架构深度剖析。",
                 sections: [
                     { title: "1.1 Unity Hub安装与编辑器版本选择（含故障排除）", 
@@ -421,7 +425,7 @@
 
             // ========= 第2章 开始使用PICO Unity Integration SDK =========
             tutorialData.chapters.push({
-                id: 2, title: "开始使用PICO Unity Integration SDK（超深度扩展）", difficulty: "初级", duration: "6小时", icon: "🥽",
+                id: 2, title: "开始使用PICO Unity Integration SDK（超深度扩展）",
                 description: "PICO Unity Integration SDK功能全景，专注于设备跟踪和空间感知，通过PICO开发者Portal集成SDK，为PICO设备配置项目设置，创建一个基本的AR跟踪应用并解决常见问题。",
                 sections: [
                     { title: "2.1 SDK功能全景：设备跟踪与空间感知详解", 
@@ -541,7 +545,7 @@
 
             // ========= 第3章 技术栈和项目计划 =========
             tutorialData.chapters.push({
-                id: 3, title: "技术栈和项目计划（超深度扩展）", difficulty: "中级", duration: "2.5小时", icon: "📋",
+                id: 3, title: "技术栈和项目计划（超深度扩展）",
                 description: "技术选择的深度理由（Unity、C#、PICO Unity Integration SDK、Android、PICO 4 VR头戴设备、GitHub）， PICO SDK与其他AR框架的全面比较。",
                 sections: [
                     { title: "3.1 技术选型深度理由（含数据支撑）", 
@@ -571,12 +575,12 @@
                     { title: "3.2 PICO SDK与其他AR框架全面比较", 
                       content: `📊 **深度对比表格**：
                       <table class="template-table">
-                      <tr><th>框架</th><th>适用设备</th><th>优势</th><th>劣势</th><th>适用场景</th></tr>
-                      <tr><td><strong>PICO SDK</strong></td><td>PICO头显</td><td>原生支持，完整6DoF，手柄输入，彩色透视</td><td>仅限PICO硬件</td><td>PICO专用VR/MR应用</td></tr>
-                      <tr><td><strong>ARCore</strong></td><td>Android手机</td><td>广泛设备支持，Google生态</td><td>无手柄，追踪易受环境影响</td><td>手机AR应用</td></tr>
-                      <tr><td><strong>ARKit</strong></td><td>iOS设备</td><td>LiDAR深度支持，Apple生态</td><td>仅限苹果设备</td><td>iOS AR应用</td></tr>
-                      <tr><td><strong>Vuforia</strong></td><td>多平台</td><td>图像识别强，支持模型目标</td><td>6DoF追踪较弱，商用需付费</td><td>图像识别为主的AR</td></tr>
-                      <tr><td><strong>OpenXR</strong></td><td>多设备</td><td>跨平台标准，一次编写多设备运行</td><td>底层API，开发复杂度高</td><td>需要跨多个VR平台的开发者</td></tr>
+                       <tr><th>框架</th><th>适用设备</th><th>优势</th><th>劣势</th><th>适用场景</th></tr>
+                       <tr><td><strong>PICO SDK</strong></td><td>PICO头显</td><td>原生支持，完整6DoF，手柄输入，彩色透视</td><td>仅限PICO硬件</td><td>PICO专用VR/MR应用</td></tr>
+                       <tr><td><strong>ARCore</strong></td><td>Android手机</td><td>广泛设备支持，Google生态</td><td>无手柄，追踪易受环境影响</td><td>手机AR应用</td></tr>
+                       <tr><td><strong>ARKit</strong></td><td>iOS设备</td><td>LiDAR深度支持，Apple生态</td><td>仅限苹果设备</td><td>iOS AR应用</td></tr>
+                       <tr><td><strong>Vuforia</strong></td><td>多平台</td><td>图像识别强，支持模型目标</td><td>6DoF追踪较弱，商用需付费</td><td>图像识别为主的AR</td></tr>
+                       <tr><td><strong>OpenXR</strong></td><td>多设备</td><td>跨平台标准，一次编写多设备运行</td><td>底层API，开发复杂度高</td><td>需要跨多个VR平台的开发者</td></tr>
                       </table>
                       <br>本教程选择PICO SDK是因为项目目标设备为PICO 4，需要利用其手柄和透视能力，同时希望获得官方的最佳支持。` }
                 ]
@@ -584,7 +588,7 @@
 
             // ========= 第4章 AR核心逻辑：空间锚定 =========
             tutorialData.chapters.push({
-                id: 4, title: "AR核心逻辑：空间锚定（超深度扩展）", difficulty: "高级", duration: "6小时", icon: "📍",
+                id: 4, title: "AR核心逻辑：空间锚定（超深度扩展）",
                 description: "PICO SDK用于空间定位的跟踪功能深度解析，在物理空间中实现锚点（创建、保存、加载、删除、导出/导入），处理跟踪丢失或设备遮挡，以及完整的实战项目。",
                 sections: [
                     { title: "4.1 PICO SDK空间定位功能深度解析", 
@@ -809,7 +813,7 @@
 
             // ========= 第5章 核心游戏逻辑开发 =========
             tutorialData.chapters.push({
-                id: 5, title: "核心游戏逻辑开发（超深度扩展）", difficulty: "中级", duration: "6小时", icon: "⚡",
+                id: 5, title: "核心游戏逻辑开发（超深度扩展）",
                 description: "输入处理的模块化设计，基于Unity物理的弹射系统深度解析，碰撞检测与伤害计算（接口设计），对象池优化，健康UI实现。",
                 sections: [
                     { title: "5.1 输入处理模块化设计（完整框架）", 
@@ -1092,7 +1096,8 @@
 
             // ========= 第6章 项目前期准备与利益相关者分析 =========
             tutorialData.chapters.push({
-                id: 6, title: "Project Preparation and Stakeholder Analysis",                 description: "Document the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
+                id: 6, title: "Project Preparation and Stakeholder Analysis",
+                description: "Document the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
                 sections: [
                     { 
                         title: "Preparing for the Transition Period and Stakeholder Analysis", 
@@ -1121,7 +1126,7 @@
 
             // ========= 第7章 有效利益相关者会议 =========
             tutorialData.chapters.push({
-                id: 7, title: "Effective Stakeholder Meetings: Here are some lessons we learned from that collaborative project.", 
+                id: 7, title: "Effective Stakeholder Meetings: Here are some lessons we learned from that collaborative project.",
                 description: "Stakeholder meetings are key to making sure a project goes well. They make sure that team members and stakeholders are on the same page. This chapter's got everything: agendas, clear roles, adaptive communication, meeting notes, action items, and lessons learned.",
                 sections: [
                     { 
@@ -1146,7 +1151,7 @@
                         <p>Good communication is key to stakeholder meetings. Instead of being stuck to the agenda, it's important to go with the flow of the conversation. If we've already gone over certain points in a previous conversation, it's probably best to avoid repeating them. Otherwise, we might end up frustrating the stakeholders. Also, if you ask the same questions over and over, it might make your team look unprepared and disorganized.</p>
                         <p>To improve communication, we recommend:</p>
                         <ul>
-                            <li><strong>Reading the room:</strong> Pay attention to stakeholders’ engagement levels and adapt accordingly.</li>
+                            <li><strong>Reading the room:</strong> Pay attention to stakeholders' engagement levels and adapt accordingly.</li>
                             <li><strong>Avoiding excessive repetition:</strong> Be mindful of what has already been discussed and prevent redundancy.</li>
                         </ul>
                         
@@ -1162,7 +1167,7 @@
                         <ul>
                             <li><strong>Consistency Builds Trust:</strong> Keeping the same people in key roles ensures that stakeholders have a consistent point of contact, fostering stronger relationships over time.</li>
                             <li><strong>Role Familiarity Enhances Performance:</strong> When individuals perform the same role repeatedly, they become more skilled and efficient, leading to smoother meetings and better outcomes.</li>
-                            <li><strong>Balance Learning and Stakeholder Needs:</strong> While it’s important to provide team members with growth opportunities, this should be balanced with the need for stakeholder confidence and meeting effectiveness.</li>
+                            <li><strong>Balance Learning and Stakeholder Needs:</strong> While it's important to provide team members with growth opportunities, this should be balanced with the need for stakeholder confidence and meeting effectiveness.</li>
                         </ul>
                         
                         <h3>Best Practices for Future Projects</h3>
@@ -1180,60 +1185,32 @@
 
             // ========= 第8章 配套示例项目 =========
             tutorialData.chapters.push({
-                id: 8, title: "配套示例项目（深度扩展）", difficulty: "初级", duration: "2小时", icon: "📦",
-                description: "链接到GitHub上完整的带注释的Unity项目，包括精简的AR场景，玩家预装，核心脚本和带注释代码的PICO SDK配置。",
+                id: 8, title: "配套示例项目（深度扩展）",
+                description: "玩家视角以及观众视角的演示视频，可在pico4上运行的unity包",
                 sections: [
-                    { title: "8.1 GitHub项目链接与下载", 
-                      content: `🔗 <a class="external-link" href="#" target="_blank">(模拟链接) github.com/example/PICO-AR-Sports-Demo</a>
-                      <br>包含：
-                      <br>- 完整Unity项目 (Unity 2022.3.62f3)
-                      <br>- 预编译APK (可直接安装)
-                      <br>- 示例标记PDF (用于锚点放置)
-                      <br>- 项目结构文档` },
+                    { title: "8.1 玩家视角演示视频", 
+                      content: `🎮 <strong>玩家视角演示视频：</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) Player_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>视频内容说明：</strong>
+                      <br>- 展示玩家在PICO 4头显中的第一人称游戏体验
+                      <br>- 演示手柄交互操作（击球、移动、菜单选择）
+                      <br>- 展示空间锚点定位与虚拟物体交互
+                      <br>- 实时反馈游戏得分与状态变化` },
                     
-                    { title: "8.2 项目结构全解析", 
-                      content: `📂 <strong>Assets目录详解：</strong>
-                      <div class="code-note">
-                      Assets/<br>
-                      ├── Art/               (体育模型、纹理)<br>
-                      ├── Scripts/            (所有C#脚本，带注释)<br>
-                      │   ├── Core/           (GameManager, ScoreManager)<br>
-                      │   ├── Interaction/     (RacketController, BallPhysics)<br>
-                      │   ├── Networking/      (NetworkPlayer, AnchorSync)<br>
-                      │   └── Utils/           (Singleton, Constants)<br>
-                      ├── Prefabs/             (Player, Ball, Net预制体)<br>
-                      ├── Scenes/              (MainAR, TestScene)<br>
-                      └── PICO/                 (SDK配置)
-                      </div>` },
+                    { title: "8.2 观众端演示视频", 
+                      content: `👥 <strong>观众端演示视频：</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) Spectator_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>视频内容说明：</strong>
+                      <br>- 展示从第三方观察者视角观看游戏进行
+                      <br>- 展示观众界面的信息呈现（比分、状态、实时数据）
+                      <br>- 演示观众与游戏环境的交互方式` },
                     
-                    { title: "8.3 核心脚本带注释示例", 
-                      content: `📝 <strong>AnchorManager.cs (节选注释)：</strong>
-                      <div class="code-note">
-                      /// <summary><br>
-                      /// 管理空间锚点的创建、保存、加载。<br>
-                      /// 使用PXR_SpatialAnchor API，所有方法都有回调。<br>
-                      /// </summary><br>
-                      public void CreateAnchor(Vector3 pos) {<br>
-                      &nbsp;   // 异步创建，成功后在回调中保存<br>
-                      &nbsp;   PXR_SpatialAnchor.CreateAnchor(pos, Quaternion.identity, (anchor, res) => {<br>
-                      &nbsp;       if (res == AnchorResult.Success) {<br>
-                      &nbsp;           anchor.Save();  // 持久化到设备<br>
-                      &nbsp;           Debug.Log($"锚点已保存，UUID: {anchor.UUID}");<br>
-                      &nbsp;       }<br>
-                      &nbsp;   });<br>
-                      }
-                      </div>` },
-                    
-                    { title: "8.4 如何运行与实验", 
-                      content: `▶️ <strong>5分钟快速启动：</strong>
-                      <br>1. 下载项目并解压。
-                      <br>2. 用Unity Hub打开项目，等待导入完成。
-                      <br>3. 在PXR_Manager中输入你的License。
-                      <br>4. 连接PICO设备，Build And Run。
-                      <br><br>🔧 <strong>尝试修改：</strong>
-                      <br>- 调整球的速度（BallPhysics中的power变量）
-                      <br>- 更换手柄震动强度
-                      <br>- 修改锚点保存数量` }
+                    { title: "8.3 可运行Unity项目包", 
+                      content: `📦 <strong>Unity项目包 (PICO 4 可直接运行)：</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) PICO-AR-Sports-Demo.unitypackage</a>
+                      <br><br>📂 <strong>包含内容：</strong>
+                      <br>- 完整Unity项目 (Unity 2022.3.62f3 LTS)
+                      <br>- 预编译APK文件 (可直接安装至PICO 4)` }
                 ]
             });
 
@@ -1246,10 +1223,9 @@
                 tutorialData.chapters.forEach(ch => {
                     const activeClass = (activeChapterId === ch.id) ? 'active' : '';
                     html += `<div class="chapter-item ${activeClass}" data-chapter-id="${ch.id}">
-                        <div class="chapter-idx">第${ch.id}章 · ${ch.difficulty}</div>
+                        <div class="chapter-idx">第${ch.id}章</div>
                         <div class="chapter-title">${ch.title}</div>
                         <div class="chapter-desc">${ch.description.substring(0,70)}…</div>
-                        <div class="chapter-meta-tags"><span>⏱ ${ch.duration}</span><span>${ch.icon}</span></div>
                     </div>`;
                 });
                 container.innerHTML = html;
