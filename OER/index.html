@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity + PICO SDK 深度扩展教程 · 最终修订版</title>
+    <title>Unity + PICO SDK Open Educational Resources</title>
     <style>
-        /* ===== 全局明亮风格·双栏精读版 ===== */
+        /* ===== Global Light Theme · Two-Column Detailed Layout ===== */
         * {
             margin: 0;
             padding: 0;
@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* 头部 */
+        /* Header */
         .app-header {
             flex-shrink: 0;
             background: white;
@@ -41,55 +41,8 @@
             color: #0b2645;
             letter-spacing: -0.02em;
         }
-        .logo-area small {
-            font-size: 1rem;
-            font-weight: 400;
-            color: #3f6192;
-            margin-left: 12px;
-        }
 
-        .header-actions {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-        }
-        .search-wrapper {
-            background: white;
-            border: 1px solid #c8d5e8;
-            border-radius: 40px;
-            padding: 0.45rem 0.45rem 0.45rem 1.2rem;
-            display: flex;
-            align-items: center;
-            width: 280px;
-        }
-        .search-wrapper input {
-            border: none;
-            background: transparent;
-            flex: 1;
-            font-size: 0.95rem;
-            outline: none;
-            color: #172d4f;
-        }
-        .search-wrapper button {
-            background: #e9f0fa;
-            border: none;
-            border-radius: 40px;
-            padding: 0.45rem 1.2rem;
-            font-size: 0.85rem;
-            color: #1d4071;
-            font-weight: 500;
-            cursor: default;
-        }
-        .badge-light {
-            background: #e6effa;
-            padding: 0.45rem 1.2rem;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            color: #173e70;
-            font-weight: 500;
-        }
-
-        /* 双栏主体 */
+        /* Main Layout */
         .main-layout {
             flex: 1;
             display: flex;
@@ -101,7 +54,7 @@
             border: 1px solid #d7e2f0;
         }
 
-        /* 左侧目录 */
+        /* Sidebar */
         .sidebar {
             width: 350px;
             background-color: #f8fbfe;
@@ -146,7 +99,7 @@
         .chapter-item .chapter-title { font-weight: 650; font-size: 1.1rem; color: #0e2850; margin-bottom: 0.2rem; }
         .chapter-item .chapter-desc { font-size: 0.9rem; color: #46658f; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 右侧内容区 */
+        /* Content Area */
         .content-area {
             flex: 1;
             overflow-y: auto;
@@ -182,7 +135,7 @@
 
         .empty-selection { display: flex; align-items: center; justify-content: center; height: 100%; color: #6c8bb8; font-size: 1.3rem; flex-direction: column; gap: 1rem; }
         
-        /* 表格样式 */
+        /* Table Styles */
         .template-table {
             width: 100%;
             border-collapse: collapse;
@@ -204,28 +157,55 @@
             border-top: 1px solid #d0e0f0;
         }
 
-        /* 引用块样式 */
-        .quote-box {
-            background: #f0f7fa;
-            border-left: 6px solid #2b5797;
-            padding: 1.2rem 2rem;
-            margin: 1.5rem 0;
-            border-radius: 0 18px 18px 0;
-            font-style: italic;
-            color: #1d3e5e;
+        /* Intro Page Styles */
+        .intro-section {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #e2edf7;
         }
-        
-        .lesson-badge {
-            background: #d4e3fd;
-            color: #1d4085;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
+        .intro-section h2 {
+            font-size: 1.8rem;
+            color: #103868;
+            margin-bottom: 1rem;
             font-weight: 600;
-            display: inline-block;
-            margin-right: 0.8rem;
         }
-        /* 纯文本段落样式 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid #e2edf7;
+            transition: all 0.2s;
+        }
+        .feature-card:hover {
+            border-color: #b9d1ef;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: #1d4085;
+            margin-bottom: 0.75rem;
+        }
+        .feature-card p {
+            color: #3a5a7a;
+            line-height: 1.5;
+        }
+        .signature {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2edf7;
+            text-align: right;
+            font-style: italic;
+            color: #5a7a9a;
+        }
+
         .plain-text-block {
             font-size: 1.1rem;
             line-height: 1.8;
@@ -236,7 +216,6 @@
             color: #173e5c;
             margin: 1.8rem 0;
         }
-        /* 新章节样式 - 用于第7章的长文本 */
         .chapter-content-block {
             font-size: 1.1rem;
             line-height: 1.8;
@@ -281,451 +260,501 @@
 <body>
     <div class="app-header">
         <div class="logo-area">
-            <h1>Unity + PICO SDK 深度扩展教程</h1>
+            <h1>Unity + PICO SDK Open Educational Resources</h1>
         </div>
     </div>
 
     <div class="main-layout">
+        <!-- Left Sidebar: Table of Contents (Intro + 8 Chapters) -->
         <div class="sidebar">
-            <div class="sidebar-header"><h3>📋 八章 · 深度扩展</h3></div>
+            <div class="sidebar-header"><h3>📋 Table of Contents</h3></div>
             <div class="chapter-list" id="chapterListContainer"></div>
         </div>
+        <!-- Right Content Area -->
         <div class="content-area" id="detailContentArea">
-            <div class="empty-selection"><span>👈 选择一章开始学习</span></div>
+            <div class="empty-selection"><span>👈 Select an item to start learning</span></div>
         </div>
     </div>
 
     <script>
         (function(){
-            // ==================== 深度扩展后的章节内容（所有reason已移除，删除了difficulty/duration/icon） ====================
+            // ==================== Introduction Page Content (No Chapter Number) ====================
+            const introContent = {
+                id: 0,
+                title: "Unity + PICO SDK Open Educational Resources",
+                description: "A comprehensive open educational resource for developing AR/VR applications using Unity and PICO SDK, featuring spatial anchors, physics-based interactions, multiplayer networking, and stakeholder engagement best practices.",
+                sections: [
+                    {
+                        title: "Introduction",
+                        content: `
+                        <div class="intro-section">
+                            <h2>🎮 Interactive Example Environment</h2>
+                            <p>For a practical demonstration of our work, please explore the complete Unity project and demo videos provided in Chapter 8.</p>
+                        </div>
+
+                        <div class="intro-section">
+                            <h2>📚 What You'll Learn</h2>
+                            <p>Our tutorials cover a wide range of topics, including:</p>
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <h4>🎮 Unity + PICO SDK Setup</h4>
+                                    <p>Get started with Unity 2022.3.62f3 LTS and PICO Unity Integration SDK. Step-by-step instructions on installing and configuring the development environment for AR/VR applications on PICO 4.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>📍 Spatial Anchors & AR Logic</h4>
+                                    <p>Learn how to implement spatial anchors to place virtual objects in real-world locations. Master the full lifecycle of anchor creation, persistence, and multi-device synchronization.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>⚡ Core Game Logic Development</h4>
+                                    <p>Explore modular input handling, collision detection with IDamageable interfaces, object pooling optimization, and health UI implementation.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>🤝 Stakeholder Engagement & Project Management</h4>
+                                    <p>Learn essential collaborative skills: effective meeting structures, roles and responsibilities, meeting minutes documentation, and best practices for successful stakeholder communication.</p>
+                                </div>
+                            </div>
+                            <p style="margin-top: 1.5rem;">We invite you to explore the tutorial modules and interactive demos as a foundation for your own creative projects while making the most of open-source assets.</p>
+                        </div>
+
+                        <div class="signature">
+                            Sincerely,<br>
+                            Team 1<br>
+                            April 1, 2026
+                        </div>
+                        `
+                    }
+                ]
+            };
+
+            // ==================== Tutorial Data (8 Chapters) ====================
             const tutorialData = { chapters: [] };
 
-            // ========= 第1章 Unity引擎简介 =========
+            // ========= Chapter 1: Unity Engine Introduction =========
             tutorialData.chapters.push({
-                id: 1, title: "Unity引擎简介（超深度扩展）",
-                description: "从零开始安装Unity Hub和编辑器（2022.3.62f3 LTS），完整模块配置（Android, Windows），编辑器五视图精讲，游戏对象和组件架构深度剖析。",
+                id: 1, title: "Unity Engine Introduction",
+                description: "Install Unity Hub and Editor (2022.3.62f3 LTS) from scratch, complete module configuration (Android, Windows), in-depth explanation of the five editor views, and deep dive into GameObject and component architecture.",
                 sections: [
-                    { title: "1.1 Unity Hub安装与编辑器版本选择（含故障排除）", 
-                      content: `✅ <strong>超详细步骤：</strong>
-                      <br><br>1. **访问官网下载**：打开 <a class="external-link" href="https://unity.com/download" target="_blank">Unity官网</a>，下载Unity Hub 3.7+ 版本（支持Windows/macOS/Linux）。
-                      <br>2. **安装Unity Hub**：双击安装程序，选择安装路径（建议非系统盘），完成安装。
-                      <br>3. **登录与激活许可证**：
-                      <br>   - 打开Unity Hub，使用Unity账号登录（如无账号，先免费注册）。
-                      <br>   - 进入“许可证”菜单，点击“添加”，选择“获得免费的个人许可证”并激活。
-                      <br>4. **安装指定编辑器版本**：
-                      <br>   - 在“安装”选项卡点击“添加”按钮。
-                      <br>   - 选择版本 <strong>2022.3.62f3 LTS</strong>（LTS表示长期支持版，适合商业项目）。
-                      <br>5. **必须勾选的模块（非常重要！）**：
-                      <br>   - **Android Build Support**：展开后必须勾选：
-                      <br>     - SDK（Android软件开发工具包）
-                      <br>     - NDK（原生开发工具包）
-                      <br>     - JDK（Java开发工具包）
-                      <br>     - OpenJDK（开源Java环境）
-                      <br>     - Gradle（Android构建工具）
-                      <br>   - **Windows Build Support (IL2CPP)**：用于PC端测试和性能分析。
-                      <br>   - **简体中文本地化包**（可选，便于中文界面）。
-                      <br>6. **模块补装**：如果安装时漏装模块，后续可在Hub中“添加模块”随时补充。
-                      <br><br>⚠️ **常见错误与解决**：
-                      <br>- 错误：安装卡在“正在下载”长时间不动 → 尝试切换网络或使用科学上网。
-                      <br>- 错误：许可证激活失败 → 检查账号是否已验证邮箱，或重新登录。
-                      <br>- 错误：模块下载失败 → 手动下载模块包，参考官方文档离线安装。
-                      <br><br>🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/GettingStartedInstallingHub.html" target="_blank">官方安装文档</a> | <a class="external-link" href="https://docs.unity3d.com/Manual/OfflineInstallation.html" target="_blank">离线安装指南</a>` },
+                    { title: "1.1 Unity Hub Installation & Editor Version Selection", 
+                      content: `✅ <strong>Detailed Steps:</strong>
+                      <br><br>1. Visit the official website: Open <a class="external-link" href="https://unity.com/download" target="_blank">Unity Download Page</a> to download Unity Hub 3.7+ (supports Windows/macOS/Linux).
+                      <br>2. Install Unity Hub: Run the installer, select the installation path (recommend non-system drive), and complete the installation.
+                      <br>3. Login and Activate License:
+                      <br>   - Open Unity Hub and log in with your Unity account.
+                      <br>   - Go to "Licenses" menu, click "Add", select "Get a free personal license" and activate it.
+                      <br>4. Install the specified editor version:
+                      <br>   - Click "Add" in the "Installs" tab.
+                      <br>   - Select version <strong>2022.3.62f3 LTS</strong> (LTS stands for Long Term Support, suitable for commercial projects).
+                      <br>5. Required modules (very important!):
+                      <br>   - Android Build Support: Expand and check:
+                      <br>     - SDK (Android Software Development Kit)
+                      <br>     - NDK (Native Development Kit)
+                      <br>     - JDK (Java Development Kit)
+                      <br>     - OpenJDK (Open Java Development Kit)
+                      <br>     - Gradle (Android build tool)
+                      <br>   - Windows Build Support (IL2CPP): For PC testing and performance analysis.
+                      <br>   - Simplified Chinese localization package (optional).
+                      <br>6. Module addition: If you miss any modules during installation, you can add them later via "Add Modules" in the Hub.
+                      <br><br>⚠️ Common Errors and Solutions:
+                      <br>- Error: Installation stuck at "Downloading" → Try switching networks or using a VPN.
+                      <br>- Error: License activation failed → Verify your email is confirmed, or log in again.
+                      <br>- Error: Module download failed → Manually download the module package, refer to official documentation for offline installation.
+                      <br><br>🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/index.html" target="_blank">Official Documentation</a> | <a class="external-link" href="https://docs.unity3d.com/ScriptReference/index.html" target="_blank">Scripting API</a>` },
                     
-                    { title: "1.2 创建项目与Android环境深度验证", 
-                      content: `📁 <strong>新建项目完整流程：</strong>
-                      <br>1. 打开Unity Hub，点击“新建项目”，选择“3D核心”模板。
-                      <br>2. 项目名称：例如“PICO_AR_Sports”，保存位置：**绝对不要包含中文或特殊字符**（建议英文路径）。
-                      <br>3. 点击“创建项目”，等待Unity初始化完成。
-                      <br><br>🔧 **Android环境深度验证**：
-                      <br>1. 打开菜单 **Edit > Preferences > External Tools**（Windows）或 **Unity > Preferences**（macOS）。
-                      <br>2. 检查 **Android SDK Tools** 路径是否自动识别：
-                      <br>   - 默认路径：Windows为 <code>C:\\Users\\[用户名]\\AppData\\Local\\Android\\Sdk</code>
-                      <br>   - 如果未识别，点击“Browse”手动指向SDK安装目录。
-                      <br>3. 检查NDK、JDK、Gradle是否都已正确识别，如缺失可点击“Download”自动下载补全。
-                      <br>4. **配置环境变量（高级）**：将Android SDK的platform-tools路径添加到系统PATH，方便使用adb命令。
-                      <br><br>📱 **真机调试环境验证**：
-                      <br>1. **开启PICO开发者模式**：
-                      <br>   - 在PICO设备中进入“设置” > “通用” > “关于本机”，连续点击“版本号”7次开启开发者选项。
-                      <br>   - 返回“设置” > “系统” > “开发者选项”，开启“USB调试”。
-                      <br>2. **连接设备**：用USB线连接电脑，在PICO设备上弹出的“允许USB调试？”对话框中点击“允许”。
-                      <br>3. **验证连接**：打开终端/命令提示符，输入 <code>adb devices</code>，如果显示设备序列号且状态为“device”，则表示连接成功。
-                      <br>4. **Unity中配置Build**：
-                      <br>   - 打开 **File > Build Settings**，点击“Android”然后点击“Switch Platform”。
-                      <br>   - 点击“Player Settings”：
-                      <br>     - **Package Name**：设置唯一包名，例如 <code>com.yourcompany.picoarsports</code>
-                      <br>     - **Minimum API Level**：选择 **Android API Level 29**（Android 10）
-                      <br>     - **Target API Level**：选择 **32 或 33**
-                      <br>   - 点击“Build And Run”，如果能在PICO设备上安装一个空App（黑屏或显示默认场景），则环境验证成功。
-                      <br><br>🔗 <a class="external-link" href="https://developer.android.com/studio/command-line/adb" target="_blank">ADB使用指南</a> | <a class="external-link" href="https://developer.picoxr.com/zh/document/unity/development-environment/" target="_blank">PICO开发环境文档</a>` },
+                    { title: "1.2 Project Creation & Android Environment Verification", 
+                      content: `📁 <strong>New Project Creation Process:</strong>
+                      <br>1. Open Unity Hub, click "New Project", select the "3D Core" template.
+                      <br>2. Project name: e.g., "PICO_AR_Sports", save location: **Do not use Chinese or special characters** (recommend English path).
+                      <br>3. Click "Create Project" and wait for Unity to initialize.
+                      <br><br>🔧 Android Environment Verification:
+                      <br>1. Open Edit > Preferences > External Tools (Windows) or Unity > Preferences (macOS).
+                      <br>2. Check if the Android SDK Tools path is automatically recognized:
+                      <br>   - Default path (Windows): <code>C:\\Users\\[username]\\AppData\\Local\\Android\\Sdk</code>
+                      <br>   - If not recognized, click "Browse" to manually point to the SDK installation directory.
+                      <br>3. Check if NDK, JDK, and Gradle are correctly recognized; if missing, click "Download" to automatically complete.
+                      <br>4. Configure environment variables: Add Android SDK's platform-tools path to the system PATH for convenient use of adb commands.
+                      <br><br>📱 Device Debugging Environment Verification:
+                      <br>1. Enable PICO Developer Mode:
+                      <br>   - On PICO device: Settings > General > About, tap "Version" 7 times to enable developer options.
+                      <br>   - Go back to Settings > System > Developer Options, enable "USB Debugging".
+                      <br>2. Connect the device: Connect via USB cable, and when prompted on the PICO device, tap "Allow USB debugging".
+                      <br>3. Verify connection: Open Terminal/Command Prompt and enter <code>adb devices</code>. If the device serial number appears with status "device", the connection is successful.
+                      <br>4. Configure Build in Unity:
+                      <br>   - Open File > Build Settings, click "Android" then "Switch Platform".
+                      <br>   - Click "Player Settings":
+                      <br>     - Package Name: Set a unique package name, e.g., <code>com.yourcompany.picoarsports</code>
+                      <br>     - Minimum API Level: Select Android API Level 29 (Android 10)
+                      <br>     - Target API Level: Select 32 or 33
+                      <br>   - Click "Build And Run". If an empty app (black screen or default scene) can be installed on the PICO device, the environment is verified.
+                      <br><br>🔗 <a class="external-link" href="https://developer.android.google.cn/tools/adb#howadbworks" target="_blank">ADB Guide</a> | <a class="external-link" href="https://developer-cn.picoxr.com/document/?platform=unity" target="_blank">PICO Development Documentation</a>` },
                     
-                    { title: "1.3 编辑器界面五视图精讲（AR开发视角）", 
-                      content: `🖥️ **Unity五大核心视图详解（AR开发视角）**：
-                      <br><br>1. **Scene视图**：
-                      <br>   - **用途**：在AR开发中用于摆放虚拟物体、调整位置、设置光照。
-                      <br>   - **快捷键**：Q（手形工具）、W（移动）、E（旋转）、R（缩放）。
-                      <br>   - **技巧**：使用“2D”模式查看UI布局，使用“ISO”模式查看3D场景。
-                      <br>   - **AR专用**：通过Scene视图可以精确地将虚拟物体放置在真实世界的对应位置（模拟）。
-                      <br><br>2. **Game视图**：
-                      <br>   - **用途**：预览最终输出效果，模拟不同分辨率和设备。
-                      <br>   - **技巧**：点击“Free Aspect”可切换预设分辨率（如1080x1920模拟手机）。
-                      <br>   - **AR专用**：在PICO头显中运行时，Game视图显示的是头显左眼画面。
-                      <br><br>3. **Hierarchy视图**：
-                      <br>   - **用途**：显示当前场景中所有游戏对象的层级结构，支持父子级关系。
-                      <br>   - **技巧**：右键可快速创建基本对象（Cube、Camera、UI等）。
-                      <br>   - **AR专用**：管理ImageTarget、PXR_CameraRig及其子物体（手柄、头显）。
-                      <br><br>4. **Project视图**：
-                      <br>   - **用途**：管理项目所有资源（脚本、模型、材质、场景等），支持搜索和筛选。
-                      <br>   - **技巧**：使用“Packages”显示所有导入的包，使用“Favorites”快速访问常用资源。
-                      <br>   - **AR专用**：按照规范组织资源，便于团队协作。
-                      <br><br>5. **Inspector视图**：
-                      <br>   - **用途**：查看和编辑选中物体的所有组件属性。
-                      <br>   - **技巧**：点击右上角“锁”图标可以锁定当前物体，方便对比不同物体属性。
-                      <br>   - **AR专用**：调整PXR_Manager的参数（如License、追踪设置）、修改手柄射线属性。
-                      <br><br>🔧 **实用技巧**：
-                      <br>- **布局保存**：调整好视图布局后，点击右上角“Layout”下拉菜单，选择“Save Layout...”保存自定义布局。
-                      <br>- **搜索功能**：Hierarchy和Project视图都支持搜索，输入“t:script”可筛选所有脚本。
-                      <br>- **快捷键**：按住Ctrl/Cmd + Shift + F可将摄像机对齐到Scene视图当前视角。` },
+                    { title: "1.3 Editor Interface: Five Views Explained", 
+                      content: `🖥️ Unity's Five Core Views Explained (AR Development Perspective):
+                      <br><br>1. Scene View:
+                      <br>   - Purpose: Place virtual objects, adjust positions, and set up lighting in AR development.
+                      <br>   - Shortcuts: Q (hand tool), W (move), E (rotate), R (scale).
+                      <br>   - Tips: Use "2D" mode to view UI layout, "ISO" mode to view 3D scenes.
+                      <br>   - AR-specific: Precisely place virtual objects in the real world (simulated).
+                      <br><br>2. Game View:
+                      <br>   - Purpose: Preview final output, simulate different resolutions and devices.
+                      <br>   - Tips: Click "Free Aspect" to switch between preset resolutions (e.g., 1080x1920 to simulate a phone).
+                      <br>   - AR-specific: When running on PICO headset, Game View shows the left eye view.
+                      <br><br>3. Hierarchy View:
+                      <br>   - Purpose: Display the hierarchical structure of all GameObjects in the current scene, supporting parent-child relationships.
+                      <br>   - Tips: Right-click to quickly create basic objects (Cube, Camera, UI, etc.).
+                      <br>   - AR-specific: Manage ImageTarget, PXR_CameraRig and its children (controllers, headset).
+                      <br><br>4. Project View:
+                      <br>   - Purpose: Manage all project assets (scripts, models, materials, scenes, etc.), support search and filtering.
+                      <br>   - Tips: Use "Packages" to view all imported packages, use "Favorites" for quick access.
+                      <br>   - AR-specific: Organize assets according to specifications for team collaboration.
+                      <br><br>5. Inspector View:
+                      <br>   - Purpose: View and edit all component properties of the selected object.
+                      <br>   - Tips: Click the "lock" icon in the top right to lock the current object for comparing different object properties.
+                      <br>   - AR-specific: Adjust PXR_Manager parameters (License, tracking settings), modify controller ray properties.
+                      <br><br>🔧 Practical Tips:
+                      <br>- Layout saving: After adjusting the view layout, click the "Layout" dropdown in the top right and select "Save Layout..." to save custom layouts.
+                      <br>- Search function: Hierarchy and Project views support search; entering "t:script" filters all scripts.
+                      <br>- Shortcut: Ctrl/Cmd + Shift + F aligns the camera to the current Scene view perspective.` },
                     
-                    { title: "1.4 游戏对象与组件架构实战（含完整示例）", 
-                      content: `🧩 **组件式思维深度解析**：
-                      <br>Unity的核心设计思想：**任何GameObject都是一个容器，通过添加组件赋予其功能**。组件包括Transform、MeshRenderer、Collider、脚本等。
-                      <br><br>**实战演练：创建可交互的旋转立方体**：
-                      <br>1. **创建空物体**：在Hierarchy右键 > “Create Empty”，命名为“Player”。
-                      <br>2. **添加可视化组件**：
-                      <br>   - 选中Player，点击Inspector下方的“Add Component”。
-                      <br>   - 搜索并添加 **MeshFilter**，在Mesh属性中选择 **Cube**。
-                      <br>   - 添加 **MeshRenderer**，在Materials中点击小圆圈选择默认材质（或新建材质）。
-                      <br>3. **添加C#脚本**：
-                      <br>   - 在Project视图的Scripts文件夹中右键 > “Create” > “C# Script”，命名为“Rotate”。
-                      <br>   - 双击打开脚本，输入以下代码：
+                    { title: "1.4 GameObjects & Component Architecture Practice", 
+                      content: `🧩 Component-based Thinking Deep Dive:
+                      <br>Unity's core design philosophy: Any GameObject is a container that gains functionality by adding components. Components include Transform, MeshRenderer, Collider, scripts, and more.
+                      <br><br>Hands-on Practice: Creating an interactive rotating cube:
+                      <br>1. Create an empty object: In Hierarchy, right-click > "Create Empty", name it "Player".
+                      <br>2. Add visualization components:
+                      <br>   - Select Player, click "Add Component" in the Inspector.
+                      <br>   - Search and add MeshFilter, select Cube in the Mesh property.
+                      <br>   - Add MeshRenderer, click the circle in Materials to select the default material (or create a new material).
+                      <br>3. Add C# script:
+                      <br>   - In Project view, right-click in the Scripts folder > "Create" > "C# Script", name it "Rotate".
+                      <br>   - Double-click to open the script and enter the following code:
                       <div class="code-note">
                       using UnityEngine;<br>
                       public class Rotate : MonoBehaviour {<br>
-                      &nbsp;   [Tooltip("旋转速度（度/秒）")]<br>
+                      &nbsp;   [Tooltip("Rotation speed (degrees/second)")]<br>
                       &nbsp;   public float speed = 30f;<br>
                       &nbsp;   void Update() {<br>
-                      &nbsp;       // 绕Y轴匀速旋转，Time.deltaTime保证帧率独立<br>
+                      &nbsp;       // Rotate around Y axis, Time.deltaTime ensures frame-rate independence<br>
                       &nbsp;       transform.Rotate(0, speed * Time.deltaTime, 0);<br>
                       &nbsp;   }<br>
                       }
                       </div>
-                      <br>4. **挂载脚本**：将Rotate脚本拖拽到Player物体上，或点击“Add Component”搜索Rotate添加。
-                      <br>5. **运行测试**：点击顶部播放按钮，应该看到立方体匀速旋转。
-                      <br><br>**理解Tag和Layer**：
-                      <br>- **Tag**：用于标识物体类型，例如“Player”、“Ball”。可在脚本中用 <code>CompareTag("Player")</code> 快速判断。
-                      <br>- **Layer**：用于物理碰撞筛选、相机渲染分层。例如设置“Player”层只与“Ball”层碰撞。
-                      <br><br>**组件生命周期**：
-                      <br>- **Awake()**：物体创建时调用，用于初始化。
-                      <br>- **Start()**：第一帧更新前调用。
-                      <br>- **Update()**：每帧调用，用于处理逻辑。
-                      <br>- **FixedUpdate()**：固定时间步长调用，用于物理计算。
-                      <br>- **OnCollisionEnter()**：碰撞发生时调用。` }
+                      <br>4. Attach the script: Drag the Rotate script onto the Player object, or click "Add Component" and search for Rotate.
+                      <br>5. Run the test: Click the Play button at the top; you should see the cube rotating steadily.
+                      <br><br>Understanding Tag and Layer:
+                      <br>- Tag: Used to identify object types, e.g., "Player", "Ball". Use <code>CompareTag("Player")</code> in scripts for quick identification.
+                      <br>- Layer: Used for physics collision filtering and camera rendering layers. For example, set the "Player" layer to only collide with the "Ball" layer.
+                      <br><br>Component Lifecycle:
+                      <br>- Awake(): Called when the object is created, used for initialization.
+                      <br>- Start(): Called before the first frame update.
+                      <br>- Update(): Called every frame, used for processing logic.
+                      <br>- FixedUpdate(): Called at fixed time intervals, used for physics calculations.
+                      <br>- OnCollisionEnter(): Called when a collision occurs.` }
                 ]
             });
 
-            // ========= 第2章 开始使用PICO Unity Integration SDK =========
+            // ========= Chapter 2: Getting Started with PICO Unity Integration SDK =========
             tutorialData.chapters.push({
-                id: 2, title: "开始使用PICO Unity Integration SDK（超深度扩展）",
-                description: "PICO Unity Integration SDK功能全景，专注于设备跟踪和空间感知，通过PICO开发者Portal集成SDK，为PICO设备配置项目设置，创建一个基本的AR跟踪应用并解决常见问题。",
+                id: 2, title: "Getting Started with PICO Unity Integration SDK",
+                description: "Overview of PICO Unity Integration SDK features, focusing on device tracking and spatial perception, integrating SDK via PICO Developer Portal, configuring project settings for PICO devices, creating a basic AR tracking app, and troubleshooting common issues.",
                 sections: [
-                    { title: "2.1 SDK功能全景：设备跟踪与空间感知详解", 
-                      content: `📡 **PICO SDK核心能力深度解析**：
-                      <br><br>1. **6DoF头显追踪**：
-                      <br>   - 获取头显的精确位置（Position）和旋转（Rotation）。
-                      <br>   - 频率高达72/90Hz，延迟极低。
-                      <br>   - 支持区域学习，可在不同环境快速重定位。
-                      <br><br>2. **手柄追踪**：
-                      <br>   - 获取左右手柄的位置、旋转、速度、角速度。
-                      <br>   - 读取所有按键状态：扳机、握持键、摇杆、菜单键、A/B/X/Y键。
-                      <br>   - 支持震动反馈（强度0-1，持续时间可调）。
-                      <br><br>3. **空间锚点**：
-                      <br>   - 创建锚点：将虚拟物体固定在真实世界的特定位置。
-                      <br>   - 保存锚点：持久化到设备存储，重启应用后自动加载。
-                      <br>   - 导出/导入锚点：实现多设备共享同一空间位置。
-                      <br><br>4. **空间网格**：
-                      <br>   - 获取真实环境的三角形网格数据，用于物理碰撞、遮挡。
-                      <br>   - 支持网格更新（当环境变化时）。
-                      <br><br>5. **彩色透视**：
-                      <br>   - 开启后头显显示真实世界画面（PICO 4/Neo3 Pro支持）。
-                      <br>   - 支持调节亮度和对比度。
-                      <br><br>6. **手势识别**：
-                      <br>   - 检测21个手部关键点。
-                      <br>   - 内置手势：捏合、点击、握拳等。
-                      <br><br>本教程聚焦于**设备跟踪**和**空间感知**基础，为后续章节铺垫。` },
+                    { title: "2.1 SDK Overview: Device Tracking & Spatial Perception", 
+                      content: `📡 PICO SDK Core Capabilities:
+                      <br><br>1. 6DoF Head Tracking:
+                      <br>   - Get precise headset position and rotation.
+                      <br>   - Frequency up to 72/90Hz, extremely low latency.
+                      <br>   - Supports area learning for quick relocalization in different environments.
+                      <br><br>2. Controller Tracking:
+                      <br>   - Get position, rotation, velocity, and angular velocity of left and right controllers.
+                      <br>   - Read all button states: trigger, grip, joystick, menu, A/B/X/Y buttons.
+                      <br>   - Support haptic feedback (intensity 0-1, adjustable duration).
+                      <br><br>3. Spatial Anchors:
+                      <br>   - Create anchors: fix virtual objects to specific locations in the real world.
+                      <br>   - Save anchors: persist to device storage, automatically load when the app restarts.
+                      <br>   - Export/import anchors: enable multi-device sharing of the same spatial location.
+                      <br><br>4. Spatial Mesh:
+                      <br>   - Get triangle mesh data of the real environment for physical collision and occlusion.
+                      <br>   - Support mesh updates (when the environment changes).
+                      <br><br>5. Color Passthrough:
+                      <br>   - When enabled, the headset displays the real-world view (supported on PICO 4/Neo3 Pro).
+                      <br>   - Supports brightness and contrast adjustment.
+                      <br><br>6. Hand Gesture Recognition:
+                      <br>   - Detect 21 hand key points.
+                      <br>   - Built-in gestures: pinch, click, fist, etc.
+                      <br><br>This tutorial focuses on the fundamentals of device tracking and spatial perception.` },
                     
-                    { title: "2.2 通过PICO开发者Portal集成SDK（含账号注册）", 
-                      content: `📦 **超详细集成步骤**：
-                      <br><br>1. **注册PICO开发者账号**：
-                      <br>   - 访问 <a class="external-link" href="https://developer.picoxr.com" target="_blank">PICO开发者官网</a>，点击“注册”。
-                      <br>   - 使用邮箱注册，完成邮箱验证。
-                      <br>   - 登录后，点击右上角“控制台”。
-                      <br><br>2. **创建应用获取License**：
-                      <br>   - 在控制台点击“创建应用”，填写应用名称（如“AR_Sports_Demo”），选择平台为“PICO 4”。
-                      <br>   - 创建成功后，在应用详情页找到 **App ID** 和 **App License**（重要！）。
-                      <br>   - 复制License字符串，稍后需要粘贴到Unity中。
-                      <br><br>3. **导入SDK到Unity**：
-                      <br>   - 方法A（推荐）：在Unity中打开 **Window > Asset Store**，搜索“PICO Unity Integration SDK”，点击“下载”然后“导入”。
-                      <br>   - 方法B：从Portal下载最新.unitypackage，然后双击导入。
-                      <br>   - 导入后，Unity菜单栏会出现“PICO”选项，表示导入成功。
-                      <br><br>4. **配置XR Plug-in Management**：
-                      <br>   - 打开 **Edit > Project Settings > XR Plug-in Management**。
-                      <br>   - 点击“Android”选项卡，勾选 **PICO XR**。
-                      <br><br>5. **填入License**：
-                      <br>   - 在Hierarchy中右键 > “PICO” > “PXR_Manager”，创建一个PICO管理器。
-                      <br>   - 选中PXR_Manager，在Inspector中找到 **App License** 字段，粘贴从Portal复制的License。
-                      <br><br>🔧 **验证SDK安装**：
-                      <br>- 检查Project视图中是否有“PICO”文件夹。
-                      <br>- 检查菜单栏是否有“PICO”选项。` },
+                    { title: "2.2 Integrating SDK via PICO Developer Portal", 
+                      content: `📦 Detailed Integration Steps:
+                      <br><br>1. Register a PICO Developer Account:
+                      <br>   - Visit <a class="external-link" href="https://developer.picoxr.com" target="_blank">PICO Developer Portal</a>, click "Register".
+                      <br>   - Use email to register and complete email verification.
+                      <br>   - After logging in, click on the console.
+                      <br><br>2. Create an App to Get License:
+                      <br>   - Click "Create App" in the console, fill in the app name (e.g., "AR_Sports_Demo"), select platform "PICO 4".
+                      <br>   - After successful creation, find App ID and App License in the app details.
+                      <br>   - Copy the License string; you'll need to paste it into Unity later.
+                      <br><br>3. Import SDK into Unity:
+                      <br>   - Option A (recommended): In Unity, open Window > Asset Store, search for "PICO Unity Integration SDK", click "Download" then "Import".
+                      <br>   - Option B: Download the latest .unitypackage from the Portal and double-click to import.
+                      <br>   - After import, the "PICO" menu item should appear in the Unity menu bar.
+                      <br><br>4. Configure XR Plug-in Management:
+                      <br>   - Open Edit > Project Settings > XR Plug-in Management.
+                      <br>   - Click the "Android" tab, check "PICO XR".
+                      <br><br>5. Enter License:
+                      <br>   - In Hierarchy, right-click > "PICO" > "PXR_Manager" to create a PICO manager.
+                      <br>   - Select PXR_Manager, find the App License field in Inspector, paste the License copied from the Portal.
+                      <br><br>🔧 Verify SDK Installation:
+                      <br>- Check if the "PICO" folder exists in Project view.
+                      <br>- Check if the "PICO" menu item appears in the menu bar.` },
                     
-                    { title: "2.3 为PICO设备配置项目（Player Settings终极指南）", 
-                      content: `⚙️ **必须的Android设置（逐项解释）**：
-                      <br><br>1. **打开Player Settings**：**File > Build Settings > Player Settings**。
-                      <br><br>2. **Resolution and Presentation**：
-                      <br>   - **Render Outside Safe Area**：取消勾选（避免渲染异常）。
-                      <br>   - **Orientation**：锁定为 **Landscape Left** 或 **Landscape Right**（PICO默认横屏）。
-                      <br><br>3. **Other Settings**（关键！）：
-                      <br>   - **Color Space**：设为 **Linear**（线性色彩空间，保证渲染正确）。
-                      <br>   - **Minimum API Level**：设为 **29**（Android 10，PICO 4最低要求）。
-                      <br>   - **Target API Level**：设为 **32** 或 **33**（建议与设备系统一致）。
-                      <br>   - **Multithreaded Rendering**：**必须禁用！**（否则可能导致黑屏或崩溃）。
-                      <br>   - **Graphics APIs**：删除 **Vulkan**，只保留 **OpenGLES3**（部分PICO设备对Vulkan支持不完善）。
-                      <br>   - **Package Name**：设置唯一包名，如 <code>com.yourcompany.picoarsports</code>。
-                      <br>   - **Version**：初始设为 **0.1**。
-                      <br><br>4. **其他优化设置**：
-                      <br>   - **Static Batching**：启用（合并静态物体减少Draw Call）。
-                      <br>   - **Dynamic Batching**：启用（合并动态物体，注意顶点数限制）。
-                      <br>   - **Fixed Framerate**：设为 **72** 或 **90**（匹配PICO刷新率）。
-                      <br><br>⚠️ **常见错误排查**：
-                      <br>- 黑屏但能听到声音：检查Multithreaded Rendering是否禁用，Graphics API是否只有OpenGLES3。
-                      <br>- 编译失败：检查JDK/NDK路径是否正确，Package Name是否符合规范。` },
+                    { title: "2.3 Configuring Project Settings for PICO Devices", 
+                      content: `⚙️ Required Android Settings (Detailed Explanation):
+                      <br><br>1. Open Player Settings: File > Build Settings > Player Settings.
+                      <br><br>2. Resolution and Presentation:
+                      <br>   - Render Outside Safe Area: Uncheck (prevents rendering issues).
+                      <br>   - Orientation: Lock to Landscape Left or Landscape Right (PICO default landscape).
+                      <br><br>3. Other Settings (Critical!):
+                      <br>   - Color Space: Set to Linear (ensures correct rendering).
+                      <br>   - Minimum API Level: Set to 29 (Android 10, minimum requirement for PICO 4).
+                      <br>   - Target API Level: Set to 32 or 33 (recommended to match device system).
+                      <br>   - Multithreaded Rendering: Must be disabled! (otherwise may cause black screen or crash).
+                      <br>   - Graphics APIs: Remove Vulkan, keep only OpenGLES3 (some PICO devices have incomplete Vulkan support).
+                      <br>   - Package Name: Set a unique package name, e.g., <code>com.yourcompany.picoarsports</code>.
+                      <br>   - Version: Initially set to 0.1.
+                      <br><br>4. Additional Optimization Settings:
+                      <br>   - Static Batching: Enable (merges static objects to reduce Draw Calls).
+                      <br>   - Dynamic Batching: Enable (merges dynamic objects, note vertex count limit).
+                      <br>   - Fixed Framerate: Set to 72 or 90 (matches PICO refresh rate).
+                      <br><br>⚠️ Common Error Troubleshooting:
+                      <br>- Black screen with sound: Check if Multithreaded Rendering is disabled and Graphics API is only OpenGLES3.
+                      <br>- Build fails: Check JDK/NDK paths, ensure Package Name follows naming conventions.` },
                     
-                    { title: "2.4 创建一个基本的AR跟踪应用（Hello World）", 
-                      content: `🌍 **实现步骤（带故障排除）**：
-                      <br><br>1. **删除默认相机**：在Hierarchy中选中“Main Camera”，右键删除。
-                      <br><br>2. **添加PICO Camera Rig**：
-                      <br>   - 在Hierarchy空白处右键 > “PICO” > “CameraRig”。
-                      <br>   - 展开CameraRig，可以看到“LeftController”、“RightController”、“CenterCamera”（头显）。
-                      <br><br>3. **创建测试物体**：
-                      <br>   - 在Hierarchy右键 > “3D Object” > “Cube”，命名为“TestCube”。
-                      <br>   - 设置位置为 (0, 0, 2)（头显前方2米）。
-                      <br><br>4. **开启彩色透视（可选）**：
-                      <br>   - 选中PXR_Manager，在Inspector中勾选 **Enable Video SeeThrough**。
-                      <br>   - 如果不勾选，则运行在VR模式（黑色背景）。
-                      <br><br>5. **配置Build并运行**：
-                      <br>   - 打开 **File > Build Settings**，确保平台为Android。
-                      <br>   - 点击“Add Open Scenes”将当前场景加入Build列表。
-                      <br>   - 连接PICO设备（已开启开发者模式和USB调试）。
-                      <br>   - 点击 **Build And Run**，选择APK保存位置。
-                      <br><br>6. **验证结果**：
-                      <br>   - 安装完成后戴上头显，应该能看到Cube稳定悬浮在真实空间中（如果开启了透视，则能看到真实环境背景）。
-                      <br>   - 尝试走动，Cube应保持在世界坐标原点，而不是跟随头部。
-                      <br><br>🎯 **如果Cube不显示**：
-                      <br>- 检查Graphics API是否为OpenGLES3，Multithreaded Rendering是否禁用。
-                      <br>- 检查PXR_Manager中License是否填写正确。
-                      <br>- 检查设备是否处于开发者模式，adb devices是否识别。
-                      <br><br>🔧 **进阶测试**：
-                      <br>- 在Cube上添加Rotate脚本（第一章），测试旋转是否正常。
-                      <br>- 尝试用手柄扳机键控制Cube变色（后续章节实现）。` },
+                    { title: "2.4 Creating a Basic AR Tracking App", 
+                      content: `🌍 Implementation Steps (with Troubleshooting):
+                      <br><br>1. Delete the default camera: In Hierarchy, select "Main Camera", right-click and delete.
+                      <br><br>2. Add PICO Camera Rig:
+                      <br>   - Right-click in Hierarchy > "PICO" > "CameraRig".
+                      <br>   - Expand CameraRig to see "LeftController", "RightController", and "CenterCamera" (headset).
+                      <br><br>3. Create a test object:
+                      <br>   - Right-click in Hierarchy > "3D Object" > "Cube", name it "TestCube".
+                      <br>   - Set position to (0, 0, 2) (2 meters in front of the headset).
+                      <br><br>4. Enable color passthrough (optional):
+                      <br>   - Select PXR_Manager, check "Enable Video SeeThrough" in Inspector.
+                      <br>   - If unchecked, the app runs in VR mode (black background).
+                      <br><br>5. Configure Build and run:
+                      <br>   - Open File > Build Settings, ensure platform is Android.
+                      <br>   - Click "Add Open Scenes" to add the current scene to the Build list.
+                      <br>   - Connect the PICO device (with developer mode and USB debugging enabled).
+                      <br>   - Click "Build And Run", select where to save the APK.
+                      <br><br>6. Verify results:
+                      <br>   - After installation, put on the headset; you should see the Cube stably floating in real space (if passthrough is enabled, you'll see the real environment background).
+                      <br>   - Try walking around; the Cube should stay in its world coordinate position, not follow your head.
+                      <br><br>🎯 If Cube doesn't display:
+                      <br>- Check if Graphics API is OpenGLES3 and Multithreaded Rendering is disabled.
+                      <br>- Check if License is correctly entered in PXR_Manager.
+                      <br>- Check if the device is in developer mode and adb devices recognizes it.
+                      <br><br>🔧 Advanced Testing:
+                      <br>- Add the Rotate script from Chapter 1 to the Cube to test rotation.
+                      <br>- Try using the controller trigger to change the Cube's color (implemented in later chapters).` },
                     
-                    { title: "2.5 常见错误与解决方案大全", 
-                      content: `❌ **错误1：Build失败提示“Unable to find Android SDK”**
-                      <br>**解决**：Edit > Preferences > External Tools 手动设置Android SDK路径。
-                      <br><br>❌ **错误2：头显内黑屏但有声音**
-                      <br>**解决**：检查Player Settings > Graphics APIs 只保留OpenGLES3；禁用Multithreaded Rendering。
-                      <br><br>❌ **错误3：手柄无追踪或射线不显示**
-                      <br>**解决**：确认PXR_Manager存在，手柄模型是否被正确加载；可尝试重启头显；检查手柄电池电量。
-                      <br><br>❌ **错误4：adb连接不上设备**
-                      <br>**解决**：检查USB线是否支持数据传输（不是充电线）；PICO内“开发者模式”是否开启；执行 <code>adb kill-server</code> 再重试；更换USB端口。
-                      <br><br>❌ **错误5：License无效**
-                      <br>**解决**：确认从Portal复制的License完整无空格；确认应用类型与设备匹配（PICO 4选择对应平台）。
-                      <br><br>❌ **错误6：彩色透视无法开启**
-                      <br>**解决**：确认设备支持彩色透视（PICO 4 / Neo3 Pro）；在PXR_Manager中勾选Enable Video SeeThrough；可能需要重启应用。` }
+                    { title: "2.5 Common Errors & Solutions", 
+                      content: `❌ Error 1: Build fails with "Unable to find Android SDK"
+                      <br>Solution: Edit > Preferences > External Tools, manually set Android SDK path.
+                      <br><br>❌ Error 2: Black screen in headset but sound works
+                      <br>Solution: Check Player Settings > Graphics APIs, keep only OpenGLES3; disable Multithreaded Rendering.
+                      <br><br>❌ Error 3: Controllers not tracking or rays not showing
+                      <br>Solution: Verify PXR_Manager exists, check if controller models are correctly loaded; try restarting the headset; check controller battery levels.
+                      <br><br>❌ Error 4: adb cannot connect to device
+                      <br>Solution: Check if USB cable supports data transfer (not just charging); verify developer mode is enabled on PICO; run <code>adb kill-server</code> and retry; try a different USB port.
+                      <br><br>❌ Error 5: Invalid License
+                      <br>Solution: Verify the License copied from Portal is complete with no extra spaces; confirm the app type matches the device (choose correct platform for PICO 4).
+                      <br><br>❌ Error 6: Color passthrough cannot be enabled
+                      <br>Solution: Confirm the device supports color passthrough (PICO 4 / Neo3 Pro); check "Enable Video SeeThrough" in PXR_Manager; try restarting the app.` }
                 ]
             });
 
-            // ========= 第3章 技术栈和项目计划 =========
+            // ========= Chapter 3: Technology Stack & Project Plan =========
             tutorialData.chapters.push({
-                id: 3, title: "技术栈和项目计划（超深度扩展）",
-                description: "技术选择的深度理由（Unity、C#、PICO Unity Integration SDK、Android、PICO 4 VR头戴设备、GitHub）， PICO SDK与其他AR框架的全面比较。",
+                id: 3, title: "Technology Stack & Project Plan",
+                description: "In-depth rationale for technology choices (Unity, C#, PICO Unity Integration SDK, Android, PICO 4 VR headset, GitHub), and comprehensive comparison of PICO SDK with other AR frameworks.",
                 sections: [
-                    { title: "3.1 技术选型深度理由（含数据支撑）", 
-                      content: `✅ **Unity**：
-                      <br>- **市场份额**：占据XR开发70%以上市场份额，社区庞大。
-                      <br>- **XR生态**：官方提供XR Interaction Toolkit、AR Foundation，资源商店有大量XR资源。
-                      <br>- **学习资源**：Unity Learn平台有大量免费XR教程。
-                      <br><br>✅ **C#**：
-                      <br>- **类型安全**：编译时检查类型错误，减少运行时崩溃。
-                      <br>- **性能**：接近原生性能，支持IL2CPP编译到多种平台。
-                      <br>- **与Unity深度集成**：所有Unity API基于C#，学习曲线平缓。
-                      <br><br>✅ **PICO Unity Integration SDK**：
-                      <br>- **原生支持**：由PICO官方提供，针对PICO硬件深度优化。
-                      <br>- **功能完整**：提供6DoF追踪、手柄输入、空间锚点、透视等全套API。
-                      <br>- **文档完善**：提供中文文档和示例项目。
-                      <br><br>✅ **Android**：
-                      <br>- **PICO基础**：PICO设备运行Android系统，利用成熟的移动开发生态。
-                      <br>- **工具链**：Android Studio、ADB、Gradle等工具成熟稳定。
-                      <br><br>✅ **PICO 4头显**：
-                      <br>- **硬件规格**：具备彩色透视、4K+分辨率、6DoF手柄，性价比高。
-                      <br>- **开发者支持**：PICO提供开发者设备借用计划。
-                      <br><br>✅ **GitHub**：
-                      <br>- **版本控制**：Git是目前最流行的版本控制系统。
-                      <br>- **团队协作**：提供Issues、Projects、Actions等完整协作工具。
-                      <br>- **CI/CD**：支持自动化测试和打包。` },
+                    { title: "3.1 Technology Selection Rationale", 
+                      content: `✅ Unity:
+                      <br>- Market Share: Holds over 70% of the XR development market, with a large community.
+                      <br>- XR Ecosystem: Officially provides XR Interaction Toolkit, AR Foundation, and many XR resources in the Asset Store.
+                      <br>- Learning Resources: Unity Learn platform offers extensive free XR tutorials.
+                      <br><br>✅ C#:
+                      <br>- Type Safety: Compile-time type checking reduces runtime crashes.
+                      <br>- Performance: Near-native performance, supports IL2CPP compilation to multiple platforms.
+                      <br>- Deep Integration with Unity: All Unity APIs are based on C#, making the learning curve smooth.
+                      <br><br>✅ PICO Unity Integration SDK:
+                      <br>- Native Support: Officially provided by PICO, deeply optimized for PICO hardware.
+                      <br>- Complete Features: Provides 6DoF tracking, controller input, spatial anchors, passthrough, and more.
+                      <br>- Comprehensive Documentation: Offers Chinese documentation and sample projects.
+                      <br><br>✅ Android:
+                      <br>- PICO Foundation: PICO devices run on Android, leveraging the mature mobile development ecosystem.
+                      <br>- Toolchain: Tools like Android Studio, ADB, and Gradle are mature and stable.
+                      <br><br>✅ PICO 4 Headset:
+                      <br>- Hardware Specifications: Color passthrough, 4K+ resolution, 6DoF controllers, high value for money.
+                      <br>- Developer Support: PICO offers device loan programs for developers.
+                      <br><br>✅ GitHub:
+                      <br>- Version Control: Git is the most popular version control system.
+                      <br>- Collaboration: Provides Issues, Projects, Actions, and other complete collaboration tools.
+                      <br>- CI/CD: Supports automated testing and packaging.` },
                     
-                    { title: "3.2 PICO SDK与其他AR框架全面比较", 
-                      content: `📊 **深度对比表格**：
+                    { title: "3.2 Comparison: PICO SDK vs Other AR Frameworks", 
+                      content: `📊 Comprehensive Comparison Table:
                       <table class="template-table">
-                       <tr><th>框架</th><th>适用设备</th><th>优势</th><th>劣势</th><th>适用场景</th></tr>
-                       <tr><td><strong>PICO SDK</strong></td><td>PICO头显</td><td>原生支持，完整6DoF，手柄输入，彩色透视</td><td>仅限PICO硬件</td><td>PICO专用VR/MR应用</td></tr>
-                       <tr><td><strong>ARCore</strong></td><td>Android手机</td><td>广泛设备支持，Google生态</td><td>无手柄，追踪易受环境影响</td><td>手机AR应用</td></tr>
-                       <tr><td><strong>ARKit</strong></td><td>iOS设备</td><td>LiDAR深度支持，Apple生态</td><td>仅限苹果设备</td><td>iOS AR应用</td></tr>
-                       <tr><td><strong>Vuforia</strong></td><td>多平台</td><td>图像识别强，支持模型目标</td><td>6DoF追踪较弱，商用需付费</td><td>图像识别为主的AR</td></tr>
-                       <tr><td><strong>OpenXR</strong></td><td>多设备</td><td>跨平台标准，一次编写多设备运行</td><td>底层API，开发复杂度高</td><td>需要跨多个VR平台的开发者</td></tr>
-                      </table>
-                      <br>本教程选择PICO SDK是因为项目目标设备为PICO 4，需要利用其手柄和透视能力，同时希望获得官方的最佳支持。` }
+                         <th>Framework</th><th>Supported Devices</th><th>Advantages</th><th>Disadvantages</th><th>Use Cases</th>
+                         <tr><td><strong>PICO SDK</strong></td><td>PICO Headsets</td><td>Native support, full 6DoF, controller input, color passthrough</td><td>PICO hardware only</td><td>PICO-specific VR/MR applications</td></tr>
+                         <tr><td><strong>ARCore</strong></td><td>Android Phones</td><td>Wide device support, Google ecosystem</td><td>No controllers, tracking affected by environment</td><td>Mobile AR applications</td></tr>
+                         <tr><td><strong>ARKit</strong></td><td>iOS Devices</td><td>LiDAR depth support, Apple ecosystem</td><td>Apple devices only</td><td>iOS AR applications</td></tr>
+                         <tr><td><strong>Vuforia</strong></td><td>Multi-platform</td><td>Strong image recognition, model target support</td><td>Weaker 6DoF tracking, commercial license required</td><td>Image recognition-based AR</td></tr>
+                         <tr><td><strong>OpenXR</strong></td><td>Multi-device</td><td>Cross-platform standard, write once run on multiple devices</td><td>Low-level API, high development complexity</td><td>Developers targeting multiple VR platforms</td></tr>
+                       </table>
+                      <br>We chose PICO SDK because our target device is PICO 4, and we need to leverage its controller and passthrough capabilities while benefiting from official support.` }
                 ]
             });
 
-            // ========= 第4章 AR核心逻辑：空间锚定 =========
+            // ========= Chapter 4: AR Core Logic - Spatial Anchors =========
             tutorialData.chapters.push({
-                id: 4, title: "AR核心逻辑：空间锚定（超深度扩展）",
-                description: "PICO SDK用于空间定位的跟踪功能深度解析，在物理空间中实现锚点（创建、保存、加载、删除、导出/导入），处理跟踪丢失或设备遮挡，以及完整的实战项目。",
+                id: 4, title: "AR Core Logic: Spatial Anchors",
+                description: "In-depth analysis of PICO SDK's spatial tracking capabilities, implementing anchors (create, save, load, delete, export/import), handling tracking loss or occlusion, and a complete hands-on project.",
                 sections: [
-                    { title: "4.1 PICO SDK空间定位功能深度解析", 
-                      content: `📍 **头显追踪API详解**：
-                      <br><code>PXR_Manager.Instance.GetHeadPose()</code> 返回头显的Transform，包含位置和旋转。
-                      <br><br>**手柄追踪API详解**：
-                      <br>- <code>PXR_Input.GetControllerPosition(int hand)</code>：获取手柄位置（0=左手，1=右手）
-                      <br>- <code>PXR_Input.GetControllerRotation(int hand)</code>：获取手柄旋转
-                      <br>- <code>PXR_Input.GetControllerVelocity(int hand)</code>：获取手柄速度
-                      <br>- <code>PXR_Input.GetControllerAngularVelocity(int hand)</code>：获取手柄角速度
-                      <br><br>**坐标系说明**：
-                      <br>PICO使用右手坐标系，Y轴向上，单位是米。原点为头显启动时的位置。
-                      <br><br>**代码示例：实时追踪所有设备**：
+                    { title: "4.1 PICO SDK Spatial Tracking API Deep Dive", 
+                      content: `📍 Head Tracking API:
+                      <br><code>PXR_Manager.Instance.GetHeadPose()</code> returns the headset's Transform, including position and rotation.
+                      <br><br>Controller Tracking API:
+                      <br>- <code>PXR_Input.GetControllerPosition(int hand)</code>: Get controller position (0 = left, 1 = right)
+                      <br>- <code>PXR_Input.GetControllerRotation(int hand)</code>: Get controller rotation
+                      <br>- <code>PXR_Input.GetControllerVelocity(int hand)</code>: Get controller velocity
+                      <br>- <code>PXR_Input.GetControllerAngularVelocity(int hand)</code>: Get controller angular velocity
+                      <br><br>Coordinate System:
+                      <br>PICO uses a right-handed coordinate system, Y-axis up, units in meters. The origin is the headset's starting position.
+                      <br><br>Code Example: Real-time tracking of all devices:
                       <div class="code-note">
                       using UnityEngine;<br>
                       using PXR_Input;<br>
                       public class TrackingDemo : MonoBehaviour {<br>
                       &nbsp;   void Update() {<br>
-                      &nbsp;       // 头显<br>
+                      &nbsp;       // Headset<br>
                       &nbsp;       Transform head = PXR_Manager.Instance.GetHeadPose();<br>
-                      &nbsp;       Debug.Log($"头显位置: {head.position}");<br>
+                      &nbsp;       Debug.Log($"Headset position: {head.position}");<br>
                       <br>
-                      &nbsp;       // 左手柄<br>
+                      &nbsp;       // Left controller<br>
                       &nbsp;       Vector3 leftPos = PXR_Input.GetControllerPosition(0);<br>
                       &nbsp;       Quaternion leftRot = PXR_Input.GetControllerRotation(0);<br>
-                      &nbsp;       Debug.Log($"左手柄位置: {leftPos}");<br>
+                      &nbsp;       Debug.Log($"Left controller position: {leftPos}");<br>
                       <br>
-                      &nbsp;       // 右手柄<br>
+                      &nbsp;       // Right controller<br>
                       &nbsp;       Vector3 rightPos = PXR_Input.GetControllerPosition(1);<br>
                       &nbsp;       Quaternion rightRot = PXR_Input.GetControllerRotation(1);<br>
-                      &nbsp;       Debug.Log($"右手柄位置: {rightPos}");<br>
+                      &nbsp;       Debug.Log($"Right controller position: {rightPos}");<br>
                       &nbsp;   }<br>
                       }
                       </div>` },
                     
-                    { title: "4.2 空间锚点完整生命周期（创建、保存、加载）", 
-                      content: `⚓ **创建锚点（带错误处理）**：
+                    { title: "4.2 Spatial Anchor Lifecycle (Create, Save, Load)", 
+                      content: `⚓ Create Anchor (with error handling):
                       <div class="code-note">
                       using PXR_SpatialAnchor;<br>
                       public void CreateAnchor(Vector3 pos, Quaternion rot) {<br>
                       &nbsp;   PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
                       &nbsp;       switch (result) {<br>
                       &nbsp;           case AnchorResult.Success:<br>
-                      &nbsp;               Debug.Log($"锚点创建成功，UUID: {anchor.UUID}");<br>
-                      &nbsp;               // 创建成功后立即保存<br>
+                      &nbsp;               Debug.Log($"Anchor created successfully, UUID: {anchor.UUID}");<br>
+                      &nbsp;               // Save immediately after creation<br>
                       &nbsp;               SaveAnchor(anchor);<br>
                       &nbsp;               break;<br>
                       &nbsp;           case AnchorResult.FailedTracking:<br>
-                      &nbsp;               Debug.LogError("创建失败：追踪丢失");<br>
+                      &nbsp;               Debug.LogError("Creation failed: tracking lost");<br>
                       &nbsp;               break;<br>
                       &nbsp;           case AnchorResult.FailedInvalidArgument:<br>
-                      &nbsp;               Debug.LogError("创建失败：参数无效");<br>
+                      &nbsp;               Debug.LogError("Creation failed: invalid argument");<br>
                       &nbsp;               break;<br>
                       &nbsp;           default:<br>
-                      &nbsp;               Debug.LogError($"创建失败：未知错误 {result}");<br>
+                      &nbsp;               Debug.LogError($"Creation failed: unknown error {result}");<br>
                       &nbsp;               break;<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>
-                      <br>**保存锚点（持久化到设备）**：
+                      <br>Save Anchor (persist to device):
                       <div class="code-note">
                       public void SaveAnchor(PXR_SpatialAnchor anchor) {<br>
                       &nbsp;   anchor.Save((saveResult) => {<br>
                       &nbsp;       if (saveResult) {<br>
-                      &nbsp;           Debug.Log($"锚点 {anchor.UUID} 保存成功");<br>
+                      &nbsp;           Debug.Log($"Anchor {anchor.UUID} saved successfully");<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           Debug.LogError("锚点保存失败");<br>
+                      &nbsp;           Debug.LogError("Anchor save failed");<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>
-                      <br>**加载所有已保存的锚点**：
+                      <br>Load All Saved Anchors:
                       <div class="code-note">
                       public void LoadAllAnchors() {<br>
                       &nbsp;   PXR_SpatialAnchor.LoadAnchorListAsync(null, (anchors) => {<br>
                       &nbsp;       if (anchors != null && anchors.Count > 0) {<br>
                       &nbsp;           foreach (var anchor in anchors) {<br>
-                      &nbsp;               Debug.Log($"加载锚点: {anchor.UUID}, 位置: {anchor.Pose.position}");<br>
-                      &nbsp;               // 在锚点位置实例化虚拟物体<br>
+                      &nbsp;               Debug.Log($"Loaded anchor: {anchor.UUID}, position: {anchor.Pose.position}");<br>
+                      &nbsp;               // Instantiate virtual object at anchor position<br>
                       &nbsp;               Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
                       &nbsp;           }<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           Debug.Log("没有找到已保存的锚点");<br>
+                      &nbsp;           Debug.Log("No saved anchors found");<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>` },
                     
-                    { title: "4.3 锚点高级功能：删除、更新、导出/导入", 
-                      content: `🗑️ **删除锚点**：
+                    { title: "4.3 Advanced Anchor Features: Delete, Export, Import", 
+                      content: `🗑️ Delete Anchor:
                       <div class="code-note">
                       public void DeleteAnchor(PXR_SpatialAnchor anchor) {<br>
                       &nbsp;   anchor.DeleteAnchor((success) => {<br>
                       &nbsp;       if (success) {<br>
-                      &nbsp;           Debug.Log($"锚点 {anchor.UUID} 删除成功");<br>
-                      &nbsp;           Destroy(associatedObject); // 删除对应的虚拟物体<br>
+                      &nbsp;           Debug.Log($"Anchor {anchor.UUID} deleted successfully");<br>
+                      &nbsp;           Destroy(associatedObject); // Delete the corresponding virtual object<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           Debug.LogError("锚点删除失败");<br>
+                      &nbsp;           Debug.LogError("Anchor deletion failed");<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>
-                      <br>**导出锚点（用于网络共享）**：
+                      <br>Export Anchor (for network sharing):
                       <div class="code-note">
                       public void ExportAnchor(PXR_SpatialAnchor anchor) {<br>
                       &nbsp;   anchor.ExportAnchor((data, result) => {<br>
                       &nbsp;       if (result == AnchorResult.Success) {<br>
-                      &nbsp;           Debug.Log($"锚点导出成功，数据长度: {data.Length} bytes");<br>
-                      &nbsp;           // 将data通过网络发送给其他设备<br>
+                      &nbsp;           Debug.Log($"Anchor exported successfully, data length: {data.Length} bytes");<br>
+                      &nbsp;           // Send data over network to other devices<br>
                       &nbsp;           NetworkManager.Send(data);<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           Debug.LogError("锚点导出失败");<br>
+                      &nbsp;           Debug.LogError("Anchor export failed");<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>
-                      <br>**导入锚点**：
+                      <br>Import Anchor:
                       <div class="code-note">
                       public void ImportAnchor(byte[] data) {<br>
                       &nbsp;   PXR_SpatialAnchor.ImportAnchor(data, (anchor, result) => {<br>
                       &nbsp;       if (result == AnchorResult.Success) {<br>
-                      &nbsp;           Debug.Log($"锚点导入成功，UUID: {anchor.UUID}");<br>
-                      &nbsp;           // 在导入的锚点位置放置虚拟物体<br>
+                      &nbsp;           Debug.Log($"Anchor imported successfully, UUID: {anchor.UUID}");<br>
+                      &nbsp;           // Place virtual object at imported anchor position<br>
                       &nbsp;           Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           Debug.LogError("锚点导入失败");<br>
+                      &nbsp;           Debug.LogError("Anchor import failed");<br>
                       &nbsp;       }<br>
                       &nbsp;   });<br>
                       }
                       </div>` },
                     
-                    { title: "4.4 处理跟踪丢失或设备遮挡（鲁棒性设计）", 
-                      content: `🔄 **监听追踪状态**：
+                    { title: "4.4 Handling Tracking Loss or Occlusion", 
+                      content: `🔄 Listen to Tracking Status:
                       <div class="code-note">
                       public class TrackingHandler : MonoBehaviour {<br>
-                      &nbsp;   public GameObject virtualObject; // 要隐藏/显示的物体<br>
+                      &nbsp;   public GameObject virtualObject; // Object to hide/show<br>
                       <br>
                       &nbsp;   void OnEnable() {<br>
                       &nbsp;       PXR_Manager.Instance.OnTrackingLost += HandleTrackingLost;<br>
@@ -738,130 +767,130 @@
                       &nbsp;   }<br>
                       <br>
                       &nbsp;   void HandleTrackingLost() {<br>
-                      &nbsp;       Debug.LogWarning("追踪丢失，隐藏虚拟物体");<br>
+                      &nbsp;       Debug.LogWarning("Tracking lost, hiding virtual object");<br>
                       &nbsp;       virtualObject.SetActive(false);<br>
-                      &nbsp;       // 显示提示信息<br>
-                      &nbsp;       UIManager.Instance.ShowMessage("追踪丢失，请重新对准标记");<br>
+                      &nbsp;       // Show notification<br>
+                      &nbsp;       UIManager.Instance.ShowMessage("Tracking lost, please re-align");<br>
                       &nbsp;   }<br>
                       <br>
                       &nbsp;   void HandleTrackingAcquired() {<br>
-                      &nbsp;       Debug.Log("重新获得追踪，显示虚拟物体");<br>
+                      &nbsp;       Debug.Log("Tracking reacquired, showing virtual object");<br>
                       &nbsp;       virtualObject.SetActive(true);<br>
                       &nbsp;       UIManager.Instance.HideMessage();<br>
                       &nbsp;   }<br>
                       }
                       </div>
-                      <br>**高级策略：短暂丢失时的预测**：
-                      <br>可以使用头显的最后已知位置和IMU数据做短暂预测，但PICO SDK内部已做优化，开发者只需关注UI反馈。` },
+                      <br>Advanced Strategy: Prediction during brief tracking loss:
+                      <br>You can use the headset's last known position and IMU data for short-term prediction, but PICO SDK handles this internally; developers only need to focus on UI feedback.` },
                     
-                    { title: "4.5 实战：完整的多锚点放置与管理应用", 
-                      content: `🏗️ **综合项目：虚拟家具摆放系统**
-                      <br><br>**需求**：
-                      <br>- 用户可以用手柄扳机键在当前位置放置虚拟家具（如椅子、桌子）。
-                      <br>- 每个家具对应一个空间锚点，重启应用后自动恢复。
-                      <br>- 用户可以用手柄射线选中家具并删除。
-                      <br><br>**实现步骤**：
-                      <br><br>1. **创建家具预制体**：为每种家具创建预制体，添加Collider组件用于射线检测。
-                      <br><br>2. **家具管理脚本**：
+                    { title: "4.5 Hands-on Project: Complete Multi-Anchor Placement App", 
+                      content: `🏗️ Complete Project: Virtual Furniture Placement System
+                      <br><br>Requirements:
+                      <br>- Users can place virtual furniture (chairs, tables, etc.) at their current position using the controller trigger.
+                      <br>- Each piece of furniture corresponds to a spatial anchor, automatically restored when the app restarts.
+                      <br>- Users can select furniture with the controller ray and delete it.
+                      <br><br>Implementation Steps:
+                      <br><br>1. Create furniture prefabs: Create a prefab for each furniture type, add Collider components for ray detection.
+                      <br><br>2. Furniture Manager Script:
                       <div class="code-note">
                       public class FurnitureManager : MonoBehaviour {<br>
-                      &nbsp;   public GameObject[] furniturePrefabs; // 家具预制体数组<br>
+                      &nbsp;   public GameObject[] furniturePrefabs; // Array of furniture prefabs<br>
                       &nbsp;   private int selectedFurnitureIndex = 0;<br>
                       &nbsp;   private List<FurnitureItem> placedFurniture = new List<FurnitureItem>();<br>
                       <br>
                       &nbsp;   void Update() {<br>
-                      &nbsp;       // 按扳机键放置家具<br>
+                      &nbsp;       // Place furniture with trigger button<br>
                       &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.TRIGGER)) {<br>
                       &nbsp;           PlaceFurniture();<br>
                       &nbsp;       }<br>
-                      &nbsp;       // 按A键切换家具类型<br>
+                      &nbsp;       // Switch furniture type with A button<br>
                       &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.A)) {<br>
                       &nbsp;           selectedFurnitureIndex = (selectedFurnitureIndex + 1) % furniturePrefabs.Length;<br>
-                      &nbsp;           UIManager.Instance.ShowMessage($"当前家具: {furniturePrefabs[selectedFurnitureIndex].name}");<br>
+                      &nbsp;           UIManager.Instance.ShowMessage($"Current furniture: {furniturePrefabs[selectedFurnitureIndex].name}");<br>
                       &nbsp;       }<br>
                       &nbsp;   }<br>
                       <br>
                       &nbsp;   void PlaceFurniture() {<br>
-                      &nbsp;       // 获取右手柄位置作为放置位置<br>
+                      &nbsp;       // Use right controller position as placement location<br>
                       &nbsp;       Vector3 pos = PXR_Input.GetControllerPosition(1);<br>
                       &nbsp;       Quaternion rot = PXR_Input.GetControllerRotation(1);<br>
                       &nbsp;       <br>
-                      &nbsp;       // 实例化家具<br>
+                      &nbsp;       // Instantiate furniture<br>
                       &nbsp;       GameObject obj = Instantiate(furniturePrefabs[selectedFurnitureIndex], pos, rot);<br>
                       &nbsp;       <br>
-                      &nbsp;       // 创建锚点并关联家具<br>
+                      &nbsp;       // Create anchor and associate with furniture<br>
                       &nbsp;       PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
                       &nbsp;           if (result == AnchorResult.Success) {<br>
                       &nbsp;               anchor.Save();<br>
                       &nbsp;               FurnitureItem item = new FurnitureItem(obj, anchor);<br>
                       &nbsp;               placedFurniture.Add(item);<br>
-                      &nbsp;               Debug.Log($"家具已放置并保存，锚点UUID: {anchor.UUID}");<br>
+                      &nbsp;               Debug.Log($"Furniture placed and saved, anchor UUID: {anchor.UUID}");<br>
                       &nbsp;           }<br>
                       &nbsp;       });<br>
                       &nbsp;   }<br>
                       <br>
                       &nbsp;   void Start() {<br>
-                      &nbsp;       // 加载所有已保存的锚点并恢复家具<br>
+                      &nbsp;       // Load all saved anchors and restore furniture<br>
                       &nbsp;       LoadAllAnchors();<br>
                       &nbsp;   }<br>
                       }
                       </div>
-                      <br>3. **删除家具**：使用手柄射线选中家具，按握持键删除。
-                      <br><br>📌 这个项目展示了锚点的完整应用，是MR应用的基础模板。` }
+                      <br>3. Delete furniture: Use controller ray to select furniture, press grip button to delete.
+                      <br><br>📌 This project demonstrates the complete application of anchors and serves as a foundational template for MR applications.` }
                 ]
             });
 
-            // ========= 第5章 核心游戏逻辑开发 =========
+            // ========= Chapter 5: Core Game Logic Development =========
             tutorialData.chapters.push({
-                id: 5, title: "核心游戏逻辑开发（超深度扩展）",
-                description: "输入处理的模块化设计，基于Unity物理的弹射系统深度解析，碰撞检测与伤害计算（接口设计），对象池优化，健康UI实现。",
+                id: 5, title: "Core Game Logic Development",
+                description: "Modular input handling, collision detection and damage calculation (interface design), object pool optimization, and health UI implementation.",
                 sections: [
-                    { title: "5.1 输入处理模块化设计（完整框架）", 
-                      content: `🎮 **InputManager.cs - 完整的输入抽象层**：
+                    { title: "5.1 Modular Input Handling", 
+                      content: `🎮 InputManager.cs - Complete Input Abstraction Layer:
                       <div class="code-note">
                       using UnityEngine;<br>
                       using PXR_Input;<br>
                       <br>
                       public class InputManager : MonoBehaviour {<br>
-                      &nbsp;   // 单例模式<br>
+                      &nbsp;   // Singleton pattern<br>
                       &nbsp;   public static InputManager Instance { get; private set; }<br>
                       <br>
                       &nbsp;   void Awake() { Instance = this; }<br>
                       <br>
-                      &nbsp;   // 手柄连接状态<br>
+                      &nbsp;   // Controller connection status<br>
                       &nbsp;   public bool LeftControllerConnected => PXR_Input.GetControllerConnectionState(0);<br>
                       &nbsp;   public bool RightControllerConnected => PXR_Input.GetControllerConnectionState(1);<br>
                       <br>
-                      &nbsp;   // 摇杆输入<br>
+                      &nbsp;   // Joystick input<br>
                       &nbsp;   public Vector2 LeftJoystick => PXR_Input.GetControllerAxis(0);<br>
                       &nbsp;   public Vector2 RightJoystick => PXR_Input.GetControllerAxis(1);<br>
                       <br>
-                      &nbsp;   // 扳机键（模拟量）<br>
+                      &nbsp;   // Trigger (analog)<br>
                       &nbsp;   public float LeftTrigger => PXR_Input.GetControllerAxis(0).x;<br>
                       &nbsp;   public float RightTrigger => PXR_Input.GetControllerAxis(1).x;<br>
                       <br>
-                      &nbsp;   // 按键事件（按下、按住、抬起）<br>
+                      &nbsp;   // Button events (press, hold, release)<br>
                       &nbsp;   public bool GetButtonDown(int hand, ControllerButton button) => PXR_Input.GetControllerButtonDown(hand, button);<br>
                       &nbsp;   public bool GetButton(int hand, ControllerButton button) => PXR_Input.GetControllerButton(hand, button);<br>
                       &nbsp;   public bool GetButtonUp(int hand, ControllerButton button) => PXR_Input.GetControllerButtonUp(hand, button);<br>
                       <br>
-                      &nbsp;   // 手柄位置、旋转、速度<br>
+                      &nbsp;   // Controller position, rotation, velocity<br>
                       &nbsp;   public Vector3 GetControllerPosition(int hand) => PXR_Input.GetControllerPosition(hand);<br>
                       &nbsp;   public Quaternion GetControllerRotation(int hand) => PXR_Input.GetControllerRotation(hand);<br>
                       &nbsp;   public Vector3 GetControllerVelocity(int hand) => PXR_Input.GetControllerVelocity(hand);<br>
                       &nbsp;   public Vector3 GetControllerAngularVelocity(int hand) => PXR_Input.GetControllerAngularVelocity(hand);<br>
                       <br>
-                      &nbsp;   // 震动<br>
+                      &nbsp;   // Vibration<br>
                       &nbsp;   public void SetVibration(int hand, float intensity, int durationMs) {<br>
                       &nbsp;       PXR_Input.SetControllerVibration(intensity, durationMs, hand);<br>
                       &nbsp;   }<br>
                       }
                       </div>
-                      <br>**使用示例**：
+                      <br>Usage Example:
                       <div class="code-note">
                       public class PlayerController : MonoBehaviour {<br>
                       &nbsp;   void Update() {<br>
-                      &nbsp;       // 通过InputManager获取输入，不直接依赖PXR_Input<br>
+                      &nbsp;       // Get input via InputManager, not directly dependent on PXR_Input<br>
                       &nbsp;       if (InputManager.Instance.GetButtonDown(1, ControllerButton.TRIGGER)) {<br>
                       &nbsp;           Shoot();<br>
                       &nbsp;       }<br>
@@ -869,55 +898,8 @@
                       }
                       </div>` },
                     
-                    { title: "5.2 基于Unity物理的弹射系统深度解析", 
-                      content: `💥 **球体物理设置详解**：
-                      <br><br>**Rigidbody组件设置**：
-                      <br>- **Mass（质量）**：网球建议0.05-0.1，乒乓球0.02-0.03
-                      <br>- **Drag（阻力）**：0.1-0.5，影响球速衰减
-                      <br>- **Angular Drag（角阻力）**：0.1-0.3
-                      <br>- **Use Gravity**：勾选（使用重力）
-                      <br>- **Is Kinematic**：不勾选
-                      <br>- **Interpolate**：建议设为Interpolate，使运动更平滑
-                      <br><br>**Physic Material（物理材质）**：
-                      <div class="code-note">
-                      // 创建网球物理材质<br>
-                      PhysicMaterial tennisMat = new PhysicMaterial();<br>
-                      tennisMat.bounciness = 0.8f;      // 弹力系数<br>
-                      tennisMat.bounceCombine = PhysicMaterialCombine.Maximum; // 取最大弹力<br>
-                      tennisMat.dynamicFriction = 0.3f;  // 动摩擦<br>
-                      tennisMat.staticFriction = 0.3f;   // 静摩擦<br>
-                      tennisMat.frictionCombine = PhysicMaterialCombine.Average; // 摩擦取平均
-                      </div>
-                      <br>**击球算法（基于手柄速度）**：
-                      <div class="code-note">
-                      public class RacketController : MonoBehaviour {<br>
-                      &nbsp;   public float hitForce = 15f;           // 基础击球力度<br>
-                      &nbsp;   public float velocityMultiplier = 0.5f; // 速度乘数<br>
-                      &nbsp;   public int handIndex = 1;               // 右手柄<br>
-                      <br>
-                      &nbsp;   void OnCollisionEnter(Collision collision) {<br>
-                      &nbsp;       if (collision.gameObject.CompareTag("Ball")) {<br>
-                      &nbsp;           Rigidbody ballRb = collision.rigidbody;<br>
-                      &nbsp;           <br>
-                      &nbsp;           // 获取手柄速度<br>
-                      &nbsp;           Vector3 racketVelocity = InputManager.Instance.GetControllerVelocity(handIndex);<br>
-                      &nbsp;           <br>
-                      &nbsp;           // 计算击球方向：拍面法线 + 手柄速度方向<br>
-                      &nbsp;           Vector3 normal = collision.contacts[0].normal;<br>
-                      &nbsp;           Vector3 direction = (normal * 0.7f + racketVelocity.normalized * 0.3f).normalized;<br>
-                      &nbsp;           <br>
-                      &nbsp;           // 计算最终速度：基础方向 * 力度 + 手柄速度 * 乘数<br>
-                      &nbsp;           ballRb.velocity = direction * hitForce + racketVelocity * velocityMultiplier;<br>
-                      &nbsp;           <br>
-                      &nbsp;           // 触发震动反馈<br>
-                      &nbsp;           InputManager.Instance.SetVibration(handIndex, 0.8f, 100);<br>
-                      &nbsp;       }<br>
-                      &nbsp;   }<br>
-                      }
-                      </div>` },
-                    
-                    { title: "5.3 碰撞检测与伤害计算（接口设计模式）", 
-                      content: `⚔️ **IDamageable接口设计**：
+                    { title: "5.2 Collision Detection & Damage Calculation (Interface Pattern)", 
+                      content: `⚔️ IDamageable Interface Design:
                       <div class="code-note">
                       public interface IDamageable {<br>
                       &nbsp;   void TakeDamage(int damage, Vector3 hitPoint, GameObject source);<br>
@@ -926,72 +908,54 @@
                       &nbsp;   int MaxHealth { get; }<br>
                       }
                       </div>
-                      <br>**玩家健康实现**：
+                      <br>Player Health Implementation:
                       <div class="code-note">
                       public class PlayerHealth : MonoBehaviour, IDamageable {<br>
                       &nbsp;   [SerializeField] private int maxHealth = 100;<br>
                       &nbsp;   private int currentHealth;<br>
-                      &nbsp;   public event System.Action<int, int> OnHealthChanged; // 血量变化事件<br>
-                      &nbsp;   public event System.Action OnPlayerDied;              // 死亡事件<br>
+                      &nbsp;   public event System.Action<int, int> OnHealthChanged;<br>
+                      &nbsp;   public event System.Action OnPlayerDied;<br>
                       <br>
                       &nbsp;   public int CurrentHealth => currentHealth;<br>
                       &nbsp;   public int MaxHealth => maxHealth;<br>
                       &nbsp;   public bool IsAlive => currentHealth > 0;<br>
                       <br>
-                      &nbsp;   void Start() {<br>
-                      &nbsp;       currentHealth = maxHealth;<br>
-                      &nbsp;   }<br>
+                      &nbsp;   void Start() { currentHealth = maxHealth; }<br>
                       <br>
                       &nbsp;   public void TakeDamage(int damage, Vector3 hitPoint, GameObject source) {<br>
                       &nbsp;       if (!IsAlive) return;<br>
-                      &nbsp;       <br>
                       &nbsp;       currentHealth = Mathf.Max(0, currentHealth - damage);<br>
                       &nbsp;       OnHealthChanged?.Invoke(currentHealth, maxHealth);<br>
-                      &nbsp;       <br>
-                      &nbsp;       // 播放受击特效<br>
                       &nbsp;       PlayHitEffect(hitPoint);<br>
-                      &nbsp;       <br>
-                      &nbsp;       // 触发震动反馈<br>
-                      &nbsp;       InputManager.Instance.SetVibration(0, 0.5f, 50);  // 左手震动<br>
-                      &nbsp;       InputManager.Instance.SetVibration(1, 0.5f, 50);  // 右手震动<br>
-                      &nbsp;       <br>
-                      &nbsp;       if (currentHealth <= 0) {<br>
-                      &nbsp;           Die();<br>
-                      &nbsp;       }<br>
+                      &nbsp;       InputManager.Instance.SetVibration(0, 0.5f, 50);<br>
+                      &nbsp;       InputManager.Instance.SetVibration(1, 0.5f, 50);<br>
+                      &nbsp;       if (currentHealth <= 0) Die();<br>
                       &nbsp;   }<br>
                       <br>
-                      &nbsp;   private void Die() {<br>
-                      &nbsp;       OnPlayerDied?.Invoke();<br>
-                      &nbsp;       // 播放死亡动画、禁用控制等<br>
-                      &nbsp;   }<br>
+                      &nbsp;   private void Die() { OnPlayerDied?.Invoke(); }<br>
                       }
                       </div>
-                      <br>**能量球脚本（攻击者）**：
+                      <br>Energy Ball Script (Attacker):
                       <div class="code-note">
                       public class EnergyBall : MonoBehaviour {<br>
                       &nbsp;   public int damage = 10;<br>
                       &nbsp;   public GameObject hitEffectPrefab;<br>
                       <br>
                       &nbsp;   void OnCollisionEnter(Collision collision) {<br>
-                      &nbsp;       // 检查碰撞对象是否实现了IDamageable接口<br>
                       &nbsp;       IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();<br>
                       &nbsp;       if (damageable != null) {<br>
                       &nbsp;           damageable.TakeDamage(damage, collision.contacts[0].point, gameObject);<br>
                       &nbsp;       }<br>
-                      &nbsp;       <br>
-                      &nbsp;       // 播放击中特效<br>
                       &nbsp;       Instantiate(hitEffectPrefab, collision.contacts[0].point, Quaternion.identity);<br>
-                      &nbsp;       <br>
-                      &nbsp;       // 返回对象池<br>
                       &nbsp;       ObjectPool.Instance.ReturnBall(gameObject);<br>
                       &nbsp;   }<br>
                       }
                       </div>` },
                     
-                    { title: "5.4 对象池（Object Pool）深度优化", 
-                      content: `🧺 **为什么需要对象池？**
-                      <br>避免频繁 Instantiate/Destroy 导致的GC和卡顿。在快速球类游戏中，每秒可能生成数十个球，对象池是必备优化。
-                      <br><br>**完整对象池实现**：
+                    { title: "5.3 Object Pool Optimization", 
+                      content: `🧺 Why Object Pool?
+                      <br>Avoid GC and stuttering caused by frequent Instantiate/Destroy. In fast-paced ball games, dozens of balls may be generated per second; object pooling is essential.
+                      <br><br>Complete Object Pool Implementation:
                       <div class="code-note">
                       public class ObjectPool : MonoBehaviour {<br>
                       &nbsp;   public static ObjectPool Instance { get; private set; }<br>
@@ -1003,7 +967,6 @@
                       <br>
                       &nbsp;   void Awake() {<br>
                       &nbsp;       Instance = this;<br>
-                      &nbsp;       // 预创建对象池<br>
                       &nbsp;       for (int i = 0; i < poolSize; i++) {<br>
                       &nbsp;           GameObject ball = Instantiate(ballPrefab);<br>
                       &nbsp;           ball.SetActive(false);<br>
@@ -1016,11 +979,9 @@
                       &nbsp;       if (pool.Count > 0) {<br>
                       &nbsp;           ball = pool.Dequeue();<br>
                       &nbsp;       } else {<br>
-                      &nbsp;           // 如果池子空了，动态扩容<br>
                       &nbsp;           ball = Instantiate(ballPrefab);<br>
-                      &nbsp;           Debug.LogWarning("对象池扩容，建议增加初始池大小");<br>
+                      &nbsp;           Debug.LogWarning("Object pool expanded, consider increasing initial pool size");<br>
                       &nbsp;       }<br>
-                      &nbsp;       <br>
                       &nbsp;       ball.SetActive(true);<br>
                       &nbsp;       activeBalls.Add(ball);<br>
                       &nbsp;       return ball;<br>
@@ -1028,13 +989,10 @@
                       <br>
                       &nbsp;   public void ReturnBall(GameObject ball) {<br>
                       &nbsp;       if (!activeBalls.Contains(ball)) return;<br>
-                      &nbsp;       <br>
                       &nbsp;       ball.SetActive(false);<br>
-                      &nbsp;       // 重置物理状态<br>
                       &nbsp;       Rigidbody rb = ball.GetComponent<Rigidbody>();<br>
                       &nbsp;       rb.velocity = Vector3.zero;<br>
                       &nbsp;       rb.angularVelocity = Vector3.zero;<br>
-                      &nbsp;       <br>
                       &nbsp;       activeBalls.Remove(ball);<br>
                       &nbsp;       pool.Enqueue(ball);<br>
                       &nbsp;   }<br>
@@ -1047,44 +1005,36 @@
                       }
                       </div>` },
                     
-                    { title: "5.5 健康UI实现（世界空间Canvas）", 
-                      content: `❤️ **完整UI实现步骤**：
-                      <br><br>1. **创建世界空间Canvas**：
-                      <br>   - 在玩家物体下创建Canvas，Render Mode设为World Space
-                      <br>   - 设置Canvas大小为(0.2, 0.05)左右，位置在玩家头顶
-                      <br><br>2. **添加血条Slider**：
-                      <br>   - 添加Slider组件，删除Handle Slide Area（只保留Background和Fill）
-                      <br>   - 设置Fill为红色，Background为灰色
-                      <br><br>3. **添加LookAtCamera脚本**：
+                    { title: "5.4 Health UI Implementation (World Space Canvas)", 
+                      content: `❤️ Complete UI Implementation Steps:
+                      <br><br>1. Create World Space Canvas:
+                      <br>   - Create a Canvas under the player object, set Render Mode to World Space
+                      <br>   - Set Canvas size to around (0.2, 0.05), position above the player's head
+                      <br><br>2. Add Health Bar Slider:
+                      <br>   - Add Slider component, delete Handle Slide Area (keep only Background and Fill)
+                      <br>   - Set Fill to red, Background to gray
+                      <br><br>3. Add LookAtCamera Script:
                       <div class="code-note">
                       public class LookAtCamera : MonoBehaviour {<br>
                       &nbsp;   private Camera mainCamera;<br>
                       &nbsp;   <br>
-                      &nbsp;   void Start() {<br>
-                      &nbsp;       mainCamera = Camera.main;<br>
-                      &nbsp;   }<br>
+                      &nbsp;   void Start() { mainCamera = Camera.main; }<br>
                       <br>
                       &nbsp;   void LateUpdate() {<br>
-                      &nbsp;       // 让UI始终面向相机，但不随相机旋转而倾斜<br>
                       &nbsp;       Vector3 direction = transform.position - mainCamera.transform.position;<br>
-                      &nbsp;       direction.y = 0; // 保持水平<br>
+                      &nbsp;       direction.y = 0;<br>
                       &nbsp;       transform.rotation = Quaternion.LookRotation(direction);<br>
                       &nbsp;   }<br>
                       }
                       </div>
-                      <br>4. **HealthBarController脚本**：
+                      <br>4. HealthBarController Script:
                       <div class="code-note">
                       public class HealthBarController : MonoBehaviour {<br>
                       &nbsp;   public Slider healthSlider;<br>
                       &nbsp;   public PlayerHealth playerHealth;<br>
                       <br>
-                      &nbsp;   void OnEnable() {<br>
-                      &nbsp;       playerHealth.OnHealthChanged += UpdateHealthBar;<br>
-                      &nbsp;   }<br>
-                      <br>
-                      &nbsp;   void OnDisable() {<br>
-                      &nbsp;       playerHealth.OnHealthChanged -= UpdateHealthBar;<br>
-                      &nbsp;   }<br>
+                      &nbsp;   void OnEnable() { playerHealth.OnHealthChanged += UpdateHealthBar; }<br>
+                      &nbsp;   void OnDisable() { playerHealth.OnHealthChanged -= UpdateHealthBar; }<br>
                       <br>
                       &nbsp;   void UpdateHealthBar(int current, int max) {<br>
                       &nbsp;       healthSlider.value = (float)current / max;<br>
@@ -1094,61 +1044,61 @@
                 ]
             });
 
-            // ========= 第6章 项目前期准备与利益相关者分析 =========
+            // ========= Chapter 6: Project Preparation & Stakeholder Analysis =========
             tutorialData.chapters.push({
                 id: 6, title: "Project Preparation and Stakeholder Analysis",
-                description: "Document the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
+                description: "Documenting the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
                 sections: [
                     { 
                         title: "Preparing for the Transition Period and Stakeholder Analysis", 
                         content: `
                         <div class="plain-text-block">
                             After we won the bid for this project, because we first needed to pass the ethics review, we had a break before we could formally engage with the stakeholders, and we had almost three weeks to prepare for the formal engagement. In the first week, we didn't pay much attention to the importance of requirements engineering. But after the meeting with Professor Dave, we immediately realized how important it was to properly analyze and understand the needs of our stakeholders, and immediately started paying attention to it.<br><br>
-                            First, we looked at a brief description of the project. This project is mainly about building an AR sports framework with viewer experience at its core. The outline of the project was very general, with no details on how we would help the stakeholders. We can only continue to guess what we are going to do. Regardless, we took a close look at the HADO games provided by stakeholders, as well as other related AR games, and developments on AR sports in recent years.<br><br>
+                            First, we looked at a brief description of the project. This project is mainly about building an AR sports framework with viewer experience at its core. The outline of the project was very general, with no details on how we would help the stakeholders. We could only continue to guess what we were going to do. Regardless, we took a close look at the HADO games provided by stakeholders, as well as other related AR games, and developments in AR sports in recent years.<br><br>
                             Keeping the stakeholders happy is very important during the project, so we wanted to get to know some of the stakeholders better during the meeting. We checked their information on the university's website, including research directions.<br><br>
                             We ended up with a requirements engineering report that was approved by the stakeholders.
                         </div>
                         
                         <div class="image-container" style="text-align: center; margin: 2rem 0;">
-                            <img src="image/屏幕截图 2026-03-19 215217.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                            <img src="image/屏幕截图 2026-03-19 215217.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
                         </div>
                         
                         <div class="image-container" style="text-align: center; margin: 2rem 0;">
-                            <img src="image/屏幕截图 2026-03-19 215242.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                            <img src="image/屏幕截图 2026-03-19 215242.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
                         </div>
                         
                         <div class="image-container" style="text-align: center; margin: 2rem 0;">
-                            <img src="image/屏幕截图 2026-03-19 215248.png" alt="需求工程报告" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                            <img src="image/屏幕截图 2026-03-19 215248.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
                         </div>
                         ` }
                 ]
             });
 
-            // ========= 第7章 有效利益相关者会议 =========
+            // ========= Chapter 7: Effective Stakeholder Meetings =========
             tutorialData.chapters.push({
-                id: 7, title: "Effective Stakeholder Meetings: Here are some lessons we learned from that collaborative project.",
-                description: "Stakeholder meetings are key to making sure a project goes well. They make sure that team members and stakeholders are on the same page. This chapter's got everything: agendas, clear roles, adaptive communication, meeting notes, action items, and lessons learned.",
+                id: 7, title: "Effective Stakeholder Meetings: Lessons Learned from a Collaborative Project",
+                description: "Stakeholder meetings are key to ensuring a project goes well. This chapter covers structured agendas, clear roles, adaptive communication, meeting minutes, action items, and lessons learned.",
                 sections: [
                     { 
                         title: "7.0 Overview and Key Steps", 
                         content: `
                         <div class="chapter-content-block">
-                        Stakeholder meetings are key to making sure a project goes well. They make sure that team members and stakeholders are on the same page. These meetings help the team really understand the whole project. But, you know, getting stakeholder meetings to be effective takes some planning and clear roles. The last thing a team wants is to come off as unprofessional, because that could damage trust and make stakeholders reluctant to keep working together.
+                        Stakeholder meetings are key to ensuring a project goes well. They ensure that team members and stakeholders are aligned. These meetings help the team truly understand the whole project. However, organizing effective stakeholder meetings requires planning and clear roles. The last thing a team wants is to come across as unprofessional, as that could damage trust and make stakeholders reluctant to continue collaboration.
                         </div>
                         <h3 class="section-title" style="font-size:1.5rem; margin-top:2rem;">Key Steps for Successful Stakeholder Meetings</h3>
                         <div class="chapter-content-block">
                         <h4>1. Structured Agenda</h4>
-                        <p>It's key to have a solid agenda to keep meetings on track and productive. It should outline the main points to be discussed. We've found that point forms usually do the trick, but it's also good to include extra notes or sub-points for important details. This makes sure we don't miss anything important and gives us a reference in case we forget anything during the discussion.</p>
+                        <p>A well-prepared agenda is essential for keeping meetings focused and productive. It should outline the key discussion points. Based on our experience, point forms are usually sufficient, but including additional notes or sub-points for important details is also helpful. This ensures critical topics are not overlooked and provides a reference in case any points are forgotten during discussion.</p>
                         
                         <h4>2. Clear Roles and Responsibilities</h4>
                         <p>Assigning specific roles for each meeting helps streamline discussions and ensures accountability. In our project, we adopted the following roles:</p>
                         <ul>
                             <li><strong>Chair:</strong> Guides the meeting, keeps discussions on track, and ensures the agenda is followed. The chair is the main person driving the conversation and presenting updates.</li>
-                            <li><strong>Secretary:</strong> Documents meeting minutes, record whatever important points that were discussed in the meeting.</li>
+                            <li><strong>Secretary:</strong> Documents meeting minutes, recording important points discussed.</li>
                         </ul>
                         
                         <h4>3. Adaptive Communication and Smart Engagement</h4>
-                        <p>Good communication is key to stakeholder meetings. Instead of being stuck to the agenda, it's important to go with the flow of the conversation. If we've already gone over certain points in a previous conversation, it's probably best to avoid repeating them. Otherwise, we might end up frustrating the stakeholders. Also, if you ask the same questions over and over, it might make your team look unprepared and disorganized.</p>
+                        <p>Effective communication is key to stakeholder meetings. Instead of rigidly following the agenda, it's important to follow the natural flow of conversation. If certain points have already been addressed in previous conversations, repeating them unnecessarily can frustrate stakeholders. Likewise, asking the same questions multiple times can make the team appear unprepared and disorganized.</p>
                         <p>To improve communication, we recommend:</p>
                         <ul>
                             <li><strong>Reading the room:</strong> Pay attention to stakeholders' engagement levels and adapt accordingly.</li>
@@ -1156,16 +1106,16 @@
                         </ul>
                         
                         <h4>4. Meeting Minutes</h4>
-                        <p>It's really important to record meeting minutes when you're working with stakeholders. A detailed record of discussions makes sure that key points aren't forgotten and provides a clear reference for future actions. Meeting minutes also help team members who couldn't make it stay informed about what was discussed.</p>
-                        <p>Also, keeping detailed records helps you keep track of everything and makes sure you don't miss anything. By reviewing the minutes, the team can make sure that all the points that were discussed have been dealt with and that any necessary follow-ups have been completed.</p>
-                        <p>We take notes during our meetings in point form to keep things clear and efficient. To help you out, we've added brackets with extra info or reasons for each point we've recorded. This approach makes sure that every note is meaningful and actionable.</p>
+                        <p>Recording meeting minutes is a crucial part of successful stakeholder engagement. A well-documented record of discussions ensures key points are not forgotten and provides a clear reference for future actions. Meeting minutes also help team members who couldn't attend stay informed.</p>
+                        <p>Additionally, keeping detailed records prevents minor details from being overlooked and serves as a checklist for tracking progress. By reviewing the minutes, the team can ensure all discussed points have been addressed and necessary follow-ups are completed.</p>
+                        <p>In our meetings, minutes are recorded in point form for clarity and efficiency. To enhance understanding, we include brackets to provide additional explanations or justifications for each recorded point. This approach ensures every note remains meaningful and actionable.</p>
                         
                         <h4>5. Action Items and Follow-Ups</h4>
-                        <p>At the end of each meeting, we have an internal team discussion to brief the other group members on what was discussed and outline the actions to be taken moving forward. This makes sure everyone's on the same page and knows what to do next.</p>
+                        <p>At the end of each stakeholder meeting, we hold an internal team discussion to brief other group members on what was discussed and outline actions to be taken moving forward. This ensures everyone is informed and aligned with next steps.</p>
                                                  
                         <h4>What We Learned:</h4>
                         <ul>
-                            <li><strong>Consistency Builds Trust:</strong> Keeping the same people in key roles ensures that stakeholders have a consistent point of contact, fostering stronger relationships over time.</li>
+                            <li><strong>Consistency Builds Trust:</strong> Keeping the same people in key roles ensures stakeholders have a consistent point of contact, fostering stronger relationships over time.</li>
                             <li><strong>Role Familiarity Enhances Performance:</strong> When individuals perform the same role repeatedly, they become more skilled and efficient, leading to smoother meetings and better outcomes.</li>
                             <li><strong>Balance Learning and Stakeholder Needs:</strong> While it's important to provide team members with growth opportunities, this should be balanced with the need for stakeholder confidence and meeting effectiveness.</li>
                         </ul>
@@ -1183,100 +1133,121 @@
                 ]
             });
 
-            // ========= 第8章 配套示例项目 =========
+            // ========= Chapter 8: Accompanying Example Project =========
             tutorialData.chapters.push({
-                id: 8, title: "配套示例项目（深度扩展）",
-                description: "玩家视角以及观众视角的演示视频，可在pico4上运行的unity包",
+                id: 8, title: "Accompanying Example Project",
+                description: "Player perspective and spectator perspective demo videos, and a runnable Unity package for PICO 4.",
                 sections: [
-                    { title: "8.1 玩家视角演示视频", 
-                      content: `🎮 <strong>玩家视角演示视频：</strong>
-                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) Player_Perspective_Demo.mp4</a>
-                      <br><br>📹 <strong>视频内容说明：</strong>
-                      <br>- 展示玩家在PICO 4头显中的第一人称游戏体验
-                      <br>- 演示手柄交互操作（击球、移动、菜单选择）
-                      <br>- 展示空间锚点定位与虚拟物体交互
-                      <br>- 实时反馈游戏得分与状态变化` },
+                    { title: "8.1 Player Perspective Demo Video", 
+                      content: `🎮 <strong>Player Perspective Demo Video:</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) Player_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>Video Content Description:</strong>
+                      <br>- Shows the first-person gameplay experience in PICO 4 headset
+                      <br>- Demonstrates controller interactions (hitting, moving, menu selection)
+                      <br>- Shows spatial anchor positioning and virtual object interaction
+                      <br>- Real-time feedback on game scores and status changes` },
                     
-                    { title: "8.2 观众端演示视频", 
-                      content: `👥 <strong>观众端演示视频：</strong>
-                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) Spectator_Perspective_Demo.mp4</a>
-                      <br><br>📹 <strong>视频内容说明：</strong>
-                      <br>- 展示从第三方观察者视角观看游戏进行
-                      <br>- 展示观众界面的信息呈现（比分、状态、实时数据）
-                      <br>- 演示观众与游戏环境的交互方式` },
+                    { title: "8.2 Spectator Perspective Demo Video", 
+                      content: `👥 <strong>Spectator Perspective Demo Video:</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) Spectator_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>Video Content Description:</strong>
+                      <br>- Shows the game from a third-party observer perspective
+                      <br>- Demonstrates information display on the spectator interface (scores, status, real-time data)
+                      <br>- Shows interaction between spectators and the game environment` },
                     
-                    { title: "8.3 可运行Unity项目包", 
-                      content: `📦 <strong>Unity项目包 (PICO 4 可直接运行)：</strong>
-                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(模拟链接) PICO-AR-Sports-Demo.unitypackage</a>
-                      <br><br>📂 <strong>包含内容：</strong>
-                      <br>- 完整Unity项目 (Unity 2022.3.62f3 LTS)
-                      <br>- 预编译APK文件 (可直接安装至PICO 4)` }
+                    { title: "8.3 Runnable Unity Project Package", 
+                      content: `📦 <strong>Unity Project Package (Runnable on PICO 4):</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) PICO-AR-Sports-Demo.unitypackage</a>
+                      <br><br>📂 <strong>Contents:</strong>
+                      <br>- Complete Unity Project (Unity 2022.3.62f3 LTS)
+                      <br>- Pre-compiled APK file (can be directly installed on PICO 4)` }
                 ]
             });
 
-            // ----- 双栏渲染逻辑 -----
-            let activeChapterId = 4;
+            // ==================== Combine: Introduction + 8 Chapters ====================
+            const allItems = [introContent, ...tutorialData.chapters];
 
+            // Render left sidebar
             function renderChapterList() {
                 const container = document.getElementById('chapterListContainer');
                 let html = '';
-                tutorialData.chapters.forEach(ch => {
-                    const activeClass = (activeChapterId === ch.id) ? 'active' : '';
-                    html += `<div class="chapter-item ${activeClass}" data-chapter-id="${ch.id}">
-                        <div class="chapter-idx">第${ch.id}章</div>
-                        <div class="chapter-title">${ch.title}</div>
-                        <div class="chapter-desc">${ch.description.substring(0,70)}…</div>
+                allItems.forEach((item, idx) => {
+                    const isIntro = (idx === 0);
+                    const activeClass = (activeItemId === (isIntro ? 0 : item.id)) ? 'active' : '';
+                    const idxDisplay = isIntro ? '' : `<div class="chapter-idx">Chapter ${item.id}</div>`;
+                    html += `<div class="chapter-item ${activeClass}" data-item-id="${isIntro ? 0 : item.id}" data-is-intro="${isIntro}">
+                        ${idxDisplay}
+                        <div class="chapter-title">${item.title}</div>
+                        <div class="chapter-desc">${item.description.substring(0,70)}…</div>
                     </div>`;
                 });
                 container.innerHTML = html;
 
                 document.querySelectorAll('.chapter-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        const id = parseInt(item.dataset.chapterId);
-                        showChapter(id);
+                        const id = parseInt(item.dataset.itemId);
+                        const isIntro = item.dataset.isIntro === 'true';
+                        showContent(isIntro ? 0 : id);
                     });
                 });
             }
 
-            function showChapter(id) {
-                const chapter = tutorialData.chapters.find(c => c.id === id);
-                if (!chapter) return;
-                activeChapterId = id;
+            let activeItemId = 0; // Default to introduction page
+
+            function showContent(id) {
+                let content;
+                let title;
+                let description;
+                
+                if (id === 0) {
+                    content = introContent;
+                    title = introContent.title;
+                    description = introContent.description;
+                    activeItemId = 0;
+                } else {
+                    const chapter = tutorialData.chapters.find(c => c.id === id);
+                    if (!chapter) return;
+                    content = chapter;
+                    title = `Chapter ${chapter.id}: ${chapter.title}`;
+                    description = chapter.description;
+                    activeItemId = id;
+                }
+
+                // Update left sidebar highlighting
                 document.querySelectorAll('.chapter-item').forEach(el => {
-                    el.classList.toggle('active', parseInt(el.dataset.chapterId) === id);
+                    const itemId = parseInt(el.dataset.itemId);
+                    const isIntro = el.dataset.isIntro === 'true';
+                    if ((isIntro && id === 0) || (!isIntro && itemId === id)) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
                 });
 
+                // Generate right content
                 let sectionsHtml = '';
-                chapter.sections.forEach(sec => {
-                    sectionsHtml += `<div class="section-block">
-                        <div class="section-title"><span class="sec-badge">${sec.title.split(' ')[0]}</span> ${sec.title.replace(/^[0-9.]+/, '')}</div>
-                        <div class="section-content">${sec.content}</div>
-                    </div>`;
-                });
-
-                const prevDisabled = chapter.id <= 1 ? 'style="opacity:0.4; pointer-events:none;"' : '';
-                const nextDisabled = chapter.id >= tutorialData.chapters.length ? 'style="opacity:0.4; pointer-events:none;"' : '';
+                if (content.sections) {
+                    content.sections.forEach(sec => {
+                        sectionsHtml += `<div class="section-block">
+                            <div class="section-title"><span class="sec-badge">${sec.title.split(' ')[0]}</span> ${sec.title.replace(/^[0-9.]+/, '')}</div>
+                            <div class="section-content">${sec.content}</div>
+                        </div>`;
+                    });
+                }
 
                 const detailHtml = `
                     <div class="detail-header">
-                        <h2>第${chapter.id}章 · ${chapter.title}</h2>
-                        <div class="desc">${chapter.description}</div>
+                        <h2>${title}</h2>
+                        <div class="desc">${description}</div>
                     </div>
                     ${sectionsHtml}
-                    <div class="nav-buttons">
-                        <button class="nav-btn" ${prevDisabled} onclick="window.prevChapter(${chapter.id})">← 上一章</button>
-                        <button class="nav-btn" ${nextDisabled} onclick="window.nextChapter(${chapter.id})">下一章 →</button>
-                    </div>
-                    <div class="footer-note">© 深度扩展教程 · 最终修订版</div>
+                    <div class="footer-note">© Unity + PICO SDK Open Educational Resources</div>
                 `;
                 document.getElementById('detailContentArea').innerHTML = detailHtml;
             }
 
-            window.prevChapter = (curr) => { if (curr > 1) showChapter(curr - 1); };
-            window.nextChapter = (curr) => { if (curr < tutorialData.chapters.length) showChapter(curr + 1); };
-
             renderChapterList();
-            showChapter(4);
+            showContent(0);
         })();
     </script>
 </body>
