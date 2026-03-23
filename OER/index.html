@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity + PICO SDK Open Educational Resources</title>
+    <style>
+        /* ===== Global Light Theme · Two-Column Detailed Layout ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f9ff;
+            color: #1e293b;
+            line-height: 1.5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .app-header {
+            flex-shrink: 0;
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #d9e3f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,20,50,0.02);
+        }
+
+        .logo-area h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #0b2645;
+            letter-spacing: -0.02em;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background: white;
+            margin: 0 2rem 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px -10px rgba(0,40,80,0.12);
+            border: 1px solid #d7e2f0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background-color: #f8fbfe;
+            border-right: 1px solid #d9e2f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 24px 0 0 24px;
+        }
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid #dae2f0;
+        }
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #102b4a;
+        }
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 2rem 1.2rem;
+            scrollbar-width: thin;
+            scrollbar-color: #b2c6e0 #e9f0fa;
+        }
+        .chapter-list::-webkit-scrollbar { width: 6px; }
+        .chapter-list::-webkit-scrollbar-track { background: #e9f0fa; }
+        .chapter-list::-webkit-scrollbar-thumb { background: #b2c6e0; border-radius: 8px; }
+
+        .chapter-item {
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.6rem;
+            border-radius: 14px;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+            background-color: transparent;
+            transition: 0.1s;
+        }
+        .chapter-item:hover { background-color: #e9f2fd; border-left-color: #9fb8dd; }
+        .chapter-item.active { background-color: #e1ebf9; border-left-color: #265197; }
+        .chapter-item .chapter-idx { font-size: 0.75rem; font-weight: 600; color: #315f9e; margin-bottom: 0.2rem; }
+        .chapter-item .chapter-title { font-weight: 650; font-size: 1.1rem; color: #0e2850; margin-bottom: 0.2rem; }
+        .chapter-item .chapter-desc { font-size: 0.9rem; color: #46658f; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2.2rem 2.8rem;
+            background: white;
+            border-radius: 0 24px 24px 0;
+        }
+
+        .detail-header { margin-bottom: 2.2rem; }
+        .detail-header h2 { font-size: 2.3rem; font-weight: 600; color: #0b2343; margin-bottom: 0.6rem; }
+        .detail-header .desc { font-size: 1.2rem; color: #2b4e7a; background: #f0f7ff; padding: 1.2rem 2rem; border-radius: 24px; border-left: 8px solid #1f4790; margin-top: 1rem; }
+
+        .section-block { margin: 2.8rem 0; border-bottom: 1px dashed #c7d6ec; padding-bottom: 2.2rem; }
+        .section-block:last-child { border-bottom: none; }
+        .section-title { font-size: 1.7rem; font-weight: 600; color: #103868; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem; }
+        .section-title .sec-badge { background: #1f4280; color: white; padding: 0.2rem 1.2rem; border-radius: 40px; font-size: 0.95rem; }
+        .section-content { font-size: 1.05rem; color: #203b63; line-height: 1.7; }
+        .section-content p { margin: 1rem 0; }
+
+        .code-note {
+            background: #f3f8ff; border: 1px solid #b9d1ef; font-family: 'SF Mono', 'Fira Code', monospace;
+            padding: 1.4rem 1.8rem; border-radius: 20px; margin: 1.5rem 0; font-size: 0.95rem; color: #132c4e; overflow-x: auto;
+        }
+        .external-link {
+            display: inline-block; background: #e2ecfc; color: #1d4488 !important; padding: 0.4rem 1.2rem; border-radius: 30px;
+            text-decoration: none; font-size: 0.9rem; font-weight: 500; margin: 0.3rem 0.8rem 0.3rem 0; border: 1px solid #acc4ea;
+        }
+        .external-link:hover { background: #d2e4ff; border-color: #3d71be; }
+        .nav-buttons { display: flex; gap: 1.5rem; margin: 2.5rem 0 1rem; }
+        .nav-btn { background: white; border: 2px solid #2e5b9f; color: #173e77; padding: 0.7rem 2.2rem; border-radius: 40px; font-weight: 600; cursor: pointer; }
+        .nav-btn:hover { background: #eaf2fe; border-color: #0e3572; }
+        .footer-note { margin-top: 2.5rem; border-top: 1px solid #d9e5f2; padding-top: 1.5rem; color: #446b9c; text-align: center; font-size: 0.9rem; }
+
+        .empty-selection { display: flex; align-items: center; justify-content: center; height: 100%; color: #6c8bb8; font-size: 1.3rem; flex-direction: column; gap: 1rem; }
+        
+        /* Table Styles */
+        .template-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,20,50,0.05);
+        }
+        .template-table th {
+            background: #e9f0fc;
+            color: #1f4280;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            text-align: left;
+        }
+        .template-table td {
+            padding: 0.8rem 1.2rem;
+            border-top: 1px solid #d0e0f0;
+        }
+
+        /* Intro Page Styles */
+        .intro-section {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #e2edf7;
+        }
+        .intro-section h2 {
+            font-size: 1.8rem;
+            color: #103868;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid #e2edf7;
+            transition: all 0.2s;
+        }
+        .feature-card:hover {
+            border-color: #b9d1ef;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: #1d4085;
+            margin-bottom: 0.75rem;
+        }
+        .feature-card p {
+            color: #3a5a7a;
+            line-height: 1.5;
+        }
+        .signature {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2edf7;
+            text-align: right;
+            font-style: italic;
+            color: #5a7a9a;
+        }
+
+        .plain-text-block {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: #f9fcff;
+            padding: 2rem 2.5rem;
+            border-radius: 24px;
+            border: 1px solid #c7d9f0;
+            color: #173e5c;
+            margin: 1.8rem 0;
+        }
+        .chapter-content-block {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background: #ffffff;
+            padding: 2rem 2.5rem;
+            border-radius: 24px;
+            border: 1px solid #d0e0f5;
+            color: #1e3a5f;
+            margin: 1.8rem 0;
+            white-space: pre-line;
+        }
+        .chapter-content-block h3 {
+            font-size: 1.5rem;
+            color: #103868;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+        .chapter-content-block h4 {
+            font-size: 1.2rem;
+            color: #1d4a8b;
+            margin: 1.2rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+        .chapter-content-block ul {
+            margin: 0.5rem 0 1rem 2rem;
+        }
+        .chapter-content-block li {
+            margin-bottom: 0.3rem;
+        }
+        .image-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <div class="logo-area">
+            <h1>Unity + PICO SDK Open Educational Resources</h1>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Left Sidebar: Table of Contents (Intro + 8 Chapters) -->
+        <div class="sidebar">
+            <div class="sidebar-header"><h3>📋 Table of Contents</h3></div>
+            <div class="chapter-list" id="chapterListContainer"></div>
+        </div>
+        <!-- Right Content Area -->
+        <div class="content-area" id="detailContentArea">
+            <div class="empty-selection"><span>👈 Select an item to start learning</span></div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // ==================== Introduction Page Content (No Chapter Number) ====================
+            const introContent = {
+                id: 0,
+                title: "Unity + PICO SDK Open Educational Resources",
+                description: "A comprehensive open educational resource for developing AR/VR applications using Unity and PICO SDK, featuring spatial anchors, physics-based interactions, multiplayer networking, and stakeholder engagement best practices.",
+                sections: [
+                    {
+                        title: "Introduction",
+                        content: `
+                        <div class="intro-section">
+                            <h2>🎮 Interactive Example Environment</h2>
+                            <p>For a practical demonstration of our work, please explore the complete Unity project and demo videos provided in Chapter 8.</p>
+                        </div>
+
+                        <div class="intro-section">
+                            <h2>📚 What You'll Learn</h2>
+                            <p>Our tutorials cover a wide range of topics, including:</p>
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <h4>🎮 Unity + PICO SDK Setup</h4>
+                                    <p>Get started with Unity 2022.3.62f3 LTS and PICO Unity Integration SDK. Step-by-step instructions on installing and configuring the development environment for AR/VR applications on PICO 4.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>📍 Spatial Anchors & AR Logic</h4>
+                                    <p>Learn how to implement spatial anchors to place virtual objects in real-world locations. Master the full lifecycle of anchor creation, persistence, and multi-device synchronization.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>⚡ Core Game Logic Development</h4>
+                                    <p>Explore modular input handling, collision detection with IDamageable interfaces, object pooling optimization, and health UI implementation.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>🤝 Stakeholder Engagement & Project Management</h4>
+                                    <p>Learn essential collaborative skills: effective meeting structures, roles and responsibilities, meeting minutes documentation, and best practices for successful stakeholder communication.</p>
+                                </div>
+                            </div>
+                            <p style="margin-top: 1.5rem;">We invite you to explore the tutorial modules and interactive demos as a foundation for your own creative projects while making the most of open-source assets.</p>
+                        </div>
+
+                        <div class="signature">
+                            Sincerely,<br>
+                            Team 1<br>
+                            April 1, 2026
+                        </div>
+                        `
+                    }
+                ]
+            };
+
+            // ==================== Tutorial Data (8 Chapters) ====================
+            const tutorialData = { chapters: [] };
+
+            // ========= Chapter 1: Unity Engine Introduction =========
+            tutorialData.chapters.push({
+                id: 1, title: "Unity Engine Introduction",
+                description: "Install Unity Hub and Editor (2022.3.62f3 LTS) from scratch, complete module configuration (Android, Windows), in-depth explanation of the five editor views, and deep dive into GameObject and component architecture.",
+                sections: [
+                    { title: "1.1 Unity Hub Installation & Editor Version Selection", 
+                      content: `✅ <strong>Detailed Steps:</strong>
+                      <br><br>1. Visit the official website: Open <a class="external-link" href="https://unity.com/download" target="_blank">Unity Download Page</a> to download Unity Hub 3.7+ (supports Windows/macOS/Linux).
+                      <br>2. Install Unity Hub: Run the installer, select the installation path (recommend non-system drive), and complete the installation.
+                      <br>3. Login and Activate License:
+                      <br>   - Open Unity Hub and log in with your Unity account.
+                      <br>   - Go to "Licenses" menu, click "Add", select "Get a free personal license" and activate it.
+                      <br>4. Install the specified editor version:
+                      <br>   - Click "Add" in the "Installs" tab.
+                      <br>   - Select version <strong>2022.3.62f3 LTS</strong> (LTS stands for Long Term Support, suitable for commercial projects).
+                      <br>5. Required modules (very important!):
+                      <br>   - Android Build Support: Expand and check:
+                      <br>     - SDK (Android Software Development Kit)
+                      <br>     - NDK (Native Development Kit)
+                      <br>     - JDK (Java Development Kit)
+                      <br>     - OpenJDK (Open Java Development Kit)
+                      <br>     - Gradle (Android build tool)
+                      <br>   - Windows Build Support (IL2CPP): For PC testing and performance analysis.
+                      <br>   - Simplified Chinese localization package (optional).
+                      <br>6. Module addition: If you miss any modules during installation, you can add them later via "Add Modules" in the Hub.
+                      <br><br>⚠️ Common Errors and Solutions:
+                      <br>- Error: Installation stuck at "Downloading" → Try switching networks or using a VPN.
+                      <br>- Error: License activation failed → Verify your email is confirmed, or log in again.
+                      <br>- Error: Module download failed → Manually download the module package, refer to official documentation for offline installation.
+                      <br><br>🔗 <a class="external-link" href="https://docs.unity3d.com/Manual/index.html" target="_blank">Official Documentation</a> | <a class="external-link" href="https://docs.unity3d.com/ScriptReference/index.html" target="_blank">Scripting API</a>` },
+                    
+                    { title: "1.2 Project Creation & Android Environment Verification", 
+                      content: `📁 <strong>New Project Creation Process:</strong>
+                      <br>1. Open Unity Hub, click "New Project", select the "3D Core" template.
+                      <br>2. Project name: e.g., "PICO_AR_Sports", save location: **Do not use Chinese or special characters** (recommend English path).
+                      <br>3. Click "Create Project" and wait for Unity to initialize.
+                      <br><br>🔧 Android Environment Verification:
+                      <br>1. Open Edit > Preferences > External Tools (Windows) or Unity > Preferences (macOS).
+                      <br>2. Check if the Android SDK Tools path is automatically recognized:
+                      <br>   - Default path (Windows): <code>C:\\Users\\[username]\\AppData\\Local\\Android\\Sdk</code>
+                      <br>   - If not recognized, click "Browse" to manually point to the SDK installation directory.
+                      <br>3. Check if NDK, JDK, and Gradle are correctly recognized; if missing, click "Download" to automatically complete.
+                      <br>4. Configure environment variables: Add Android SDK's platform-tools path to the system PATH for convenient use of adb commands.
+                      <br><br>📱 Device Debugging Environment Verification:
+                      <br>1. Enable PICO Developer Mode:
+                      <br>   - On PICO device: Settings > General > About, tap "Version" 7 times to enable developer options.
+                      <br>   - Go back to Settings > System > Developer Options, enable "USB Debugging".
+                      <br>2. Connect the device: Connect via USB cable, and when prompted on the PICO device, tap "Allow USB debugging".
+                      <br>3. Verify connection: Open Terminal/Command Prompt and enter <code>adb devices</code>. If the device serial number appears with status "device", the connection is successful.
+                      <br>4. Configure Build in Unity:
+                      <br>   - Open File > Build Settings, click "Android" then "Switch Platform".
+                      <br>   - Click "Player Settings":
+                      <br>     - Package Name: Set a unique package name, e.g., <code>com.yourcompany.picoarsports</code>
+                      <br>     - Minimum API Level: Select Android API Level 29 (Android 10)
+                      <br>     - Target API Level: Select 32 or 33
+                      <br>   - Click "Build And Run". If an empty app (black screen or default scene) can be installed on the PICO device, the environment is verified.
+                      <br><br>🔗 <a class="external-link" href="https://developer.android.google.cn/tools/adb#howadbworks" target="_blank">ADB Guide</a> | <a class="external-link" href="https://developer-cn.picoxr.com/document/?platform=unity" target="_blank">PICO Development Documentation</a>` },
+                    
+                    { title: "1.3 Editor Interface: Five Views Explained", 
+                      content: `🖥️ Unity's Five Core Views Explained (AR Development Perspective):
+                      <br><br>1. Scene View:
+                      <br>   - Purpose: Place virtual objects, adjust positions, and set up lighting in AR development.
+                      <br>   - Shortcuts: Q (hand tool), W (move), E (rotate), R (scale).
+                      <br>   - Tips: Use "2D" mode to view UI layout, "ISO" mode to view 3D scenes.
+                      <br>   - AR-specific: Precisely place virtual objects in the real world (simulated).
+                      <br><br>2. Game View:
+                      <br>   - Purpose: Preview final output, simulate different resolutions and devices.
+                      <br>   - Tips: Click "Free Aspect" to switch between preset resolutions (e.g., 1080x1920 to simulate a phone).
+                      <br>   - AR-specific: When running on PICO headset, Game View shows the left eye view.
+                      <br><br>3. Hierarchy View:
+                      <br>   - Purpose: Display the hierarchical structure of all GameObjects in the current scene, supporting parent-child relationships.
+                      <br>   - Tips: Right-click to quickly create basic objects (Cube, Camera, UI, etc.).
+                      <br>   - AR-specific: Manage ImageTarget, PXR_CameraRig and its children (controllers, headset).
+                      <br><br>4. Project View:
+                      <br>   - Purpose: Manage all project assets (scripts, models, materials, scenes, etc.), support search and filtering.
+                      <br>   - Tips: Use "Packages" to view all imported packages, use "Favorites" for quick access.
+                      <br>   - AR-specific: Organize assets according to specifications for team collaboration.
+                      <br><br>5. Inspector View:
+                      <br>   - Purpose: View and edit all component properties of the selected object.
+                      <br>   - Tips: Click the "lock" icon in the top right to lock the current object for comparing different object properties.
+                      <br>   - AR-specific: Adjust PXR_Manager parameters (License, tracking settings), modify controller ray properties.
+                      <br><br>🔧 Practical Tips:
+                      <br>- Layout saving: After adjusting the view layout, click the "Layout" dropdown in the top right and select "Save Layout..." to save custom layouts.
+                      <br>- Search function: Hierarchy and Project views support search; entering "t:script" filters all scripts.
+                      <br>- Shortcut: Ctrl/Cmd + Shift + F aligns the camera to the current Scene view perspective.` },
+                    
+                    { title: "1.4 GameObjects & Component Architecture Practice", 
+                      content: `🧩 Component-based Thinking Deep Dive:
+                      <br>Unity's core design philosophy: Any GameObject is a container that gains functionality by adding components. Components include Transform, MeshRenderer, Collider, scripts, and more.
+                      <br><br>Hands-on Practice: Creating an interactive rotating cube:
+                      <br>1. Create an empty object: In Hierarchy, right-click > "Create Empty", name it "Player".
+                      <br>2. Add visualization components:
+                      <br>   - Select Player, click "Add Component" in the Inspector.
+                      <br>   - Search and add MeshFilter, select Cube in the Mesh property.
+                      <br>   - Add MeshRenderer, click the circle in Materials to select the default material (or create a new material).
+                      <br>3. Add C# script:
+                      <br>   - In Project view, right-click in the Scripts folder > "Create" > "C# Script", name it "Rotate".
+                      <br>   - Double-click to open the script and enter the following code:
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      public class Rotate : MonoBehaviour {<br>
+                      &nbsp;   [Tooltip("Rotation speed (degrees/second)")]<br>
+                      &nbsp;   public float speed = 30f;<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // Rotate around Y axis, Time.deltaTime ensures frame-rate independence<br>
+                      &nbsp;       transform.Rotate(0, speed * Time.deltaTime, 0);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>4. Attach the script: Drag the Rotate script onto the Player object, or click "Add Component" and search for Rotate.
+                      <br>5. Run the test: Click the Play button at the top; you should see the cube rotating steadily.
+                      <br><br>Understanding Tag and Layer:
+                      <br>- Tag: Used to identify object types, e.g., "Player", "Ball". Use <code>CompareTag("Player")</code> in scripts for quick identification.
+                      <br>- Layer: Used for physics collision filtering and camera rendering layers. For example, set the "Player" layer to only collide with the "Ball" layer.
+                      <br><br>Component Lifecycle:
+                      <br>- Awake(): Called when the object is created, used for initialization.
+                      <br>- Start(): Called before the first frame update.
+                      <br>- Update(): Called every frame, used for processing logic.
+                      <br>- FixedUpdate(): Called at fixed time intervals, used for physics calculations.
+                      <br>- OnCollisionEnter(): Called when a collision occurs.` }
+                ]
+            });
+
+            // ========= Chapter 2: Getting Started with PICO Unity Integration SDK =========
+            tutorialData.chapters.push({
+                id: 2, title: "Getting Started with PICO Unity Integration SDK",
+                description: "Overview of PICO Unity Integration SDK features, focusing on device tracking and spatial perception, integrating SDK via PICO Developer Portal, configuring project settings for PICO devices, creating a basic AR tracking app, and troubleshooting common issues.",
+                sections: [
+                    { title: "2.1 SDK Overview: Device Tracking & Spatial Perception", 
+                      content: `📡 PICO SDK Core Capabilities:
+                      <br><br>1. 6DoF Head Tracking:
+                      <br>   - Get precise headset position and rotation.
+                      <br>   - Frequency up to 72/90Hz, extremely low latency.
+                      <br>   - Supports area learning for quick relocalization in different environments.
+                      <br><br>2. Controller Tracking:
+                      <br>   - Get position, rotation, velocity, and angular velocity of left and right controllers.
+                      <br>   - Read all button states: trigger, grip, joystick, menu, A/B/X/Y buttons.
+                      <br>   - Support haptic feedback (intensity 0-1, adjustable duration).
+                      <br><br>3. Spatial Anchors:
+                      <br>   - Create anchors: fix virtual objects to specific locations in the real world.
+                      <br>   - Save anchors: persist to device storage, automatically load when the app restarts.
+                      <br>   - Export/import anchors: enable multi-device sharing of the same spatial location.
+                      <br><br>4. Spatial Mesh:
+                      <br>   - Get triangle mesh data of the real environment for physical collision and occlusion.
+                      <br>   - Support mesh updates (when the environment changes).
+                      <br><br>5. Color Passthrough:
+                      <br>   - When enabled, the headset displays the real-world view (supported on PICO 4/Neo3 Pro).
+                      <br>   - Supports brightness and contrast adjustment.
+                      <br><br>6. Hand Gesture Recognition:
+                      <br>   - Detect 21 hand key points.
+                      <br>   - Built-in gestures: pinch, click, fist, etc.
+                      <br><br>This tutorial focuses on the fundamentals of device tracking and spatial perception.` },
+                    
+                    { title: "2.2 Integrating SDK via PICO Developer Portal", 
+                      content: `📦 Detailed Integration Steps:
+                      <br><br>1. Register a PICO Developer Account:
+                      <br>   - Visit <a class="external-link" href="https://developer.picoxr.com" target="_blank">PICO Developer Portal</a>, click "Register".
+                      <br>   - Use email to register and complete email verification.
+                      <br>   - After logging in, click on the console.
+                      <br><br>2. Create an App to Get License:
+                      <br>   - Click "Create App" in the console, fill in the app name (e.g., "AR_Sports_Demo"), select platform "PICO 4".
+                      <br>   - After successful creation, find App ID and App License in the app details.
+                      <br>   - Copy the License string; you'll need to paste it into Unity later.
+                      <br><br>3. Import SDK into Unity:
+                      <br>   - Option A (recommended): In Unity, open Window > Asset Store, search for "PICO Unity Integration SDK", click "Download" then "Import".
+                      <br>   - Option B: Download the latest .unitypackage from the Portal and double-click to import.
+                      <br>   - After import, the "PICO" menu item should appear in the Unity menu bar.
+                      <br><br>4. Configure XR Plug-in Management:
+                      <br>   - Open Edit > Project Settings > XR Plug-in Management.
+                      <br>   - Click the "Android" tab, check "PICO XR".
+                      <br><br>5. Enter License:
+                      <br>   - In Hierarchy, right-click > "PICO" > "PXR_Manager" to create a PICO manager.
+                      <br>   - Select PXR_Manager, find the App License field in Inspector, paste the License copied from the Portal.
+                      <br><br>🔧 Verify SDK Installation:
+                      <br>- Check if the "PICO" folder exists in Project view.
+                      <br>- Check if the "PICO" menu item appears in the menu bar.` },
+                    
+                    { title: "2.3 Configuring Project Settings for PICO Devices", 
+                      content: `⚙️ Required Android Settings (Detailed Explanation):
+                      <br><br>1. Open Player Settings: File > Build Settings > Player Settings.
+                      <br><br>2. Resolution and Presentation:
+                      <br>   - Render Outside Safe Area: Uncheck (prevents rendering issues).
+                      <br>   - Orientation: Lock to Landscape Left or Landscape Right (PICO default landscape).
+                      <br><br>3. Other Settings (Critical!):
+                      <br>   - Color Space: Set to Linear (ensures correct rendering).
+                      <br>   - Minimum API Level: Set to 29 (Android 10, minimum requirement for PICO 4).
+                      <br>   - Target API Level: Set to 32 or 33 (recommended to match device system).
+                      <br>   - Multithreaded Rendering: Must be disabled! (otherwise may cause black screen or crash).
+                      <br>   - Graphics APIs: Remove Vulkan, keep only OpenGLES3 (some PICO devices have incomplete Vulkan support).
+                      <br>   - Package Name: Set a unique package name, e.g., <code>com.yourcompany.picoarsports</code>.
+                      <br>   - Version: Initially set to 0.1.
+                      <br><br>4. Additional Optimization Settings:
+                      <br>   - Static Batching: Enable (merges static objects to reduce Draw Calls).
+                      <br>   - Dynamic Batching: Enable (merges dynamic objects, note vertex count limit).
+                      <br>   - Fixed Framerate: Set to 72 or 90 (matches PICO refresh rate).
+                      <br><br>⚠️ Common Error Troubleshooting:
+                      <br>- Black screen with sound: Check if Multithreaded Rendering is disabled and Graphics API is only OpenGLES3.
+                      <br>- Build fails: Check JDK/NDK paths, ensure Package Name follows naming conventions.` },
+                    
+                    { title: "2.4 Creating a Basic AR Tracking App", 
+                      content: `🌍 Implementation Steps (with Troubleshooting):
+                      <br><br>1. Delete the default camera: In Hierarchy, select "Main Camera", right-click and delete.
+                      <br><br>2. Add PICO Camera Rig:
+                      <br>   - Right-click in Hierarchy > "PICO" > "CameraRig".
+                      <br>   - Expand CameraRig to see "LeftController", "RightController", and "CenterCamera" (headset).
+                      <br><br>3. Create a test object:
+                      <br>   - Right-click in Hierarchy > "3D Object" > "Cube", name it "TestCube".
+                      <br>   - Set position to (0, 0, 2) (2 meters in front of the headset).
+                      <br><br>4. Enable color passthrough (optional):
+                      <br>   - Select PXR_Manager, check "Enable Video SeeThrough" in Inspector.
+                      <br>   - If unchecked, the app runs in VR mode (black background).
+                      <br><br>5. Configure Build and run:
+                      <br>   - Open File > Build Settings, ensure platform is Android.
+                      <br>   - Click "Add Open Scenes" to add the current scene to the Build list.
+                      <br>   - Connect the PICO device (with developer mode and USB debugging enabled).
+                      <br>   - Click "Build And Run", select where to save the APK.
+                      <br><br>6. Verify results:
+                      <br>   - After installation, put on the headset; you should see the Cube stably floating in real space (if passthrough is enabled, you'll see the real environment background).
+                      <br>   - Try walking around; the Cube should stay in its world coordinate position, not follow your head.
+                      <br><br>🎯 If Cube doesn't display:
+                      <br>- Check if Graphics API is OpenGLES3 and Multithreaded Rendering is disabled.
+                      <br>- Check if License is correctly entered in PXR_Manager.
+                      <br>- Check if the device is in developer mode and adb devices recognizes it.
+                      <br><br>🔧 Advanced Testing:
+                      <br>- Add the Rotate script from Chapter 1 to the Cube to test rotation.
+                      <br>- Try using the controller trigger to change the Cube's color (implemented in later chapters).` },
+                    
+                    { title: "2.5 Common Errors & Solutions", 
+                      content: `❌ Error 1: Build fails with "Unable to find Android SDK"
+                      <br>Solution: Edit > Preferences > External Tools, manually set Android SDK path.
+                      <br><br>❌ Error 2: Black screen in headset but sound works
+                      <br>Solution: Check Player Settings > Graphics APIs, keep only OpenGLES3; disable Multithreaded Rendering.
+                      <br><br>❌ Error 3: Controllers not tracking or rays not showing
+                      <br>Solution: Verify PXR_Manager exists, check if controller models are correctly loaded; try restarting the headset; check controller battery levels.
+                      <br><br>❌ Error 4: adb cannot connect to device
+                      <br>Solution: Check if USB cable supports data transfer (not just charging); verify developer mode is enabled on PICO; run <code>adb kill-server</code> and retry; try a different USB port.
+                      <br><br>❌ Error 5: Invalid License
+                      <br>Solution: Verify the License copied from Portal is complete with no extra spaces; confirm the app type matches the device (choose correct platform for PICO 4).
+                      <br><br>❌ Error 6: Color passthrough cannot be enabled
+                      <br>Solution: Confirm the device supports color passthrough (PICO 4 / Neo3 Pro); check "Enable Video SeeThrough" in PXR_Manager; try restarting the app.` }
+                ]
+            });
+
+            // ========= Chapter 3: Technology Stack & Project Plan =========
+            tutorialData.chapters.push({
+                id: 3, title: "Technology Stack & Project Plan",
+                description: "In-depth rationale for technology choices (Unity, C#, PICO Unity Integration SDK, Android, PICO 4 VR headset, GitHub), and comprehensive comparison of PICO SDK with other AR frameworks.",
+                sections: [
+                    { title: "3.1 Technology Selection Rationale", 
+                      content: `✅ Unity:
+                      <br>- Market Share: Holds over 70% of the XR development market, with a large community.
+                      <br>- XR Ecosystem: Officially provides XR Interaction Toolkit, AR Foundation, and many XR resources in the Asset Store.
+                      <br>- Learning Resources: Unity Learn platform offers extensive free XR tutorials.
+                      <br><br>✅ C#:
+                      <br>- Type Safety: Compile-time type checking reduces runtime crashes.
+                      <br>- Performance: Near-native performance, supports IL2CPP compilation to multiple platforms.
+                      <br>- Deep Integration with Unity: All Unity APIs are based on C#, making the learning curve smooth.
+                      <br><br>✅ PICO Unity Integration SDK:
+                      <br>- Native Support: Officially provided by PICO, deeply optimized for PICO hardware.
+                      <br>- Complete Features: Provides 6DoF tracking, controller input, spatial anchors, passthrough, and more.
+                      <br>- Comprehensive Documentation: Offers Chinese documentation and sample projects.
+                      <br><br>✅ Android:
+                      <br>- PICO Foundation: PICO devices run on Android, leveraging the mature mobile development ecosystem.
+                      <br>- Toolchain: Tools like Android Studio, ADB, and Gradle are mature and stable.
+                      <br><br>✅ PICO 4 Headset:
+                      <br>- Hardware Specifications: Color passthrough, 4K+ resolution, 6DoF controllers, high value for money.
+                      <br>- Developer Support: PICO offers device loan programs for developers.
+                      <br><br>✅ GitHub:
+                      <br>- Version Control: Git is the most popular version control system.
+                      <br>- Collaboration: Provides Issues, Projects, Actions, and other complete collaboration tools.
+                      <br>- CI/CD: Supports automated testing and packaging.` },
+                    
+                    { title: "3.2 Comparison: PICO SDK vs Other AR Frameworks", 
+                      content: `📊 Comprehensive Comparison Table:
+                      <table class="template-table">
+                         <th>Framework</th><th>Supported Devices</th><th>Advantages</th><th>Disadvantages</th><th>Use Cases</th>
+                         <tr><td><strong>PICO SDK</strong></td><td>PICO Headsets</td><td>Native support, full 6DoF, controller input, color passthrough</td><td>PICO hardware only</td><td>PICO-specific VR/MR applications</td></tr>
+                         <tr><td><strong>ARCore</strong></td><td>Android Phones</td><td>Wide device support, Google ecosystem</td><td>No controllers, tracking affected by environment</td><td>Mobile AR applications</td></tr>
+                         <tr><td><strong>ARKit</strong></td><td>iOS Devices</td><td>LiDAR depth support, Apple ecosystem</td><td>Apple devices only</td><td>iOS AR applications</td></tr>
+                         <tr><td><strong>Vuforia</strong></td><td>Multi-platform</td><td>Strong image recognition, model target support</td><td>Weaker 6DoF tracking, commercial license required</td><td>Image recognition-based AR</td></tr>
+                         <tr><td><strong>OpenXR</strong></td><td>Multi-device</td><td>Cross-platform standard, write once run on multiple devices</td><td>Low-level API, high development complexity</td><td>Developers targeting multiple VR platforms</td></tr>
+                       </table>
+                      <br>We chose PICO SDK because our target device is PICO 4, and we need to leverage its controller and passthrough capabilities while benefiting from official support.` }
+                ]
+            });
+
+            // ========= Chapter 4: AR Core Logic - Spatial Anchors =========
+            tutorialData.chapters.push({
+                id: 4, title: "AR Core Logic: Spatial Anchors",
+                description: "In-depth analysis of PICO SDK's spatial tracking capabilities, implementing anchors (create, save, load, delete, export/import), handling tracking loss or occlusion, and a complete hands-on project.",
+                sections: [
+                    { title: "4.1 PICO SDK Spatial Tracking API Deep Dive", 
+                      content: `📍 Head Tracking API:
+                      <br><code>PXR_Manager.Instance.GetHeadPose()</code> returns the headset's Transform, including position and rotation.
+                      <br><br>Controller Tracking API:
+                      <br>- <code>PXR_Input.GetControllerPosition(int hand)</code>: Get controller position (0 = left, 1 = right)
+                      <br>- <code>PXR_Input.GetControllerRotation(int hand)</code>: Get controller rotation
+                      <br>- <code>PXR_Input.GetControllerVelocity(int hand)</code>: Get controller velocity
+                      <br>- <code>PXR_Input.GetControllerAngularVelocity(int hand)</code>: Get controller angular velocity
+                      <br><br>Coordinate System:
+                      <br>PICO uses a right-handed coordinate system, Y-axis up, units in meters. The origin is the headset's starting position.
+                      <br><br>Code Example: Real-time tracking of all devices:
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      using PXR_Input;<br>
+                      public class TrackingDemo : MonoBehaviour {<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // Headset<br>
+                      &nbsp;       Transform head = PXR_Manager.Instance.GetHeadPose();<br>
+                      &nbsp;       Debug.Log($"Headset position: {head.position}");<br>
+                      <br>
+                      &nbsp;       // Left controller<br>
+                      &nbsp;       Vector3 leftPos = PXR_Input.GetControllerPosition(0);<br>
+                      &nbsp;       Quaternion leftRot = PXR_Input.GetControllerRotation(0);<br>
+                      &nbsp;       Debug.Log($"Left controller position: {leftPos}");<br>
+                      <br>
+                      &nbsp;       // Right controller<br>
+                      &nbsp;       Vector3 rightPos = PXR_Input.GetControllerPosition(1);<br>
+                      &nbsp;       Quaternion rightRot = PXR_Input.GetControllerRotation(1);<br>
+                      &nbsp;       Debug.Log($"Right controller position: {rightPos}");<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.2 Spatial Anchor Lifecycle (Create, Save, Load)", 
+                      content: `⚓ Create Anchor (with error handling):
+                      <div class="code-note">
+                      using PXR_SpatialAnchor;<br>
+                      public void CreateAnchor(Vector3 pos, Quaternion rot) {<br>
+                      &nbsp;   PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
+                      &nbsp;       switch (result) {<br>
+                      &nbsp;           case AnchorResult.Success:<br>
+                      &nbsp;               Debug.Log($"Anchor created successfully, UUID: {anchor.UUID}");<br>
+                      &nbsp;               // Save immediately after creation<br>
+                      &nbsp;               SaveAnchor(anchor);<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           case AnchorResult.FailedTracking:<br>
+                      &nbsp;               Debug.LogError("Creation failed: tracking lost");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           case AnchorResult.FailedInvalidArgument:<br>
+                      &nbsp;               Debug.LogError("Creation failed: invalid argument");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;           default:<br>
+                      &nbsp;               Debug.LogError($"Creation failed: unknown error {result}");<br>
+                      &nbsp;               break;<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>Save Anchor (persist to device):
+                      <div class="code-note">
+                      public void SaveAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.Save((saveResult) => {<br>
+                      &nbsp;       if (saveResult) {<br>
+                      &nbsp;           Debug.Log($"Anchor {anchor.UUID} saved successfully");<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("Anchor save failed");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>Load All Saved Anchors:
+                      <div class="code-note">
+                      public void LoadAllAnchors() {<br>
+                      &nbsp;   PXR_SpatialAnchor.LoadAnchorListAsync(null, (anchors) => {<br>
+                      &nbsp;       if (anchors != null && anchors.Count > 0) {<br>
+                      &nbsp;           foreach (var anchor in anchors) {<br>
+                      &nbsp;               Debug.Log($"Loaded anchor: {anchor.UUID}, position: {anchor.Pose.position}");<br>
+                      &nbsp;               // Instantiate virtual object at anchor position<br>
+                      &nbsp;               Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
+                      &nbsp;           }<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.Log("No saved anchors found");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.3 Advanced Anchor Features: Delete, Export, Import", 
+                      content: `🗑️ Delete Anchor:
+                      <div class="code-note">
+                      public void DeleteAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.DeleteAnchor((success) => {<br>
+                      &nbsp;       if (success) {<br>
+                      &nbsp;           Debug.Log($"Anchor {anchor.UUID} deleted successfully");<br>
+                      &nbsp;           Destroy(associatedObject); // Delete the corresponding virtual object<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("Anchor deletion failed");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>Export Anchor (for network sharing):
+                      <div class="code-note">
+                      public void ExportAnchor(PXR_SpatialAnchor anchor) {<br>
+                      &nbsp;   anchor.ExportAnchor((data, result) => {<br>
+                      &nbsp;       if (result == AnchorResult.Success) {<br>
+                      &nbsp;           Debug.Log($"Anchor exported successfully, data length: {data.Length} bytes");<br>
+                      &nbsp;           // Send data over network to other devices<br>
+                      &nbsp;           NetworkManager.Send(data);<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("Anchor export failed");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>
+                      <br>Import Anchor:
+                      <div class="code-note">
+                      public void ImportAnchor(byte[] data) {<br>
+                      &nbsp;   PXR_SpatialAnchor.ImportAnchor(data, (anchor, result) => {<br>
+                      &nbsp;       if (result == AnchorResult.Success) {<br>
+                      &nbsp;           Debug.Log($"Anchor imported successfully, UUID: {anchor.UUID}");<br>
+                      &nbsp;           // Place virtual object at imported anchor position<br>
+                      &nbsp;           Instantiate(virtualObjectPrefab, anchor.Pose.position, anchor.Pose.rotation);<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           Debug.LogError("Anchor import failed");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   });<br>
+                      }
+                      </div>` },
+                    
+                    { title: "4.4 Handling Tracking Loss or Occlusion", 
+                      content: `🔄 Listen to Tracking Status:
+                      <div class="code-note">
+                      public class TrackingHandler : MonoBehaviour {<br>
+                      &nbsp;   public GameObject virtualObject; // Object to hide/show<br>
+                      <br>
+                      &nbsp;   void OnEnable() {<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingLost += HandleTrackingLost;<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingAcquired += HandleTrackingAcquired;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void OnDisable() {<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingLost -= HandleTrackingLost;<br>
+                      &nbsp;       PXR_Manager.Instance.OnTrackingAcquired -= HandleTrackingAcquired;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void HandleTrackingLost() {<br>
+                      &nbsp;       Debug.LogWarning("Tracking lost, hiding virtual object");<br>
+                      &nbsp;       virtualObject.SetActive(false);<br>
+                      &nbsp;       // Show notification<br>
+                      &nbsp;       UIManager.Instance.ShowMessage("Tracking lost, please re-align");<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void HandleTrackingAcquired() {<br>
+                      &nbsp;       Debug.Log("Tracking reacquired, showing virtual object");<br>
+                      &nbsp;       virtualObject.SetActive(true);<br>
+                      &nbsp;       UIManager.Instance.HideMessage();<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>Advanced Strategy: Prediction during brief tracking loss:
+                      <br>You can use the headset's last known position and IMU data for short-term prediction, but PICO SDK handles this internally; developers only need to focus on UI feedback.` },
+                    
+                    { title: "4.5 Hands-on Project: Complete Multi-Anchor Placement App", 
+                      content: `🏗️ Complete Project: Virtual Furniture Placement System
+                      <br><br>Requirements:
+                      <br>- Users can place virtual furniture (chairs, tables, etc.) at their current position using the controller trigger.
+                      <br>- Each piece of furniture corresponds to a spatial anchor, automatically restored when the app restarts.
+                      <br>- Users can select furniture with the controller ray and delete it.
+                      <br><br>Implementation Steps:
+                      <br><br>1. Create furniture prefabs: Create a prefab for each furniture type, add Collider components for ray detection.
+                      <br><br>2. Furniture Manager Script:
+                      <div class="code-note">
+                      public class FurnitureManager : MonoBehaviour {<br>
+                      &nbsp;   public GameObject[] furniturePrefabs; // Array of furniture prefabs<br>
+                      &nbsp;   private int selectedFurnitureIndex = 0;<br>
+                      &nbsp;   private List<FurnitureItem> placedFurniture = new List<FurnitureItem>();<br>
+                      <br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // Place furniture with trigger button<br>
+                      &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.TRIGGER)) {<br>
+                      &nbsp;           PlaceFurniture();<br>
+                      &nbsp;       }<br>
+                      &nbsp;       // Switch furniture type with A button<br>
+                      &nbsp;       if (PXR_Input.GetControllerButtonDown(1, ControllerButton.A)) {<br>
+                      &nbsp;           selectedFurnitureIndex = (selectedFurnitureIndex + 1) % furniturePrefabs.Length;<br>
+                      &nbsp;           UIManager.Instance.ShowMessage($"Current furniture: {furniturePrefabs[selectedFurnitureIndex].name}");<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void PlaceFurniture() {<br>
+                      &nbsp;       // Use right controller position as placement location<br>
+                      &nbsp;       Vector3 pos = PXR_Input.GetControllerPosition(1);<br>
+                      &nbsp;       Quaternion rot = PXR_Input.GetControllerRotation(1);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // Instantiate furniture<br>
+                      &nbsp;       GameObject obj = Instantiate(furniturePrefabs[selectedFurnitureIndex], pos, rot);<br>
+                      &nbsp;       <br>
+                      &nbsp;       // Create anchor and associate with furniture<br>
+                      &nbsp;       PXR_SpatialAnchor.CreateAnchor(pos, rot, (anchor, result) => {<br>
+                      &nbsp;           if (result == AnchorResult.Success) {<br>
+                      &nbsp;               anchor.Save();<br>
+                      &nbsp;               FurnitureItem item = new FurnitureItem(obj, anchor);<br>
+                      &nbsp;               placedFurniture.Add(item);<br>
+                      &nbsp;               Debug.Log($"Furniture placed and saved, anchor UUID: {anchor.UUID}");<br>
+                      &nbsp;           }<br>
+                      &nbsp;       });<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   void Start() {<br>
+                      &nbsp;       // Load all saved anchors and restore furniture<br>
+                      &nbsp;       LoadAllAnchors();<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>3. Delete furniture: Use controller ray to select furniture, press grip button to delete.
+                      <br><br>📌 This project demonstrates the complete application of anchors and serves as a foundational template for MR applications.` }
+                ]
+            });
+
+            // ========= Chapter 5: Core Game Logic Development =========
+            tutorialData.chapters.push({
+                id: 5, title: "Core Game Logic Development",
+                description: "Modular input handling, collision detection and damage calculation (interface design), object pool optimization, and health UI implementation.",
+                sections: [
+                    { title: "5.1 Modular Input Handling", 
+                      content: `🎮 InputManager.cs - Complete Input Abstraction Layer:
+                      <div class="code-note">
+                      using UnityEngine;<br>
+                      using PXR_Input;<br>
+                      <br>
+                      public class InputManager : MonoBehaviour {<br>
+                      &nbsp;   // Singleton pattern<br>
+                      &nbsp;   public static InputManager Instance { get; private set; }<br>
+                      <br>
+                      &nbsp;   void Awake() { Instance = this; }<br>
+                      <br>
+                      &nbsp;   // Controller connection status<br>
+                      &nbsp;   public bool LeftControllerConnected => PXR_Input.GetControllerConnectionState(0);<br>
+                      &nbsp;   public bool RightControllerConnected => PXR_Input.GetControllerConnectionState(1);<br>
+                      <br>
+                      &nbsp;   // Joystick input<br>
+                      &nbsp;   public Vector2 LeftJoystick => PXR_Input.GetControllerAxis(0);<br>
+                      &nbsp;   public Vector2 RightJoystick => PXR_Input.GetControllerAxis(1);<br>
+                      <br>
+                      &nbsp;   // Trigger (analog)<br>
+                      &nbsp;   public float LeftTrigger => PXR_Input.GetControllerAxis(0).x;<br>
+                      &nbsp;   public float RightTrigger => PXR_Input.GetControllerAxis(1).x;<br>
+                      <br>
+                      &nbsp;   // Button events (press, hold, release)<br>
+                      &nbsp;   public bool GetButtonDown(int hand, ControllerButton button) => PXR_Input.GetControllerButtonDown(hand, button);<br>
+                      &nbsp;   public bool GetButton(int hand, ControllerButton button) => PXR_Input.GetControllerButton(hand, button);<br>
+                      &nbsp;   public bool GetButtonUp(int hand, ControllerButton button) => PXR_Input.GetControllerButtonUp(hand, button);<br>
+                      <br>
+                      &nbsp;   // Controller position, rotation, velocity<br>
+                      &nbsp;   public Vector3 GetControllerPosition(int hand) => PXR_Input.GetControllerPosition(hand);<br>
+                      &nbsp;   public Quaternion GetControllerRotation(int hand) => PXR_Input.GetControllerRotation(hand);<br>
+                      &nbsp;   public Vector3 GetControllerVelocity(int hand) => PXR_Input.GetControllerVelocity(hand);<br>
+                      &nbsp;   public Vector3 GetControllerAngularVelocity(int hand) => PXR_Input.GetControllerAngularVelocity(hand);<br>
+                      <br>
+                      &nbsp;   // Vibration<br>
+                      &nbsp;   public void SetVibration(int hand, float intensity, int durationMs) {<br>
+                      &nbsp;       PXR_Input.SetControllerVibration(intensity, durationMs, hand);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>Usage Example:
+                      <div class="code-note">
+                      public class PlayerController : MonoBehaviour {<br>
+                      &nbsp;   void Update() {<br>
+                      &nbsp;       // Get input via InputManager, not directly dependent on PXR_Input<br>
+                      &nbsp;       if (InputManager.Instance.GetButtonDown(1, ControllerButton.TRIGGER)) {<br>
+                      &nbsp;           Shoot();<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.2 Collision Detection & Damage Calculation (Interface Pattern)", 
+                      content: `⚔️ IDamageable Interface Design:
+                      <div class="code-note">
+                      public interface IDamageable {<br>
+                      &nbsp;   void TakeDamage(int damage, Vector3 hitPoint, GameObject source);<br>
+                      &nbsp;   bool IsAlive { get; }<br>
+                      &nbsp;   int CurrentHealth { get; }<br>
+                      &nbsp;   int MaxHealth { get; }<br>
+                      }
+                      </div>
+                      <br>Player Health Implementation:
+                      <div class="code-note">
+                      public class PlayerHealth : MonoBehaviour, IDamageable {<br>
+                      &nbsp;   [SerializeField] private int maxHealth = 100;<br>
+                      &nbsp;   private int currentHealth;<br>
+                      &nbsp;   public event System.Action<int, int> OnHealthChanged;<br>
+                      &nbsp;   public event System.Action OnPlayerDied;<br>
+                      <br>
+                      &nbsp;   public int CurrentHealth => currentHealth;<br>
+                      &nbsp;   public int MaxHealth => maxHealth;<br>
+                      &nbsp;   public bool IsAlive => currentHealth > 0;<br>
+                      <br>
+                      &nbsp;   void Start() { currentHealth = maxHealth; }<br>
+                      <br>
+                      &nbsp;   public void TakeDamage(int damage, Vector3 hitPoint, GameObject source) {<br>
+                      &nbsp;       if (!IsAlive) return;<br>
+                      &nbsp;       currentHealth = Mathf.Max(0, currentHealth - damage);<br>
+                      &nbsp;       OnHealthChanged?.Invoke(currentHealth, maxHealth);<br>
+                      &nbsp;       PlayHitEffect(hitPoint);<br>
+                      &nbsp;       InputManager.Instance.SetVibration(0, 0.5f, 50);<br>
+                      &nbsp;       InputManager.Instance.SetVibration(1, 0.5f, 50);<br>
+                      &nbsp;       if (currentHealth <= 0) Die();<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   private void Die() { OnPlayerDied?.Invoke(); }<br>
+                      }
+                      </div>
+                      <br>Energy Ball Script (Attacker):
+                      <div class="code-note">
+                      public class EnergyBall : MonoBehaviour {<br>
+                      &nbsp;   public int damage = 10;<br>
+                      &nbsp;   public GameObject hitEffectPrefab;<br>
+                      <br>
+                      &nbsp;   void OnCollisionEnter(Collision collision) {<br>
+                      &nbsp;       IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();<br>
+                      &nbsp;       if (damageable != null) {<br>
+                      &nbsp;           damageable.TakeDamage(damage, collision.contacts[0].point, gameObject);<br>
+                      &nbsp;       }<br>
+                      &nbsp;       Instantiate(hitEffectPrefab, collision.contacts[0].point, Quaternion.identity);<br>
+                      &nbsp;       ObjectPool.Instance.ReturnBall(gameObject);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.3 Object Pool Optimization", 
+                      content: `🧺 Why Object Pool?
+                      <br>Avoid GC and stuttering caused by frequent Instantiate/Destroy. In fast-paced ball games, dozens of balls may be generated per second; object pooling is essential.
+                      <br><br>Complete Object Pool Implementation:
+                      <div class="code-note">
+                      public class ObjectPool : MonoBehaviour {<br>
+                      &nbsp;   public static ObjectPool Instance { get; private set; }<br>
+                      &nbsp;   <br>
+                      &nbsp;   public GameObject ballPrefab;<br>
+                      &nbsp;   public int poolSize = 30;<br>
+                      &nbsp;   private Queue<GameObject> pool = new Queue<GameObject>();<br>
+                      &nbsp;   private List<GameObject> activeBalls = new List<GameObject>();<br>
+                      <br>
+                      &nbsp;   void Awake() {<br>
+                      &nbsp;       Instance = this;<br>
+                      &nbsp;       for (int i = 0; i < poolSize; i++) {<br>
+                      &nbsp;           GameObject ball = Instantiate(ballPrefab);<br>
+                      &nbsp;           ball.SetActive(false);<br>
+                      &nbsp;           pool.Enqueue(ball);<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public GameObject GetBall() {<br>
+                      &nbsp;       GameObject ball;<br>
+                      &nbsp;       if (pool.Count > 0) {<br>
+                      &nbsp;           ball = pool.Dequeue();<br>
+                      &nbsp;       } else {<br>
+                      &nbsp;           ball = Instantiate(ballPrefab);<br>
+                      &nbsp;           Debug.LogWarning("Object pool expanded, consider increasing initial pool size");<br>
+                      &nbsp;       }<br>
+                      &nbsp;       ball.SetActive(true);<br>
+                      &nbsp;       activeBalls.Add(ball);<br>
+                      &nbsp;       return ball;<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public void ReturnBall(GameObject ball) {<br>
+                      &nbsp;       if (!activeBalls.Contains(ball)) return;<br>
+                      &nbsp;       ball.SetActive(false);<br>
+                      &nbsp;       Rigidbody rb = ball.GetComponent<Rigidbody>();<br>
+                      &nbsp;       rb.velocity = Vector3.zero;<br>
+                      &nbsp;       rb.angularVelocity = Vector3.zero;<br>
+                      &nbsp;       activeBalls.Remove(ball);<br>
+                      &nbsp;       pool.Enqueue(ball);<br>
+                      &nbsp;   }<br>
+                      <br>
+                      &nbsp;   public void ReturnAllBalls() {<br>
+                      &nbsp;       foreach (var ball in activeBalls.ToArray()) {<br>
+                      &nbsp;           ReturnBall(ball);<br>
+                      &nbsp;       }<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` },
+                    
+                    { title: "5.4 Health UI Implementation (World Space Canvas)", 
+                      content: `❤️ Complete UI Implementation Steps:
+                      <br><br>1. Create World Space Canvas:
+                      <br>   - Create a Canvas under the player object, set Render Mode to World Space
+                      <br>   - Set Canvas size to around (0.2, 0.05), position above the player's head
+                      <br><br>2. Add Health Bar Slider:
+                      <br>   - Add Slider component, delete Handle Slide Area (keep only Background and Fill)
+                      <br>   - Set Fill to red, Background to gray
+                      <br><br>3. Add LookAtCamera Script:
+                      <div class="code-note">
+                      public class LookAtCamera : MonoBehaviour {<br>
+                      &nbsp;   private Camera mainCamera;<br>
+                      &nbsp;   <br>
+                      &nbsp;   void Start() { mainCamera = Camera.main; }<br>
+                      <br>
+                      &nbsp;   void LateUpdate() {<br>
+                      &nbsp;       Vector3 direction = transform.position - mainCamera.transform.position;<br>
+                      &nbsp;       direction.y = 0;<br>
+                      &nbsp;       transform.rotation = Quaternion.LookRotation(direction);<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>
+                      <br>4. HealthBarController Script:
+                      <div class="code-note">
+                      public class HealthBarController : MonoBehaviour {<br>
+                      &nbsp;   public Slider healthSlider;<br>
+                      &nbsp;   public PlayerHealth playerHealth;<br>
+                      <br>
+                      &nbsp;   void OnEnable() { playerHealth.OnHealthChanged += UpdateHealthBar; }<br>
+                      &nbsp;   void OnDisable() { playerHealth.OnHealthChanged -= UpdateHealthBar; }<br>
+                      <br>
+                      &nbsp;   void UpdateHealthBar(int current, int max) {<br>
+                      &nbsp;       healthSlider.value = (float)current / max;<br>
+                      &nbsp;   }<br>
+                      }
+                      </div>` }
+                ]
+            });
+
+            // ========= Chapter 6: Project Preparation & Stakeholder Analysis =========
+            tutorialData.chapters.push({
+                id: 6, title: "Project Preparation and Stakeholder Analysis",
+                description: "Documenting the preparatory phase following a project win and prior to formal engagement with stakeholders, including team reflection, research, and background analysis.",
+                sections: [
+                    { 
+                        title: "Preparing for the Transition Period and Stakeholder Analysis", 
+                        content: `
+                        <div class="plain-text-block">
+                            After we won the bid for this project, because we first needed to pass the ethics review, we had a break before we could formally engage with the stakeholders, and we had almost three weeks to prepare for the formal engagement. In the first week, we didn't pay much attention to the importance of requirements engineering. But after the meeting with Professor Dave, we immediately realized how important it was to properly analyze and understand the needs of our stakeholders, and immediately started paying attention to it.<br><br>
+                            First, we looked at a brief description of the project. This project is mainly about building an AR sports framework with viewer experience at its core. The outline of the project was very general, with no details on how we would help the stakeholders. We could only continue to guess what we were going to do. Regardless, we took a close look at the HADO games provided by stakeholders, as well as other related AR games, and developments in AR sports in recent years.<br><br>
+                            Keeping the stakeholders happy is very important during the project, so we wanted to get to know some of the stakeholders better during the meeting. We checked their information on the university's website, including research directions.<br><br>
+                            We ended up with a requirements engineering report that was approved by the stakeholders.
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215217.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215242.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        
+                        <div class="image-container" style="text-align: center; margin: 2rem 0;">
+                            <img src="image/屏幕截图 2026-03-19 215248.png" alt="Requirements Engineering Report" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: inline-block;">
+                        </div>
+                        ` }
+                ]
+            });
+
+            // ========= Chapter 7: Effective Stakeholder Meetings =========
+            tutorialData.chapters.push({
+                id: 7, title: "Effective Stakeholder Meetings: Lessons Learned from a Collaborative Project",
+                description: "Stakeholder meetings are key to ensuring a project goes well. This chapter covers structured agendas, clear roles, adaptive communication, meeting minutes, action items, and lessons learned.",
+                sections: [
+                    { 
+                        title: "7.0 Overview and Key Steps", 
+                        content: `
+                        <div class="chapter-content-block">
+                        Stakeholder meetings are key to ensuring a project goes well. They ensure that team members and stakeholders are aligned. These meetings help the team truly understand the whole project. However, organizing effective stakeholder meetings requires planning and clear roles. The last thing a team wants is to come across as unprofessional, as that could damage trust and make stakeholders reluctant to continue collaboration.
+                        </div>
+                        <h3 class="section-title" style="font-size:1.5rem; margin-top:2rem;">Key Steps for Successful Stakeholder Meetings</h3>
+                        <div class="chapter-content-block">
+                        <h4>1. Structured Agenda</h4>
+                        <p>A well-prepared agenda is essential for keeping meetings focused and productive. It should outline the key discussion points. Based on our experience, point forms are usually sufficient, but including additional notes or sub-points for important details is also helpful. This ensures critical topics are not overlooked and provides a reference in case any points are forgotten during discussion.</p>
+                        
+                        <h4>2. Clear Roles and Responsibilities</h4>
+                        <p>Assigning specific roles for each meeting helps streamline discussions and ensures accountability. In our project, we adopted the following roles:</p>
+                        <ul>
+                            <li><strong>Chair:</strong> Guides the meeting, keeps discussions on track, and ensures the agenda is followed. The chair is the main person driving the conversation and presenting updates.</li>
+                            <li><strong>Secretary:</strong> Documents meeting minutes, recording important points discussed.</li>
+                        </ul>
+                        
+                        <h4>3. Adaptive Communication and Smart Engagement</h4>
+                        <p>Effective communication is key to stakeholder meetings. Instead of rigidly following the agenda, it's important to follow the natural flow of conversation. If certain points have already been addressed in previous conversations, repeating them unnecessarily can frustrate stakeholders. Likewise, asking the same questions multiple times can make the team appear unprepared and disorganized.</p>
+                        <p>To improve communication, we recommend:</p>
+                        <ul>
+                            <li><strong>Reading the room:</strong> Pay attention to stakeholders' engagement levels and adapt accordingly.</li>
+                            <li><strong>Avoiding excessive repetition:</strong> Be mindful of what has already been discussed and prevent redundancy.</li>
+                        </ul>
+                        
+                        <h4>4. Meeting Minutes</h4>
+                        <p>Recording meeting minutes is a crucial part of successful stakeholder engagement. A well-documented record of discussions ensures key points are not forgotten and provides a clear reference for future actions. Meeting minutes also help team members who couldn't attend stay informed.</p>
+                        <p>Additionally, keeping detailed records prevents minor details from being overlooked and serves as a checklist for tracking progress. By reviewing the minutes, the team can ensure all discussed points have been addressed and necessary follow-ups are completed.</p>
+                        <p>In our meetings, minutes are recorded in point form for clarity and efficiency. To enhance understanding, we include brackets to provide additional explanations or justifications for each recorded point. This approach ensures every note remains meaningful and actionable.</p>
+                        
+                        <h4>5. Action Items and Follow-Ups</h4>
+                        <p>At the end of each stakeholder meeting, we hold an internal team discussion to brief other group members on what was discussed and outline actions to be taken moving forward. This ensures everyone is informed and aligned with next steps.</p>
+                                                 
+                        <h4>What We Learned:</h4>
+                        <ul>
+                            <li><strong>Consistency Builds Trust:</strong> Keeping the same people in key roles ensures stakeholders have a consistent point of contact, fostering stronger relationships over time.</li>
+                            <li><strong>Role Familiarity Enhances Performance:</strong> When individuals perform the same role repeatedly, they become more skilled and efficient, leading to smoother meetings and better outcomes.</li>
+                            <li><strong>Balance Learning and Stakeholder Needs:</strong> While it's important to provide team members with growth opportunities, this should be balanced with the need for stakeholder confidence and meeting effectiveness.</li>
+                        </ul>
+                        
+                        <h3>Best Practices for Future Projects</h3>
+                        <p>Based on our experience, here are some recommendations for organizing stakeholder meetings:</p>
+                        <ul>
+                            <li><strong>Assign Fixed Roles:</strong> Identify a consistent chair and secretary for the duration of the project. This ensures continuity and builds stakeholder confidence.</li>
+                            <li><strong>Rotate Roles Strategically:</strong> If team members need exposure to different roles, consider rotating responsibilities during internal team meetings rather than stakeholder meetings.</li>
+                            <li><strong>Prepare Agendas:</strong> Clearly communicate the purpose, structure, and roles of the meeting to stakeholders in advance to set expectations.</li>
+                            <li><strong>Document and Share Minutes:</strong> Ensure meeting minutes and action items are shared promptly after each meeting to keep everyone informed and aligned.</li>
+                        </ul>
+                        </div>
+                        ` }
+                ]
+            });
+
+            // ========= Chapter 8: Accompanying Example Project =========
+            tutorialData.chapters.push({
+                id: 8, title: "Accompanying Example Project",
+                description: "Player perspective and spectator perspective demo videos, and a runnable Unity package for PICO 4.",
+                sections: [
+                    { title: "8.1 Player Perspective Demo Video", 
+                      content: `🎮 <strong>Player Perspective Demo Video:</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) Player_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>Video Content Description:</strong>
+                      <br>- Shows the first-person gameplay experience in PICO 4 headset
+                      <br>- Demonstrates controller interactions (hitting, moving, menu selection)
+                      <br>- Shows spatial anchor positioning and virtual object interaction
+                      <br>- Real-time feedback on game scores and status changes` },
+                    
+                    { title: "8.2 Spectator Perspective Demo Video", 
+                      content: `👥 <strong>Spectator Perspective Demo Video:</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) Spectator_Perspective_Demo.mp4</a>
+                      <br><br>📹 <strong>Video Content Description:</strong>
+                      <br>- Shows the game from a third-party observer perspective
+                      <br>- Demonstrates information display on the spectator interface (scores, status, real-time data)
+                      <br>- Shows interaction between spectators and the game environment` },
+                    
+                    { title: "8.3 Runnable Unity Project Package", 
+                      content: `📦 <strong>Unity Project Package (Runnable on PICO 4):</strong>
+                      <br><br>🔗 <a class="external-link" href="#" target="_blank">(Simulated Link) PICO-AR-Sports-Demo.unitypackage</a>
+                      <br><br>📂 <strong>Contents:</strong>
+                      <br>- Complete Unity Project (Unity 2022.3.62f3 LTS)
+                      <br>- Pre-compiled APK file (can be directly installed on PICO 4)` }
+                ]
+            });
+
+            // ==================== Combine: Introduction + 8 Chapters ====================
+            const allItems = [introContent, ...tutorialData.chapters];
+
+            // Render left sidebar
+            function renderChapterList() {
+                const container = document.getElementById('chapterListContainer');
+                let html = '';
+                allItems.forEach((item, idx) => {
+                    const isIntro = (idx === 0);
+                    const activeClass = (activeItemId === (isIntro ? 0 : item.id)) ? 'active' : '';
+                    const idxDisplay = isIntro ? '' : `<div class="chapter-idx">Chapter ${item.id}</div>`;
+                    html += `<div class="chapter-item ${activeClass}" data-item-id="${isIntro ? 0 : item.id}" data-is-intro="${isIntro}">
+                        ${idxDisplay}
+                        <div class="chapter-title">${item.title}</div>
+                        <div class="chapter-desc">${item.description.substring(0,70)}…</div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+
+                document.querySelectorAll('.chapter-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const id = parseInt(item.dataset.itemId);
+                        const isIntro = item.dataset.isIntro === 'true';
+                        showContent(isIntro ? 0 : id);
+                    });
+                });
+            }
+
+            let activeItemId = 0; // Default to introduction page
+
+            function showContent(id) {
+                let content;
+                let title;
+                let description;
+                
+                if (id === 0) {
+                    content = introContent;
+                    title = introContent.title;
+                    description = introContent.description;
+                    activeItemId = 0;
+                } else {
+                    const chapter = tutorialData.chapters.find(c => c.id === id);
+                    if (!chapter) return;
+                    content = chapter;
+                    title = `Chapter ${chapter.id}: ${chapter.title}`;
+                    description = chapter.description;
+                    activeItemId = id;
+                }
+
+                // Update left sidebar highlighting
+                document.querySelectorAll('.chapter-item').forEach(el => {
+                    const itemId = parseInt(el.dataset.itemId);
+                    const isIntro = el.dataset.isIntro === 'true';
+                    if ((isIntro && id === 0) || (!isIntro && itemId === id)) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+
+                // Generate right content
+                let sectionsHtml = '';
+                if (content.sections) {
+                    content.sections.forEach(sec => {
+                        sectionsHtml += `<div class="section-block">
+                            <div class="section-title"><span class="sec-badge">${sec.title.split(' ')[0]}</span> ${sec.title.replace(/^[0-9.]+/, '')}</div>
+                            <div class="section-content">${sec.content}</div>
+                        </div>`;
+                    });
+                }
+
+                const detailHtml = `
+                    <div class="detail-header">
+                        <h2>${title}</h2>
+                        <div class="desc">${description}</div>
+                    </div>
+                    ${sectionsHtml}
+                    <div class="footer-note">© Unity + PICO SDK Open Educational Resources</div>
+                `;
+                document.getElementById('detailContentArea').innerHTML = detailHtml;
+            }
+
+            renderChapterList();
+            showContent(0);
+        })();
+    </script>
+</body>
+</html>
