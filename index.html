@@ -194,7 +194,6 @@
         .nav-buttons { display: flex; gap: 1.5rem; margin: 2.5rem 0 1rem; }
         .nav-btn { background: white; border: 2px solid #2e5b9f; color: #173e77; padding: 0.7rem 2.2rem; border-radius: 40px; font-weight: 600; cursor: pointer; }
         .nav-btn:hover { background: #eaf2fe; border-color: #0e3572; }
-        .footer-note { margin-top: 2.5rem; border-top: 1px solid #d9e5f2; padding-top: 1.5rem; color: #446b9c; text-align: center; font-size: 0.9rem; }
 
         .empty-selection { display: flex; align-items: center; justify-content: center; height: 100%; color: #6c8bb8; font-size: 1.3rem; flex-direction: column; gap: 1rem; }
         
@@ -684,11 +683,12 @@
                       content: `📊 Comprehensive Comparison Table:
                       <table class="template-table">
                          <th>Framework</th><th>Supported Devices</th><th>Advantages</th><th>Disadvantages</th><th>Use Cases</th>
-                          <tr><td><strong>PICO SDK</strong><td>PICO Headsets<td>Native support, full 6DoF, controller input, color passthrough<td>PICO hardware only<td>PICO-specific VR/MR applications</tr>
-                          <tr><td><strong>ARCore</strong><td>Android Phones<td>Wide device support, Google ecosystem<td>No controllers, tracking affected by environment<td>Mobile AR applications</tr>
-                          <tr><td><strong>ARKit</strong><td>iOS Devices<td>LiDAR depth support, Apple ecosystem<td>Apple devices only<td>iOS AR applications</tr>
-                          <tr><td><strong>Vuforia</strong><td>Multi-platform<td>Strong image recognition, model target support<td>Weaker 6DoF tracking, commercial license required<td>Image recognition-based AR</tr>
-                          <tr><td><strong>OpenXR</strong><td>Multi-device<td>Cross-platform standard, write once run on multiple devices<td>Low-level API, high development complexity<td>Developers targeting multiple VR platforms</tr>
+                          学金<td><strong>PICO SDK</strong></td><td>PICO Headsets</td><td>Native support, full 6DoF, controller input, color passthrough</td><td>PICO hardware only</td><td>PICO-specific VR/MR applications</td>
+                          </tr>
+                          <tr><td><strong>ARCore</strong></td><td>Android Phones</td><td>Wide device support, Google ecosystem</td><td>No controllers, tracking affected by environment</td><td>Mobile AR applications</td></tr>
+                          <tr><td><strong>ARKit</strong></td><td>iOS Devices</td><td>LiDAR depth support, Apple ecosystem</td><td>Apple devices only</td><td>iOS AR applications</td></tr>
+                          <tr><td><strong>Vuforia</strong></td><td>Multi-platform</td><td>Strong image recognition, model target support</td><td>Weaker 6DoF tracking, commercial license required</td><td>Image recognition-based AR</td></tr>
+                          <tr><td><strong>OpenXR</strong></td><td>Multi-device</td><td>Cross-platform standard, write once run on multiple devices</td><td>Low-level API, high development complexity</td><td>Developers targeting multiple VR platforms</td></tr>
                         </table>
                       <br>We chose PICO SDK because our target device is PICO 4, and we need to leverage its controller and passthrough capabilities while benefiting from official support.` }
                 ]
@@ -1325,7 +1325,6 @@
                         <div class="desc">${description}</div>
                     </div>
                     ${sectionsHtml}
-                    <div class="footer-note">© Unity + PICO SDK Open Educational Resources</div>
                 `;
                 document.getElementById('detailContentArea').innerHTML = detailHtml;
             }
